@@ -16,4 +16,15 @@ public class ReverseCard extends Card
 		setColor(color);
 		setImage(nameImage);
 	}
+	
+	@Override
+	public String toString()
+	{
+		return getColor().toString().toLowerCase() + "REVERSE";
+	}
+
+	@Override
+	protected int getValue() {
+		return -1;
+	}
 }

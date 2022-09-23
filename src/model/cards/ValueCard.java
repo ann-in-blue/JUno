@@ -28,6 +28,6 @@ public class ValueCard extends Card
 	@Override
 	public String toString()
 	{
-		return value + " " + this.getColor().toString();
+		return this.getColor().toString().toLowerCase() + value;
 	}
 }

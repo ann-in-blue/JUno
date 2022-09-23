@@ -8,4 +8,16 @@ public class Draw4Card extends WildCard
 	{
 		super(nameImage);
 	}
+	
+	@Override
+	public String toString()
+	{
+		return "draw4";
+	}
+
+	@Override
+	protected int getValue() {
+		return -1;
+	}
 }
+

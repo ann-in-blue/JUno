@@ -11,5 +11,14 @@ public class Draw2Card extends Card
 		setImage(nameImage);
 
 	}
+	@Override
+	public String toString()
+	{
+		return getColor().toString().toLowerCase() + "+2";
+	}
+	@Override
+	protected int getValue() {
+		return -1;
+	}
 
 }

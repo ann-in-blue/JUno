@@ -8,4 +8,14 @@ public class ChangeColorCard extends WildCard
 	}
 	
 
+	@Override
+	public String toString() {
+		return "changeColor";
+	}
+
+
+	@Override
+	protected int getValue() {
+		return -1;
+	}
 }

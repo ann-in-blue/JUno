@@ -53,4 +53,6 @@ public abstract class Card implements CardInterface
 	public boolean isWildCard() {
 		return false;
 	}
+
+	protected abstract int getValue();
 }

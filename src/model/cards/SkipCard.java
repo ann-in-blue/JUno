@@ -16,5 +16,16 @@ public class SkipCard extends Card
 		setColor(color);
 		setImage(nameImage);
 	}
+	
+	@Override
+	public String toString()
+	{
+		return getColor().toString().toLowerCase() + "SKIP";
+	}
+
+	@Override
+	protected int getValue() {
+		return -1;
+	}
 
 }

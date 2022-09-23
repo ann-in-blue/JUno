@@ -1,18 +1,22 @@
 package model;
 
+import java.lang.ModuleLayer.Controller;
 import java.util.Random;
+import model.Game.*;
+import javax.swing.ImageIcon;
 
 
 public class Deck implements CardFactory
 {
 	
-	private Card[] deck;
+	Card[] deck;
+	protected int currentCard;
 	
 	
-	public Deck() throws WrongArgumentsException
+	public Deck(int numeroCarte) throws WrongArgumentsException
 	{
-		this.deck = new Card[112];
-		
+		this.deck = new Card[numeroCarte];
+		currentCard = 0;
 		int ind = 0;
 
 		for (Color color : Color.values())
@@ -83,11 +87,77 @@ public class Deck implements CardFactory
 	 * @param i
 	 * @return
 	 */
-	public Card distribuisciCard(int i)
+	public Card distribuisciCard()
 	{
-		if (i < deck.length)
-			return deck[i++];
-		return deck[0];
+		if (currentCard < deck.length)
+			return deck[currentCard++];
+		
+		//se il mazzo è finito si mischia di nuovo il mazzo e si continua a giocare
+		else {
+			//setDecktoDiscardDeck?????????????????????????
+			//notify al controller??????????????
+			shuffle();
+			currentCard = 0;
+			return deck[currentCard];
+		}
+	}
+	public int getCurrentCard() {
+		return currentCard;
+	}
+
+	public void setCurrentCard(int currentCard) {
+		this.currentCard = currentCard;
+	}
+
+	public void setDeck(Card[] deck) {
+		this.deck = deck;
+	}
+
+	/**
+	 * metodo che distribuisce la prossima carta del mazzo.
+	 * @param i
+	 * @return
+	 */
+	public ImageIcon mostraCard()
+	{
+		if (currentCard < deck.length)
+			//return deck[currentCard++];
+			return new ImageIcon(deck[currentCard++].toString() + ".png");
+		
+		//se il mazzo è finito si mischia di nuovo il mazzo e si continua a giocare -> DA FARE, mischiare mazzo senza le carte in mano ai giocatori
+		else {
+			shuffle();
+			currentCard = 0;
+			return new ImageIcon(deck[currentCard++].toString() + ".png");
+			//return deck[currentCard];
+		}
+	}
+	
+	/**
+	 * Metodo che permette di distribuire più carte insieme (esempio con un +2, +4).
+	 * Il numero in input è il numero di carte da distribuire.
+	 * @throws WrongArgumentsException 
+	 */
+	public Card[] distribuisciCard(int n) throws WrongArgumentsException
+	{
+		if (n < 0)
+			throw new WrongArgumentsException("Il numero di carte da distribuire non è valido");
+		
+		Card[] res = new Card[n];
+		for(int i = 0; i< n; i++)
+			res[i] = distribuisciCard();
+				
+		return res;
+	}
+	
+	
+	/**
+	 * Metodo che restituisce true se il mazzo è vuoto, false altrimenti
+	 * @return
+	 */
+	public boolean isEmpty()
+	{
+		return this.deck.length == 0;
 	}
 
 	
