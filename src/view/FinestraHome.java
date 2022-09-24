@@ -2,7 +2,6 @@ package view;
 
 import java.awt.*;
 import java.awt.event.*;
-
 import javax.swing.*;
 
 public class FinestraHome extends JFrame
@@ -16,16 +15,14 @@ public class FinestraHome extends JFrame
 	private PannelloIscriviti pannelloIscriviti;
 	
 	private JPanel panel;
-	private Image image;
 
 	/**
 	 * Costruttore della finestra
 	 */
-	public FinestraHome()
-	{
+	public FinestraHome() 	{
 		super("JUno");
-		setLayout(new GridLayout());
-		//setLayout(new BorderLayout());
+		//setLayout(new GridBagLayout());
+		setLayout(new BorderLayout());
 		setSize(1200, 700);
 		setLocationRelativeTo(null);	//mette la finestra al centro dello schermo
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -36,27 +33,27 @@ public class FinestraHome extends JFrame
 		 */
 		btn = new JButton();
 		btn.setPreferredSize(new Dimension(0, 400));
-		btn.setBackground(null);
+		btn.setBackground(Color.black);
 		
 		//pannello per i bottoni
 		panel = new JPanel();
 		
 		//bottone accedi
 		bottoneAccedi = new JButton("Accedi");
-		bottoneAccedi.setPreferredSize(new Dimension(270,100));
+		bottoneAccedi.setPreferredSize(new Dimension(200,100));
 		bottoneAccedi.setBackground(Color.red);
 		bottoneAccedi.setFont(new Font("Arial", Font.PLAIN, 35));
 		
 		//bottone iscriviti
 		bottoneIscriviti = new JButton("Iscriviti");
 		bottoneIscriviti.setBackground(Color.lightGray);
-		bottoneIscriviti.setPreferredSize(new Dimension(200,70));
+		bottoneIscriviti.setPreferredSize(new Dimension(200,100));
 		bottoneIscriviti.setFont(new Font("Arial", Font.PLAIN, 25));
 
 		//aggiunta dei bottoni al pannello
 		panel.add(btn);
 		panel.add(bottoneAccedi, BorderLayout.CENTER);
-		panel.add(bottoneIscriviti);
+		panel.add(bottoneIscriviti, BorderLayout.CENTER);
 		
 		//inizializzazione pannelli
 		pannelloAccedi = new PannelloAccedi();
@@ -84,65 +81,63 @@ public class FinestraHome extends JFrame
 		/**
 		 * Aggiungo i componenti alla finestra tramite un grid layout
 		 */
-
-		GridBagConstraints gbc = new GridBagConstraints();
-		
-		//prima colonna: pannello accedi
-		gbc.gridx = 0;
-		gbc.gridy = 0;
-		
-		gbc.weightx = 0.01;
-		gbc.weighty = 0.01;
-		//gbc.fill = GridBagConstraints.HORIZONTAL;
-		gbc.insets = new Insets(0, 0, 0, 5);
-		
-		add(pannelloAccedi, gbc);
-		
-		//panel
-		gbc.gridx = 1;
-		gbc.gridy = 1;
-		
-		gbc.weightx = 0.01;
-		gbc.weighty = 0.01;
-		//gbc.fill = GridBagConstraints.HORIZONTAL;
-		gbc.insets = new Insets(0, 0, 0, 5);
-		
-		add(panel, gbc);
-		
-//		//seconda colonna: bottone accedi
-//		gbc.gridx = 1;
-//		gbc.gridy = 1;
+		this.add(pannelloAccedi, BorderLayout.PAGE_START);
+		this.add(panel);
+		this.add(pannelloIscriviti);
+//		GridBagConstraints gbc = new GridBagConstraints();
 //		
-//		gbc.weightx = 0.01;
-//		gbc.weighty = 0.01;
-//		
-//		
-//		//gbc.fill = GridBagConstraints.NONE;
-//
-//		//gbc.anchor = GridBagConstraints.PAGE_START; 	//allineamento
-//		gbc.ipadx = 30;
-//		gbc.ipady = 30;
-//		add(bottoneAccedi, gbc);
-//		
-//		//terza colonna: bottone iscriviti
-//		gbc.gridx = 2;
+//		//prima colonna: pannello accedi
+//		gbc.gridx = 0;
 //		gbc.gridy = 0;
 //		
 //		gbc.weightx = 0.01;
 //		gbc.weighty = 0.01;
+//		gbc.anchor = GridBagConstraints.LINE_START; 	//allineamento
+//	
+//		add(pannelloAccedi, gbc);
+////		
+//		//panel
+//		gbc.gridx = 1;
+//		gbc.gridy = 0;
+////		gbc.anchor = GridBagConstraints.CENTER; 	//allineamento
+//		gbc.weightx = 0.01;
+//		gbc.weighty = 0.01;
+//		gbc.fill = GridBagConstraints.BOTH;
 //
-//		gbc.anchor = GridBagConstraints.LINE_END;
-//		gbc.insets = new Insets(0, 0, 0, 0);
-//		add(bottoneIscriviti, gbc);
+//		add(panel, gbc);
+//		//add(btn, gbc);
 //		
-		//quarta colonna: pannello iscriviti
-		gbc.gridx = 2;
-		gbc.gridy = 0;
-		
-		gbc.weightx = 1.0;
-		gbc.weighty = 1.0;
-		
-		add(pannelloIscriviti, gbc);
-		
+////		//seconda colonna: bottone accedi
+////		gbc.gridx = 1;
+////		gbc.gridy = 1;
+////		
+////		gbc.weightx = 0.01;
+////		gbc.weighty = 0.01;
+////		
+//		//gbc.anchor = GridBagConstraints.PAGE_START; 	//allineamento
+////		gbc.ipadx = 30;
+////		gbc.ipady = 30;
+////		add(bottoneAccedi, gbc);
+//		
+////		//terza colonna: bottone iscriviti
+////		gbc.gridx = 2;
+////		gbc.gridy = 0;
+////		
+////		gbc.weightx = 0.01;
+////		gbc.weighty = 0.01;
+////
+////		gbc.anchor = GridBagConstraints.LINE_END;
+////		add(bottoneIscriviti, gbc);
+////		
+//		//quarta colonna: pannello iscriviti
+//		gbc.gridx = 0;
+//		gbc.gridy = 1;
+//		
+//		gbc.weightx = 0.1;
+//		gbc.weighty = 0.1;
+//		gbc.anchor = GridBagConstraints.LINE_END; 	//allineamento
+//
+//		add(pannelloIscriviti, gbc);
+//		
 	}
 }

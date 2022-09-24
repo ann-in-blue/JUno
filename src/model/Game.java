@@ -21,8 +21,7 @@ public class Game
 	private int validValue;
 	
 	boolean direction;	//senso orario o senso antiorario
-	
-	boolean isGameOver;	//DA VEDERE
+	boolean isGameOver;	
 	
 	
 	public Game(String[] playersId) throws WrongArgumentsException
@@ -161,36 +160,17 @@ public class Game
 		//caso in cui esce una carta Skip
 		if(card.getClass().getSimpleName().equals("SkipCard"))
 		{
-			JLabel message = new JLabel(playersId[currentPlayer] + " was skipped!");
-			message.setFont(new Font("Arial", Font.BOLD, 48));
-			JOptionPane.showMessageDialog(null, message);
-			
 			setValidColor(card.getColor());
 			setValidValue(-1);	//non c'è nessun valore valido in questo caso
 			
-			if(isDirection())	//se direzione == true avanzo di 1 nella lista dei giocatori
-				setCurrentPlayer((currentPlayer + 1) % playersId.length);		//una volta arrivata alla fine della lista torno all'inizio
-			else
-				setCurrentPlayer((currentPlayer - 1) % playersId.length);
+			skipTurnMove();
 			
 		}
 		
 		//caso in cui esce una carta "reverse card"
 		if(card.getClass().getSimpleName().equals("ReverseCard"))
-		{
-			JLabel message = new JLabel("Game direction changed!");
-			message.setFont(new Font("Arial", Font.BOLD, 48));
-			JOptionPane.showMessageDialog(null, message);
-			
-			//se la direzione è true diventa false e viceversa
-			if(isDirection())
-			{
-				setCurrentPlayer((currentPlayer + 1) % playersId.length);
-				setDirection(false);
-			} else {
-				setCurrentPlayer((currentPlayer - 1) % playersId.length);
-				setDirection(true);
-			}
+		{			
+			reverseCardMove();
 			
 			setValidColor(card.getColor());
 			setValidValue(-1);	//non c'è nessun valore valido in questo caso
@@ -204,9 +184,8 @@ public class Game
 			setValidColor(card.getColor());
 			setValidValue(-1);
 			
-			//DA IMPLEMENTARE 
-			draw2Cards();
-			skipTurn();
+			drawMultipleCardsMove(2);
+			skipTurnMove();
 			
 		}
 		
@@ -222,26 +201,79 @@ public class Game
 	/**
 	 * Metodo che blocca il giocatore corrente per un turno
 	 */
-	private void skipTurn() {
+	private void skipTurnMove() {
 		
 		if(isDirection())	//se direzione == true avanzo di 1 nella lista dei giocatori
 			setCurrentPlayer((getCurrentPlayer() + 1) % getPlayersId().length);		//una volta arrivata alla fine della lista torno all'inizio
 		
-		else
+		else if (!isDirection())
+		{
 			setCurrentPlayer((getCurrentPlayer() - 1) % getPlayersId().length);
+			if(currentPlayer == -1)	//controllo nel caso in cui con il modulo sia uscito come risultato -1
+				currentPlayer = playersId.length - 1;
+		}
+		
+		JLabel message = new JLabel(playersId[currentPlayer] + "was skipped!");
+		message.setFont(new Font("Arial", Font.BOLD, 48));
+		JOptionPane.showMessageDialog(null, message);
+	}
+	
+	/**
+	 * Metodo che permette di cambiare direzione di gioco grazie alla carta "Reverse Card"
+	 */
+	public void reverseCardMove()
+	{
+		JLabel message = new JLabel("Game direction changed by " + playersId[currentPlayer]+"!");
+		message.setFont(new Font("Arial", Font.BOLD, 48));
+		JOptionPane.showMessageDialog(null, message);
+		
+		//se la direzione è true diventa false e viceversa
+		if(isDirection())
+		{
+			setCurrentPlayer((currentPlayer + 1) % playersId.length);
+			setDirection(false);
+			
+		} else if(!isDirection())
+		{
+			setCurrentPlayer((currentPlayer - 1) % playersId.length);
+			if(currentPlayer == -1)
+				currentPlayer = playersId.length - 1;
+			
+			setDirection(true);
+		}
+
 		
 	}
 	
-	private void draw2Cards() {
+	/**
+	 * Metodo che permette di pescare n carte
+	 * @param n
+	 */
+	private void drawMultipleCardsMove(int n) {
 		
 		try {
-			//il giocatore corrente pesca 2 carte, le quali vengono aggiunte al suo mazzo
-			getPlayersDecks().get(getCurrentPlayer()).addAll(Arrays.asList(deck.distribuisciCard(2)));
-			
+			//il giocatore corrente pesca n carte, le quali vengono aggiunte al suo mazzo
+			for (int i = 0; i<n; i++)
+				{
+					if(!getDeck().isEmpty())		//se il mazzo NON è terminato pesca una carta
+						getPlayersDecks().get(getCurrentPlayer()).add(deck.distribuisciCard());
+					
+					//altrimenti prendi il mazzo di scarto, mescola e pesca da quel mazzo
+					else {
+						
+						setDecktoDiscardDeck();					
+						deck.shuffle();
+						getPlayersDecks().get(getCurrentPlayer()).add(deck.distribuisciCard());
+					}
+	
+				}
+			JOptionPane.showMessageDialog(null, playersId[currentPlayer] + "drew "+ n+" cards!");
+
 		} catch (WrongArgumentsException e) {
 			e.printStackTrace();
 		}
 	}
+	
 	
 	public ArrayList<ArrayList<Card>> getPlayersDecks() {
 		return playersDecks;
@@ -294,6 +326,139 @@ public class Game
 			throw new InvalidTurnException("It is not "+ player + " turn!", player);
 		//se l'indice del giocatore in input corrisponde all'indice del giocatore corrente il turno è valido, altrimenti non è il turno del giocatore in input.
 	}
+	
+	/**
+	 * Metodo per giocare la carta scelta
+	 * @throws InvalidCardException 
+	 */
+	public void playCard(String player, Card card, Color color) throws InvalidTurnException, InvalidColorException, InvalidValueException, InvalidCardException
+	{
+		//controllo se il turno è del giocatore che vuole vuole giocare la carta
+		checkInvalidTurn(player);
+		
+		//carte in mano al giocatore selezionato
+		ArrayList<Card> playerCards = getPlayerDeck(player);
+		
+		//caso in cui la carta NON è valida -> nel senso che non ha stesso colore oppure stesso valore
+		if(!isValidCardToPlay(card))
+		{
+			//3 casi possibili
+			
+			//caso 1: carta +4 -> la carta può essere giocata
+			if(card.getClass().getSimpleName().equals("Draw4Card"))	 
+			{
+				setValidColor(switch(chooseColorInput(player))
+						{
+								case "Red" -> Color.RED;
+								case "Blue" -> Color.BLUE;
+								case "Green" -> Color.GREEN;
+								case "Yellow" -> Color.YELLOW;
+								default -> null;
+						});
+				setValidValue(-1);
+				nextPlayerTurn();	//si passa il turno al giocatore successivo
+				drawMultipleCardsMove(4);	//il giocatore successivo pesca 4 carte
+				
+			}
+			//caso 2: carta "cambia colore" -> è una carta valida da giocare
+			else if(card.getClass().getSimpleName().equals("ChangeColorCard"))
+			{				
+				setValidColor(switch(chooseColorInput(player))
+						{
+								case "Red" -> Color.RED;
+								case "Blue" -> Color.BLUE;
+								case "Green" -> Color.GREEN;
+								case "Yellow" -> Color.YELLOW;
+								default -> null;
+						});
+				setValidValue(-1);	//si setta il valore di gioco a -1
+				nextPlayerTurn();	//si passa il turno al giocatore successivo
+			}
+			//caso 3: la carta non è compatibile e non può essere giocata
+			else
+			{
+				JLabel message = new JLabel("Invalid move: card played: "+ card.getValue() +" "+ card.getColor() + " with valid data (" + validValue +", "+validColor+")\n Choose another card!");
+				message.setFont(new Font("Arial", Font.BOLD, 50));
+				JOptionPane.showMessageDialog(null, message);
+				throw new InvalidCardException(message.getText());
+			}
+			
+		}
+		
+		//caso in cui il colore è valido ed è una carta +2
+		else if (card.getColor().equals(validColor) && card.getClass().getSimpleName().equals("Draw2Card"))
+		{
+			setValidValue(-1);	//la carta +2 non ha valore quindi viene cambiato il valore di gioco
+			nextPlayerTurn();	//si passa al giocatore successivo
+			drawMultipleCardsMove(2);	//il giocatore successivo pesca 2 carte
+			
+		}
+		
+		//caso in cui il colore è valido ed è una carta skip
+		else if (card.getColor().equals(validColor) && card.getClass().getSimpleName().equals("SkipCard"))
+		{
+			setValidValue(-1);	
+			skipTurnMove();	//il giocatore successivo viene bloccato			
+			nextPlayerTurn();	//si passa il turno al giocatore successivo a quello bloccato
+
+			
+		}
+		
+		//caso in cui il colore è valido e la carta è una "Reverse card"
+		else if(card.getColor().equals(validColor) && card.getClass().getSimpleName().equals("ReverseCard"))
+		{
+			setValidValue(-1);
+			reverseCardMove();	//si cambia la direzione di gioco e si passa il turno al giocatore successivo
+		}
+		
+		//caso in cui la carta è una carta valore
+		else if(card.getClass().getSimpleName().equals("ValueCard") && card.getValue() == validValue)
+		{
+			setValidColor(card.getColor());	//cambia il colore della partita
+			nextPlayerTurn();
+		}
+		
+		//togliamo la carta dal mazzo del giocatore che l'ha giocata e la mettiamo nel mazzo di scarto
+		playerCards.remove(card);
+		discardDeck.add(card);
+		
+		//se rimane solo una carta nel mazzo è necessario dire "UNO"
+		if(getPlayerDeckSize(player) == 1)
+			JOptionPane.showMessageDialog(null, "UNO!!!" + playersId[currentPlayer]);
+		
+		
+		//controllo se il mazzo del giocatore è finito -> in quel caso finisce la partita
+		if(playerCards.isEmpty())
+			isGameOver();
+		
+	}
+	
+	/**
+	 * Metodo per la scelta del colore da input. Restituisce il colore scelto sotto forma di stringa
+	 */
+	public String chooseColorInput(String player)
+	{
+		Object[] possibleColors = {"Red", "Blue", "Green", "Yellow"};
+		Object selectedColor = JOptionPane.showInputDialog(null,"Choose one color", "Input", JOptionPane.INFORMATION_MESSAGE, null, possibleColors, possibleColors[0]);
+		return (String)selectedColor;
+	}
+	
+	/**
+	 * Metodo per passare il turno al giocatore successivo
+	 */
+	public void nextPlayerTurn()
+	{
+		if(isDirection())	//se direzione == true avanzo di 1 nella lista dei giocatori
+			setCurrentPlayer((getCurrentPlayer() + 1) % getPlayersId().length);		//una volta arrivata alla fine della lista torno all'inizio
+		else
+		{
+			setCurrentPlayer((getCurrentPlayer() - 1) % getPlayersId().length);
+			if(currentPlayer == -1)
+				currentPlayer = playersId.length - 1;
+		}
+		
+	}
+	
 	/**
 	 * Metodo per verificare se un mazzo è vuoto e quindi se la partita è finita
 	 * @return true se è vuoto, false altrimenti

@@ -23,8 +23,8 @@ public class PannelloIscriviti extends JPanel {
 	public PannelloIscriviti() {
 		
 		setLayout(new GridBagLayout());
-		setPreferredSize(new Dimension(150, 100));
-		//setVisible(false);
+//		setPreferredSize(new Dimension(100, 100));
+		setVisible(true);
 		
 		Border bordoInterno = BorderFactory.createTitledBorder("Iscrizione");
 		Border bordoEsterno = BorderFactory.createEmptyBorder(5, 5, 5, 5);
@@ -53,67 +53,67 @@ public class PannelloIscriviti extends JPanel {
 //		});
 		
 		
-		GridBagConstraints gbc = new GridBagConstraints();
+		GridBagConstraints gbc1 = new GridBagConstraints();
 
 		//titolo finestra
-		gbc.gridx = 0;
-		gbc.gridy = 0;
+		gbc1.gridx = 0;
+		gbc1.gridy = 0;
 		
-		gbc.weightx = 0.01;
-		gbc.weighty = 0.01;
+		gbc1.weightx = 0.01;
+		gbc1.weighty = 0.01;
 		
-		gbc.anchor = GridBagConstraints.LINE_END; 	//allineamento
-		gbc.insets = new Insets(0, 0, 0, 5);
+		gbc1.anchor = GridBagConstraints.LINE_END; 	//allineamento
+		gbc1.insets = new Insets(0, 0, 0, 5);
 		
-		add(titoloFinestra, gbc);
+		add(titoloFinestra, gbc1);
 		
 		//labelNome
-		gbc.gridx = 0;
-		gbc.gridy = 1;
+		gbc1.gridx = 0;
+		gbc1.gridy = 1;
 		
-		gbc.weightx = 0.01;
-		gbc.weighty = 0.01;
+		gbc1.weightx = 0.01;
+		gbc1.weighty = 0.01;
 		
-		gbc.anchor = GridBagConstraints.LINE_END; 	//allineamento
-		gbc.insets = new Insets(0, 0, 0, 5);
+		gbc1.anchor = GridBagConstraints.LINE_END; 	//allineamento
+		gbc1.insets = new Insets(0, 0, 0, 5);
 		
-		add(labelNome, gbc);
+		add(labelNome, gbc1);
 		
 		//fieldNome
-		gbc.gridx = 1;
-		gbc.gridy = 1;
+		gbc1.gridx = 1;
+		gbc1.gridy = 1;
 		
-		gbc.weightx = 0.01;
-		gbc.weighty = 0.01;
+		gbc1.weightx = 0.01;
+		gbc1.weighty = 0.01;
 		
-		gbc.anchor = GridBagConstraints.LINE_START; 	//allineamento
-		gbc.insets = new Insets(0, 0, 0, 5);
+		gbc1.anchor = GridBagConstraints.LINE_START; 	//allineamento
+		gbc1.insets = new Insets(0, 0, 0, 5);
 		
-		add(fieldNome, gbc);
+		add(fieldNome, gbc1);
 		
 		//labelAvatar
-		gbc.gridx = 0;
-		gbc.gridy = 2;
+		gbc1.gridx = 0;
+		gbc1.gridy = 2;
 		
-		gbc.weightx = 0.01;
-		gbc.weighty = 0.01;
+		gbc1.weightx = 0.01;
+		gbc1.weighty = 0.01;
 		
-		gbc.anchor = GridBagConstraints.LINE_END; 	//allineamento
-		gbc.insets = new Insets(0, 0, 0, 5);
+		gbc1.anchor = GridBagConstraints.LINE_END; 	//allineamento
+		gbc1.insets = new Insets(0, 0, 0, 5);
 		
-		add(labelAvatar, gbc);
+		add(labelAvatar, gbc1);
 		
 		//buttonAvatar
-		gbc.gridx = 0;
-		gbc.gridy = 1;
+		gbc1.gridx = 0;
+		gbc1.gridy = 1;
 		
-		gbc.weightx = 0.01;
-		gbc.weighty = 0.01;
+		gbc1.weightx = 0.01;
+		gbc1.weighty = 0.01;
 		
-		gbc.anchor = GridBagConstraints.LINE_END; 	//allineamento
-		gbc.insets = new Insets(0, 0, 0, 5);
+		gbc1.anchor = GridBagConstraints.LINE_END; 	//allineamento
+		gbc1.insets = new Insets(0, 0, 0, 5);
 		
-		add(buttonAvatar, gbc);
+		add(buttonAvatar, gbc1);
 		
 	}
 }

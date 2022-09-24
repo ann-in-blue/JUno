@@ -10,4 +10,9 @@ public class InvalidTurnException extends Exception
 		this.player = player;
 	}
 
+	public String getPlayer() {
+		return player;
+	}
+
+
 }
