@@ -1,4 +1,4 @@
-package view;
+package altro;
 
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -23,24 +23,24 @@ public class PannelloIscriviti extends JPanel {
 	public PannelloIscriviti() {
 		
 		setLayout(new GridBagLayout());
-//		setPreferredSize(new Dimension(100, 100));
+		setPreferredSize(new Dimension(100, 100));
 		setVisible(true);
 		
 		Border bordoInterno = BorderFactory.createTitledBorder("Iscrizione");
 		Border bordoEsterno = BorderFactory.createEmptyBorder(5, 5, 5, 5);
 		Border bordoFinale = BorderFactory.createCompoundBorder(bordoEsterno, bordoInterno);
 		
-		setBorder(bordoFinale);
+//		setBorder(bordoFinale);
 		
 		titoloFinestra = new JLabel("Inserisci i tuoi dati per creare un account");
 		
 		labelNome = new JLabel("Nome");
-		fieldNome = new JTextField();
+		fieldNome = new JTextField(20);
 		
 		labelAvatar = new JLabel("Inserisci un avatar o usa quello di default!");
 		buttonAvatar = new JButton();
-		avatarChooser = new JFileChooser();
-		avatarChooser.addChoosableFileFilter(new AvatarFilter());
+		//avatarChooser = new JFileChooser();
+		//avatarChooser.addChoosableFileFilter(new AvatarFilter());
 		
 //		buttonAvatar.addActionListener(new ActionListener() {
 //			@Override
@@ -105,7 +105,7 @@ public class PannelloIscriviti extends JPanel {
 		
 		//buttonAvatar
 		gbc1.gridx = 0;
-		gbc1.gridy = 1;
+		gbc1.gridy = 3;
 		
 		gbc1.weightx = 0.01;
 		gbc1.weighty = 0.01;

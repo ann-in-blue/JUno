@@ -2,10 +2,11 @@ package model;
 
 import java.awt.Font;
 import java.util.*;
-
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-public class Game 
+
+
+public class Game extends Observable
 {
 	//campi per salvare i giocatori
 	private int currentPlayer;
@@ -24,7 +25,11 @@ public class Game
 	boolean isGameOver;	
 	
 	
-	public Game(String[] playersId) throws WrongArgumentsException
+	public Game() 
+	{
+	}
+	
+	public void startGame(String[] playersId) throws WrongArgumentsException
 	{
 		deck = new Deck(112);	//creazione del mazzo
 		deck.shuffle();	//shuffle del mazzo
@@ -41,9 +46,7 @@ public class Game
 			ArrayList<Card> hand = new ArrayList<Card>(Arrays.asList(deck.distribuisciCard(7)));
 			playersDecks.add(hand);
 		}
-		
 	}
-	
 	//GETTERS E SETTERS
 	
 	public String getCurrentPlayerName() {

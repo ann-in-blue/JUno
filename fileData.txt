@@ -1,0 +1,6 @@
+robin,robin.png,0,0,0,Principiante
+ann,image.png,0,0,0,Principiante
+legolas,legolas.png,0,0,0,Principiante
+yoda,yoda.png,0,0,0,Principiante
+harry,harry.png,0,0,0,Principiante
+obiwan,obiwan.png,0,0,0,Principiante
