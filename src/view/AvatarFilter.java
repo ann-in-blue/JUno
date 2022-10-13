@@ -1,9 +1,7 @@
-package altro;
+package view;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
-
-import view.Utils;
 
 import java.io.File;
 

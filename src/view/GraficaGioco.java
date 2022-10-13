@@ -4,59 +4,68 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Line2D;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
-public class Grafica1 extends JFrame 
+public class GraficaGioco extends JFrame 
 {
-	private Image image;
+	private JButton buttonDeck;
+	private JButton buttonDiscardDeck;
+	private JPanel panelDecks;
 	private PannelloGiocatore pannelloGiocatore1;
 	private PannelloGiocatore pannelloGiocatore2;
 	private PannelloGiocatore pannelloGiocatore3;
 	private PannelloGiocatore pannelloGiocatore4;
+	private ArrayList<JButton> cardButtons;
 
 	
-	public Grafica1()
+	//prova bottone immagine
+	BufferedImage buttonIcon;
+	
+	public GraficaGioco(String[] players)
 	{
 		super("JUno");
-//		try {
-//			//carica l'immagine 
-//			image= ImageIO.read(new File("images/table.jpg"));
-//			
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//	
-		
-//		setLayout(new BorderLayout());
+				
 		setLayout(new GridBagLayout());
 
-		pannelloGiocatore1 = new PannelloGiocatore(450, 150, "Player 1", 5,5);
-		pannelloGiocatore2 = new PannelloGiocatore(250, 100, "Player 2", 5, 5);
-		pannelloGiocatore3 = new PannelloGiocatore(450, 150, "Player 3", 5,5);
-		pannelloGiocatore4 = new PannelloGiocatore(250, 100, "Player 4", 5, 5);
+		//prova
+		try {
+			buttonIcon = ImageIO.read(new File("small/card_back.png"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		panelDecks = new JPanel();
+		buttonDeck = new JButton(new ImageIcon(buttonIcon));
+//		buttonDeck.setSize(new Dimension(50,50));
+		buttonDiscardDeck = new JButton();
+		
+		panelDecks.add(buttonDeck);
+		panelDecks.add(buttonDiscardDeck);
 
-//		add(pannelloGiocatore1, BorderLayout.SOUTH);
-//		add(pannelloGiocatore2, BorderLayout.LINE_START);
-		//add(pannelloGiocatore3, BorderLayout.NORTH);
-//		add(pannelloGiocatore4, BorderLayout.LINE_END);
+		pannelloGiocatore1 = new PannelloGiocatore(450, 150, players[0], 5, 5);
+		
+		pannelloGiocatore2 = new PannelloGiocatore("images/cartaCopert.png", 250, 100, players[1], 5, 5);
+		pannelloGiocatore3 = new PannelloGiocatore("images/cartaCopert.png", 450, 150, players[2], 5, 5);
+		pannelloGiocatore4 = new PannelloGiocatore("images/cartaCopert.png", 250, 100, players[3], 5, 5);
 
-//
 		GridBagConstraints gbc = new GridBagConstraints();
 		
 		//pannello giocatore 3
 		gbc.gridx = 1;
 		gbc.gridy = 0;
 		
-		gbc.weightx = 0.01;
-		gbc.weighty = 0.01;
+		gbc.weightx = 1.0;
+		gbc.weighty = 1.0;
 		
 //		gbc.anchor = GridBagConstraints.RELATIVE;
-		gbc.insets = new Insets(0, 0, 0, 5);
+//		gbc.insets = new Insets(0, 0, 0, 5);
 		
 		add(pannelloGiocatore3, gbc);
 		
@@ -66,9 +75,9 @@ public class Grafica1 extends JFrame
 		
 		gbc.weightx = 1.0;
 		gbc.weighty = 1.0;
-		gbc.fill = GridBagConstraints.BOTH;	//occupa tutto lo spazio disponibile in altezza e in larghezza.
+//		gbc.fill = GridBagConstraints.BOTH;	//occupa tutto lo spazio disponibile in altezza e in larghezza.
 //		gbc.anchor = GridBagConstraints.LINE_START;
-		gbc.insets = new Insets(0, 0, 0, 5);
+//		gbc.insets = new Insets(0, 0, 0, 5);
 
 		add(pannelloGiocatore4, gbc);
 		
@@ -78,24 +87,33 @@ public class Grafica1 extends JFrame
 		
 		gbc.weightx = 1.0;
 		gbc.weighty = 1.0;
-//		gbc.gridwidth = 2;
-//		gbc.gridheight = 1;
-//		gbc.anchor = GridBagConstraints.LINE_END;
-		gbc.fill = GridBagConstraints.BOTH;	//occupa tutto lo spazio disponibile in altezza e in larghezza.
+
 		add(pannelloGiocatore2, gbc);
 		
 		//pannello giocatore 1
 		gbc.gridx = 1;
 		gbc.gridy = 2;
 		
-		gbc.weightx = 0.01;
-		gbc.weighty = 0.01;
+		gbc.weightx = 1.0;
+		gbc.weighty = 1.0;
 //		gbc.anchor = GridBagConstraints.LINE_START;
 
 		add(pannelloGiocatore1, gbc);
 		
+		//immagine
+		gbc.gridx = 1;
+		gbc.gridy = 1;
+		
+		gbc.weightx = 0.01;
+		gbc.weighty = 0.01;
+//		gbc.fill = GridBagConstraints.BOTH;
+//				gbc.anchor = GridBagConstraints.RELATIVE;
+//		gbc.insets = new Insets(0, 0, 0, 5);
+		
+		add(panelDecks, gbc);
+		
 
-		setSize(1000, 700);
+		setSize(1200, 700);
 
 		setLocationRelativeTo(null);	//mette la finestra al centro dello schermo
 		
@@ -106,6 +124,7 @@ public class Grafica1 extends JFrame
 		setVisible(true);
 		
 	}
+	
 	//ridisegnamo la finestra
 //		@Override
 //		public void paint(Graphics g)

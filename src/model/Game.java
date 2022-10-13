@@ -5,6 +5,12 @@ import java.util.*;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
+import model.exceptions.InvalidCardException;
+import model.exceptions.InvalidColorException;
+import model.exceptions.InvalidTurnException;
+import model.exceptions.InvalidValueException;
+import model.exceptions.WrongArgumentsException;
+
 
 public class Game extends Observable
 {
@@ -27,25 +33,32 @@ public class Game extends Observable
 	
 	public Game() 
 	{
+		playersId = new String[4];
 	}
 	
-	public void startGame(String[] playersId) throws WrongArgumentsException
+	public void startGame()
 	{
-		deck = new Deck(112);	//creazione del mazzo
-		deck.shuffle();	//shuffle del mazzo
-		discardDeck = new ArrayList<Card>();	//mazzo di scarto
-		
-		this.playersId = playersId;
-		currentPlayer = 0;
-		direction = false;
-		playersDecks =  new ArrayList<ArrayList<Card>>();
-		
-		for (int i = 0; i < playersId.length; i++)
+		try
 		{
-			//per ogni giocatore -> array di 7 carte iniziali
-			ArrayList<Card> hand = new ArrayList<Card>(Arrays.asList(deck.distribuisciCard(7)));
-			playersDecks.add(hand);
+			deck = new Deck(112);	//creazione del mazzo
+			deck.shuffle();	//shuffle del mazzo
+			discardDeck = new ArrayList<Card>();	//mazzo di scarto
+			
+			currentPlayer = 0;
+			direction = false;
+			playersDecks =  new ArrayList<ArrayList<Card>>();
+			
+			for (int i = 0; i < playersId.length; i++)
+				{
+				//per ogni giocatore -> array di 7 carte iniziali
+				ArrayList<Card> hand = new ArrayList<Card>(Arrays.asList(deck.distribuisciCard(7)));
+				playersDecks.add(hand);
+			}
+		}catch(WrongArgumentsException wae)
+		{
+			wae.printStackTrace();
 		}
+		
 	}
 	//GETTERS E SETTERS
 	

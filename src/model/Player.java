@@ -8,7 +8,7 @@ import java.io.Serializable;
  * @author a-00
  *
  */
-public class Player implements Serializable
+public class Player 
 {	
 	private String nickname;
 	private String avatar; 	//rappresenta il path dell'immagine profilo del giocatore
@@ -29,7 +29,7 @@ public class Player implements Serializable
 		this.nickname = nickname;
 		this.avatar = avatar;
 		
-		this.livello = "Principiante";
+		this.livello = "Base";
 		
 		
 	}

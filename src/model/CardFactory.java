@@ -1,6 +1,7 @@
 package model;
 
 import model.cards.*;
+import model.exceptions.WrongArgumentsException;
 
 /**
  * classe che ha il compito di inizializzare le varie carte con i parametri necessari.

@@ -3,6 +3,8 @@ package model;
 import java.lang.ModuleLayer.Controller;
 import java.util.Random;
 import model.Game.*;
+import model.exceptions.WrongArgumentsException;
+
 import javax.swing.ImageIcon;
 
 

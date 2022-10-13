@@ -23,35 +23,35 @@ import java.util.stream.Collectors;
  * @author a-00
  *
  */
-public class FilePlayersData
+public class FilePlayersDatabase
 {
 	
-	private ArrayList<Player> players;
+//	private ArrayList<Player> players;
 	
-	public FilePlayersData()
-	{
-		this.players = new ArrayList<Player>();
-	}
-	public FilePlayersData(ArrayList<Player> players) {
-		super();
-		this.players = players;
-	}
-
-	/**
-	 * Metodo per aggiungere un giocatore nella lista.
-	 * @param player
-	 */
-	public void addPlayers(Player player)
-	{
-		players.add(player);
-	}
-	
-	/**
-	 * Metodo che restituisce l'array contenente i giocatori.
-	 */
-	public ArrayList<Player> getPlayers() {
-		return players;
-	}
+//	public FilePlayersData()
+//	{
+//		this.players = new ArrayList<Player>();
+//	}
+//	public FilePlayersData(ArrayList<Player> players) {
+//		super();
+//		this.players = players;
+//	}
+//
+//	/**
+//	 * Metodo per aggiungere un giocatore nella lista.
+//	 * @param player
+//	 */
+//	public void addPlayers(Player player)
+//	{
+//		players.add(player);
+//	}
+//	
+//	/**
+//	 * Metodo che restituisce l'array contenente i giocatori.
+//	 */
+//	public ArrayList<Player> getPlayers() {
+//		return players;
+//	}
 
 
 	/**
@@ -96,12 +96,8 @@ public class FilePlayersData
 	public boolean checkPlayerInFile(File file, String nickname) throws IOException
 	{
 		Path p = Path.of(file.getAbsolutePath());
-//		System.out.println(p);
-//		System.out.println(Files.lines(p).toString());
-	
-		return Files.lines(p).anyMatch(x -> x.startsWith(nickname));
-		//		return Files.lines(Path.of(file.getAbsolutePath())).anyMatch(x -> x.startsWith(nickname));
 
+		return Files.lines(p).anyMatch(x -> x.startsWith(nickname));
 	}
 	
 	
@@ -116,8 +112,8 @@ public class FilePlayersData
 		if(checkPlayerInFile(file, nickname))
 		{
 			try {	
-				System.out.println("fff");
-			//leggiamo l'array di giocatori salvato su file e troviamo la stringa corrispondente al giocatore cercato
+
+				//leggiamo l'array di giocatori salvato su file e troviamo la stringa corrispondente al giocatore cercato
 				List<String> p = Files.lines(Path.of(file.getAbsolutePath())).filter(x -> x.startsWith(nickname)).collect(Collectors.toList());
 			
 			return p.get(0);
@@ -139,15 +135,11 @@ public class FilePlayersData
 	public static void main(String[] args) throws IOException {
 		
 		File f = new File("/home/a-00/git/JUno/fileData.txt");
-		FilePlayersData fd = new FilePlayersData();
+		FilePlayersDatabase fd = new FilePlayersDatabase();
 		
-		fd.salvaSuFile(f, "yoda", "yoda.png");
-		fd.salvaSuFile(f, "harry", "harry.png");
-		fd.salvaSuFile(f, "obiwan", "obiwan.png");
+//		fd.salvaSuFile(f, "yoda", "yoda.png");
 
-
-		
-		//System.out.println(fd.caricaDaFile(f, "hell"));
+		Player p1 = new Player(fd.caricaDaFile(f, "yoda"));
 
 	}
 	

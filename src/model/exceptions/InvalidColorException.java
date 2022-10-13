@@ -1,4 +1,6 @@
-package model;
+package model.exceptions;
+
+import model.Color;
 
 public class InvalidColorException extends Exception
 {

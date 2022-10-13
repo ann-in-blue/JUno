@@ -1,14 +1,20 @@
 package view;
 
+import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.Stroke;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Line2D;
 
 import javax.swing.*;
 
@@ -42,7 +48,7 @@ public class PaginaIniziale extends JPanel
 		labelNickname = new JLabel("Inserisci un nickname...");
 		labelNickname.setFont(new Font("Arial", Font.PLAIN, 20));
 		
-		fieldNickname = new JTextField(30);
+		fieldNickname = new JTextField(20);
 		
 		buttonNickname = new JButton("Invia");
 		buttonNickname.setBackground(Color.LIGHT_GRAY);
@@ -139,5 +145,7 @@ public class PaginaIniziale extends JPanel
 	public void setButtonNickname(JButton buttonNickname) {
 		this.buttonNickname = buttonNickname;
 	}
+	
+
 	
 }

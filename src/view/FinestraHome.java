@@ -39,4 +39,19 @@ public class FinestraHome extends JFrame implements Observer
 		// TODO Auto-generated method stub
 		
 	}
+	
+	//ridisegnamo la finestra
+		@Override
+		public void paint(Graphics g)
+		{
+//			Graphics2D g2d=(Graphics2D)g;			
+			
+			
+		}
+		
+		public void refresh()
+		{
+			this.repaint();
+			
+		}
 }

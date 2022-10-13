@@ -1,6 +1,9 @@
-robin,robin.png,0,0,0,Principiante
-ann,image.png,0,0,0,Principiante
-legolas,legolas.png,0,0,0,Principiante
-yoda,yoda.png,0,0,0,Principiante
-harry,harry.png,0,0,0,Principiante
-obiwan,obiwan.png,0,0,0,Principiante
+bot1,bot1.png,15,0,15,Avanzato
+bot2,bot2.png,10,2,8,Intermedio
+bot3,bot3.png,13,2,11,Intermedio
+robin,robin.png,0,0,0,Base
+ann,image.png,0,0,0,Base
+legolas,legolas.png,0,0,0,Base
+yoda,yoda.png,0,0,0,Base
+harry,harry.png,0,0,0,Base
+obiwan,obiwan.png,0,0,0,Base
