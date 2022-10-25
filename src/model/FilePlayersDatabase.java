@@ -25,35 +25,6 @@ import java.util.stream.Collectors;
  */
 public class FilePlayersDatabase
 {
-	
-//	private ArrayList<Player> players;
-	
-//	public FilePlayersData()
-//	{
-//		this.players = new ArrayList<Player>();
-//	}
-//	public FilePlayersData(ArrayList<Player> players) {
-//		super();
-//		this.players = players;
-//	}
-//
-//	/**
-//	 * Metodo per aggiungere un giocatore nella lista.
-//	 * @param player
-//	 */
-//	public void addPlayers(Player player)
-//	{
-//		players.add(player);
-//	}
-//	
-//	/**
-//	 * Metodo che restituisce l'array contenente i giocatori.
-//	 */
-//	public ArrayList<Player> getPlayers() {
-//		return players;
-//	}
-
-
 	/**
 	 * Metodo per salvare i dati di un giocatore sul file in input.
 	 * Il nickname e l'avatar vengono inseriti dall'utente mentre gli altri dati vengono settati a 0.

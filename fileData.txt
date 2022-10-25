@@ -1,9 +1,9 @@
-bot1,bot1.png,15,0,15,Avanzato
-bot2,bot2.png,10,2,8,Intermedio
-bot3,bot3.png,13,2,11,Intermedio
+bot1,avatar1.jpg,15,0,15,Avanzato
+bot2,avatar2.jpg,10,2,8,Intermedio
+bot3,avatar3.jpg,13,2,11,Intermedio
 robin,robin.png,0,0,0,Base
-ann,image.png,0,0,0,Base
+ann,avatar4.jpg,0,0,0,Base
 legolas,legolas.png,0,0,0,Base
 yoda,yoda.png,0,0,0,Base
 harry,harry.png,0,0,0,Base
-obiwan,obiwan.png,0,0,0,Base
+hhh,avatar2.jpg,0,0,0,Base

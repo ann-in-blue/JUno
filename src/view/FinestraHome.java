@@ -7,9 +7,14 @@ import java.util.Observer;
 
 import javax.swing.*;
 
-public class FinestraHome extends JFrame implements Observer
+public class FinestraHome extends JFrame 
 {	
+	private PaginaIniziale paginaIniziale;
 	
+	public PaginaIniziale getPaginaIniziale() {
+		return paginaIniziale;
+	}
+
 	/**
 	 * Costruttore della finestra
 	 */
@@ -19,7 +24,7 @@ public class FinestraHome extends JFrame implements Observer
 		/**
 		 * Inizializzazione dei vari elementi della finestra
 */
-		PaginaIniziale paginaIniziale = new PaginaIniziale();
+		paginaIniziale = new PaginaIniziale();
 	
 		setLayout(new BorderLayout());
 		setSize(1200, 700);
@@ -34,24 +39,19 @@ public class FinestraHome extends JFrame implements Observer
 //		pack();
 	}
 
-	@Override
-	public void update(Observable o, Object arg) {
-		// TODO Auto-generated method stub
-		
-	}
 	
 	//ridisegnamo la finestra
-		@Override
-		public void paint(Graphics g)
-		{
-//			Graphics2D g2d=(Graphics2D)g;			
-			
-			
-		}
-		
-		public void refresh()
-		{
-			this.repaint();
-			
-		}
+//	@Override
+//	public void paint(Graphics g)
+//	{
+////			Graphics2D g2d=(Graphics2D)g;			
+//		
+//		
+//	}
+//	
+//	public void refresh()
+//	{
+//		this.repaint();
+//		
+//	}
 }

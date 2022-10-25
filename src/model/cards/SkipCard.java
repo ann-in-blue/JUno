@@ -13,6 +13,7 @@ public class SkipCard extends Card
 
 	public SkipCard(Color color, String nameImage)
 	{
+		super();
 		setColor(color);
 		setImage(nameImage);
 	}

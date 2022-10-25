@@ -16,16 +16,16 @@ public class ControllerFilePlayersDatabase
 	 */
 	public void salvaSuFile(String nickname, String avatar) throws IOException
 	{
-		fileData.salvaSuFile(JUno.file, nickname, avatar);
+		fileData.salvaSuFile(ControllerJUno.file, nickname, avatar);
 	}
 
 	public String caricaDaFile(String nickname) throws IOException
 	{
-		return fileData.caricaDaFile(JUno.file, nickname);
+		return fileData.caricaDaFile(ControllerJUno.file, nickname);
 	}
 	
 	public boolean checkPlayerInFile(String nickname) throws IOException
 	{
-		return fileData.checkPlayerInFile(JUno.file, nickname);
+		return fileData.checkPlayerInFile(ControllerJUno.file, nickname);
 	}
 }

@@ -1,6 +1,7 @@
 package view;
 
 import java.awt.BorderLayout;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -8,6 +9,8 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+import controller.AvatarFilter;
 
 public class PannelloAvatar extends JPanel{
 
@@ -47,6 +50,6 @@ public class PannelloAvatar extends JPanel{
 			}
 			else
 				//avatar di default
-				return "image.png";
+				return "images/image.png";
 		}
 }

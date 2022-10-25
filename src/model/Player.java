@@ -1,7 +1,5 @@
 package model;
 
-import java.io.Serializable;
-
 /**
  * classe che rappresenta un giocatore.
  * DAti: nickname, avatar, partite giocate, vinte e perse, livello.
@@ -62,9 +60,9 @@ public class Player
 		return nickname;
 	}
 
-	public void setNickname(String nickname) {
-		this.nickname = nickname;
-	}
+//	public void setNickname(String nickname) {
+//		this.nickname = nickname;
+//	}
 
 	public String getAvatar() {
 		return avatar;

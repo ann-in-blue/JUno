@@ -1,7 +1,8 @@
 package model;
 
 import model.cards.*;
-import model.exceptions.WrongArgumentsException;
+
+import controller.exceptions.WrongArgumentsException;
 
 /**
  * classe che ha il compito di inizializzare le varie carte con i parametri necessari.
@@ -61,8 +62,9 @@ public interface CardFactory
 		//in base al tipo crea la carta specifica
 		return switch(type) 
 		{
-		case VALUE_CARD -> new ValueCard(color, value, nameImage);
-			
+		case VALUE_CARD -> new ValueCard(color, value, nameImage);	
+		case DRAW_2_CARD -> new Draw2Card(color, nameImage);
+
 		default -> 
 			throw new WrongArgumentsException("Wrong arguments for the type: "+type.toString());
 		};

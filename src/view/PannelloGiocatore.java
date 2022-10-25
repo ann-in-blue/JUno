@@ -2,6 +2,7 @@ package view;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -12,48 +13,41 @@ import javax.swing.border.Border;
 
 public class PannelloGiocatore extends JPanel{
 
-//	private ImageIcon imageCard;
 	private BufferedImage myPicture;
 	private JLabel picLabel;
+	private JLabel nickname;
+	private JLabel remainingCards;
 	
-	public PannelloGiocatore(String imagePath, int larghezza, int altezza, String titolo, int offsetDx, int offsetSx)
+	public PannelloGiocatore(String imagePath, int larghezza, int altezza, String titolo, int numOfCards)
 	{
 		try {
 			//carica l'immagine 
-//			imageCard= new ImageIcon("images/mazzo.png");
 			myPicture = ImageIO.read(new File(imagePath));
 			picLabel = new JLabel(new ImageIcon(myPicture));			
-			picLabel.setSize(100, 70);
+//			picLabel.setSize(50, 50);
 			
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		//nome del giocatore
+		nickname = new JLabel(titolo);
+		nickname.setFont(new Font("Arial", Font.PLAIN, 35));
+		remainingCards = new JLabel("Remaining cards: "+ numOfCards);
 		
 		setLayout(new BorderLayout());
 		setPreferredSize(new Dimension(larghezza, altezza));
-		add(new JLabel(titolo));
+		add(nickname, BorderLayout.PAGE_START);
 		add(picLabel, BorderLayout.CENTER);
+		add(remainingCards, BorderLayout.PAGE_END);
 
-		
-		Border bordoInterno = BorderFactory.createTitledBorder(titolo);
-		Border bordoEsterno = BorderFactory.createEmptyBorder(5, offsetSx, 5, offsetDx);
-		Border bordoFinale = BorderFactory.createCompoundBorder(bordoEsterno, bordoInterno);
-		
-		setBorder(bordoFinale);
 	}
 	
 	
-	public PannelloGiocatore(int larghezza, int altezza, String titolo, int offsetDx, int offsetSx)
+	public PannelloGiocatore(int larghezza, int altezza, String titolo)
 	{
 		setPreferredSize(new Dimension(larghezza, altezza));
-		add(new JLabel(titolo));
-		
-		Border bordoInterno = BorderFactory.createTitledBorder(titolo);
-		Border bordoEsterno = BorderFactory.createEmptyBorder(5, offsetSx, 5, offsetDx);
-		Border bordoFinale = BorderFactory.createCompoundBorder(bordoEsterno, bordoInterno);
-		
-		setBorder(bordoFinale);
+		add(new JLabel(titolo), BorderLayout.PAGE_START);
+
 	}
 
 

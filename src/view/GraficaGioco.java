@@ -1,31 +1,36 @@
 package view;
 
 import java.awt.*;
-import java.awt.event.*;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.Line2D;
+
+//import java.awt.event.*;
+//import java.awt.geom.AffineTransform;
+//import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Observable;
+//import java.util.ArrayList;
+import java.util.Observer;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
-public class GraficaGioco extends JFrame 
+import model.Card;
+
+public class GraficaGioco extends JFrame
 {
 	private JButton buttonDeck;
 	private JButton buttonDiscardDeck;
 	private JPanel panelDecks;
-	private PannelloGiocatore pannelloGiocatore1;
+	private JLabel labelTurno;
+	private PannelloGiocatoreUmano pannelloGiocatoreUmano;
 	private PannelloGiocatore pannelloGiocatore2;
 	private PannelloGiocatore pannelloGiocatore3;
 	private PannelloGiocatore pannelloGiocatore4;
-	private ArrayList<JButton> cardButtons;
-
-	
+		
 	//prova bottone immagine
-	BufferedImage buttonIcon;
+	private BufferedImage buttonIcon;
+	private BufferedImage iconDiscardDeck;
 	
 	public GraficaGioco(String[] players)
 	{
@@ -35,25 +40,30 @@ public class GraficaGioco extends JFrame
 
 		//prova
 		try {
-			buttonIcon = ImageIO.read(new File("small/card_back.png"));
+			buttonIcon = ImageIO.read(new File("images/card_back.png"));
+			iconDiscardDeck = ImageIO.read(new File("images/card_back.png"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
 		panelDecks = new JPanel();
+		labelTurno = new JLabel("Turno di: ");
 		buttonDeck = new JButton(new ImageIcon(buttonIcon));
-//		buttonDeck.setSize(new Dimension(50,50));
-		buttonDiscardDeck = new JButton();
-		
+		buttonDeck.setSize(new Dimension(20,50));
+		buttonDeck.setBackground(super.getBackground());
+		buttonDiscardDeck = new JButton(new ImageIcon(iconDiscardDeck));
+		buttonDiscardDeck.setSize(new Dimension(50,50));
+
 		panelDecks.add(buttonDeck);
 		panelDecks.add(buttonDiscardDeck);
-
-		pannelloGiocatore1 = new PannelloGiocatore(450, 150, players[0], 5, 5);
+		panelDecks.add(labelTurno);
 		
-		pannelloGiocatore2 = new PannelloGiocatore("images/cartaCopert.png", 250, 100, players[1], 5, 5);
-		pannelloGiocatore3 = new PannelloGiocatore("images/cartaCopert.png", 450, 150, players[2], 5, 5);
-		pannelloGiocatore4 = new PannelloGiocatore("images/cartaCopert.png", 250, 100, players[3], 5, 5);
+		pannelloGiocatoreUmano = new PannelloGiocatoreUmano(800, 500, players[0]);
+		
+		pannelloGiocatore2 = new PannelloGiocatore("images/card_back_alt.png", 250, 200, players[1], 7);
+		pannelloGiocatore3 = new PannelloGiocatore("images/card_back_alt.png", 250, 200, players[2], 7);
+		pannelloGiocatore4 = new PannelloGiocatore("images/card_back_alt.png", 250, 200, players[3], 7);
 
 		GridBagConstraints gbc = new GridBagConstraints();
 		
@@ -61,9 +71,10 @@ public class GraficaGioco extends JFrame
 		gbc.gridx = 1;
 		gbc.gridy = 0;
 		
-		gbc.weightx = 1.0;
-		gbc.weighty = 1.0;
-		
+		gbc.weightx = 0.01;
+		gbc.weighty = 0.01;
+		gbc.fill = GridBagConstraints.VERTICAL;	//occupa tutto lo spazio disponibile in altezza e in larghezza.
+
 //		gbc.anchor = GridBagConstraints.RELATIVE;
 //		gbc.insets = new Insets(0, 0, 0, 5);
 		
@@ -71,11 +82,10 @@ public class GraficaGioco extends JFrame
 		
 //pannello giocatore 4
 		gbc.gridx = 2;	//mette il componente a destra di quello precedente
-		gbc.gridy = 1;
+		gbc.gridy = 0;
 		
-		gbc.weightx = 1.0;
-		gbc.weighty = 1.0;
-//		gbc.fill = GridBagConstraints.BOTH;	//occupa tutto lo spazio disponibile in altezza e in larghezza.
+		gbc.weightx = 0.01;
+		gbc.weighty = 0.01;
 //		gbc.anchor = GridBagConstraints.LINE_START;
 //		gbc.insets = new Insets(0, 0, 0, 5);
 
@@ -83,10 +93,10 @@ public class GraficaGioco extends JFrame
 		
 		//pannello giocatore 2
 		gbc.gridx = 0;	//inizio seconda riga
-		gbc.gridy = 1;
+		gbc.gridy = 0;
 		
-		gbc.weightx = 1.0;
-		gbc.weighty = 1.0;
+		gbc.weightx = 0.1;
+		gbc.weighty = 0.1;
 
 		add(pannelloGiocatore2, gbc);
 		
@@ -94,11 +104,11 @@ public class GraficaGioco extends JFrame
 		gbc.gridx = 1;
 		gbc.gridy = 2;
 		
-		gbc.weightx = 1.0;
-		gbc.weighty = 1.0;
-//		gbc.anchor = GridBagConstraints.LINE_START;
+		gbc.weightx = 0.9;
+		gbc.weighty = 0.9;
+		gbc.fill = GridBagConstraints.HORIZONTAL;
 
-		add(pannelloGiocatore1, gbc);
+		add(pannelloGiocatoreUmano, gbc);
 		
 		//immagine
 		gbc.gridx = 1;
@@ -106,14 +116,13 @@ public class GraficaGioco extends JFrame
 		
 		gbc.weightx = 0.01;
 		gbc.weighty = 0.01;
-//		gbc.fill = GridBagConstraints.BOTH;
-//				gbc.anchor = GridBagConstraints.RELATIVE;
-//		gbc.insets = new Insets(0, 0, 0, 5);
+		gbc.fill = GridBagConstraints.NONE;
+		gbc.anchor = GridBagConstraints.CENTER;
 		
 		add(panelDecks, gbc);
 		
 
-		setSize(1200, 700);
+		setSize(1500, 1000);
 
 		setLocationRelativeTo(null);	//mette la finestra al centro dello schermo
 		
@@ -124,22 +133,55 @@ public class GraficaGioco extends JFrame
 		setVisible(true);
 		
 	}
+
+
+	public JLabel getLabelTurno() {
+		return labelTurno;
+	}
+
+
+	public void setLabelTurno(JLabel labelTurno) {
+		this.labelTurno = labelTurno;
+	}
+
+
+	public JButton getButtonDeck() {
+		return buttonDeck;
+	}
 	
-	//ridisegnamo la finestra
-//		@Override
-//		public void paint(Graphics g)
-//		{
-//			Graphics2D g2d=(Graphics2D)g;
-//			//versione evoluta di Graphics
-//			
-//			AffineTransform identity = new AffineTransform();
-//			AffineTransform trans = new AffineTransform();
-//			trans.setTransform(identity);
-//			g2d.drawImage(image, trans, this);
-//			
-//			
-//			
-//		}
+	public PannelloGiocatoreUmano getPannelloGiocatoreUmano() {
+		return pannelloGiocatoreUmano;
+	}
+
+	public void setPannelloGiocatoreUmano(PannelloGiocatoreUmano pannelloGiocatoreUmano) {
+		this.pannelloGiocatoreUmano = pannelloGiocatoreUmano;
+	}
+	
+	/**
+	 * Metodo per cambiare la carta presente sul tavolo nel mazzo di scarto.
+	 * @param card
+	 */
+	public void setDiscardButton(Card card)
+	{
+			String image = card.getImage();
+			BufferedImage iconDiscardDeck;
+			
+			try {				
+				panelDecks.remove(buttonDiscardDeck);
+				iconDiscardDeck = ImageIO.read(new File(image));
+				buttonDiscardDeck = new JButton(new ImageIcon(iconDiscardDeck));
+//				buttonDiscardDeck.setIcon(new ImageIcon(iconDiscardDeck));
+				panelDecks.add(buttonDiscardDeck);
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+
+	public JButton getButtonDiscardDeck() {
+		return buttonDiscardDeck;
+	}
 
 
 }

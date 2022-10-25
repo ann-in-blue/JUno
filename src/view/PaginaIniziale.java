@@ -1,24 +1,25 @@
 package view;
 
-import java.awt.BasicStroke;
-import java.awt.BorderLayout;
+
+//import java.awt.BorderLayout;
 import java.awt.Color;
+
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
+//import java.awt.Graphics;
+//import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.Stroke;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.Line2D;
+//import java.awt.Stroke;
+//import java.awt.event.ActionEvent;
+//import java.awt.event.ActionListener;
+//import java.awt.geom.AffineTransform;
+//import java.awt.geom.Line2D;
 
 import javax.swing.*;
 
-import controller.listeners.PaginaInizialeEventListener;
+import controller.PaginaInizialeEventListener;
 
 /**
  * Classe che rappresenta la pagina iniziale del gioco 
@@ -27,11 +28,11 @@ import controller.listeners.PaginaInizialeEventListener;
  */
 public class PaginaIniziale extends JPanel
 {
-	protected JLabel labelTitolo;
-	protected JLabel labelNickname;
-	protected JTextField fieldNickname;
-	protected JButton buttonNickname;
-	protected JButton btn;
+	private JLabel labelTitolo;
+	private JLabel labelNickname;
+	private JTextField fieldNickname;
+	private JButton buttonNickname;
+	private JButton btn;
 		
 	public PaginaIniziale()
 	{		
@@ -41,7 +42,7 @@ public class PaginaIniziale extends JPanel
 		setLayout(new GridBagLayout());
 		setVisible(true);
 		
-	//inizializzazione delle componenti della pagina
+		//inizializzazione delle componenti della pagina
 		labelTitolo = new JLabel("JUno");
 		labelTitolo.setFont(new Font("Arial", Font.PLAIN, 40));
 		
@@ -49,6 +50,7 @@ public class PaginaIniziale extends JPanel
 		labelNickname.setFont(new Font("Arial", Font.PLAIN, 20));
 		
 		fieldNickname = new JTextField(20);
+		fieldNickname.requestFocusInWindow();
 		
 		buttonNickname = new JButton("Invia");
 		buttonNickname.setBackground(Color.LIGHT_GRAY);
@@ -58,10 +60,6 @@ public class PaginaIniziale extends JPanel
 
 		btn = new JButton();
 		btn.setVisible(false);
-		
-		//azioni da eseguire una volta cliccato il bottone "Invia"
-		buttonNickname.addActionListener(new PaginaInizialeEventListener(fieldNickname.getText()));	
-		
 		
 		GridBagConstraints gbc = new GridBagConstraints();
 
@@ -127,25 +125,29 @@ public class PaginaIniziale extends JPanel
 		gbc.weighty = 0.05;
 		add(new JPanel(), gbc);
 				
+		
+		//azioni da eseguire una volta cliccato il bottone "Invia"
+//		buttonNickname.addActionListener(new PaginaInizialeEventListener(fieldNickname));			
+//		buttonNickname.addActionListener(new ActionListener() {
+//
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				String text = fieldNickname.getText();
+//				System.out.println(text);
+//
+//			}
+//			
+//		});
+				
 
-	}
-
-	public JTextField getFieldNickname() {
-		return fieldNickname;
-	}
-
-	public void setFieldNickname(JTextField fieldNickname) {
-		this.fieldNickname = fieldNickname;
 	}
 
 	public JButton getButtonNickname() {
 		return buttonNickname;
 	}
 
-	public void setButtonNickname(JButton buttonNickname) {
-		this.buttonNickname = buttonNickname;
+	public JTextField getFieldNickname() {
+		return fieldNickname;
 	}
-	
-
 	
 }

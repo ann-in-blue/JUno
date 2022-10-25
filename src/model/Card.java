@@ -14,9 +14,8 @@ import javax.imageio.ImageIO;
  */
 public abstract class Card implements CardInterface
 {
-	private Image img;
+	private String image;
 	private Color color;
-	private boolean isWildCard;	//serve????
 
 
 	@Override
@@ -26,9 +25,9 @@ public abstract class Card implements CardInterface
 	}
 	
 	@Override
-	public Image getImage()
+	public String getImage()
 	{
-		return img;
+		return image;
 	}
 	@Override
 	public void setColor(Color color)
@@ -37,17 +36,9 @@ public abstract class Card implements CardInterface
 	}
 	
 	@Override
-	public void setImage(String nameImage)
+	public void setImage(String image)
 	{
-		try {
-			//carica l'immagine 		
-			img = ImageIO.read(new File(nameImage));
-			
-		} catch (IOException e) 
-		{
-			e.printStackTrace();
-		}
-
+		this.image = image;
 	}
 	@Override
 	public boolean isWildCard() {

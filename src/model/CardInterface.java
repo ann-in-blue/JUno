@@ -6,7 +6,7 @@ public interface CardInterface
 {
 	
 	public Color getColor();
-	public Image getImage();
+	public String getImage();
 	public boolean isWildCard();
 	public void setColor(Color color);
 	public String toString();
