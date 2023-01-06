@@ -29,38 +29,34 @@ public class CardEventListener implements ActionListener
 	@Override
 	public void actionPerformed(ActionEvent e) 
 	{
-		System.out.println(card);
-		System.out.println(card.getColor());
-//		System.out.println(((ValueCard)card).getValue());
-		
-		try {
+//		if(controllerJUno.game.getCurrentPlayer()==0)
+//		{
 			
-			if(controllerJUno.game.playCard(controllerJUno.game.getCurrentPlayerName(), card))
-			{
-				System.out.println("true check");
+			System.out.println(card);
+			System.out.println(card.getColor());
+	//		System.out.println(((ValueCard)card).getValue());
+			
+			try {
 				
-				controllerJUno.update(controllerJUno.game, card);
-				System.out.println("Carta giocata: "+ card);
+					controllerJUno.game.playCard(controllerJUno.game.getCurrentPlayerName(), card);
 				
-				for(int i = 1; i<4; i++)
-				{
-					//turno del giocatore artificiale
-					Card card = controllerJUno.game.playCardArtificial(i);
-					System.out.println("carta giocata ai:"+card);
+					System.out.println("true check");
 					
-					controllerJUno.update(controllerJUno.game, card);
-//					controllerJUno.viewGioco.getPannelloGiocatoreUmano().validate();
-					controllerJUno.viewGioco.getPannelloGiocatoreUmano().refresh();
-				}
-			}
+					controllerJUno.update(ControllerJUno.game, card);
+//					controllerJUno.playTurn();
+					System.out.println("Carta giocata: "+ card);
 				
-			
-		} catch (InvalidTurnException | InvalidColorException | InvalidValueException | InvalidCardException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+					
+				
+			} catch (InvalidTurnException | InvalidColorException | InvalidValueException | InvalidCardException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+//			} catch (InterruptedException e1) {
+//				// TODO Auto-generated catch block
+//				e1.printStackTrace();
+			}
 		}
-		
-	}
+//	}
 	
 
 }

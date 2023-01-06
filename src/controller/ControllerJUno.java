@@ -7,10 +7,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
 
+import controller.exceptions.InvalidTurnException;
 import controller.exceptions.WrongArgumentsException;
 import model.ArtificialPlayer;
 import model.Card;
@@ -113,11 +115,11 @@ public class ControllerJUno implements Observer
 				//per ogni carta in mano al giocatore umano aggiungo l'immagine alla view
 				viewGioco.getPannelloGiocatoreUmano().addButtonCard(game.getPlayerDeck(nickname).get(i));
 			
-				/**
-				 * Aggancio dei listeners sulle carte del giocatore umano:
-				 * Per ogni carta presente nella mano del giocatore umano aggiungo un listener che permetterà di scegliere la carta da giocare.
-				 */
-				viewGioco.getPannelloGiocatoreUmano().getCardButtons().get(i).addActionListener(new CardEventListener(game.getPlayerDeck(nickname).get(i), this));
+					/**
+					 * Aggancio dei listeners sulle carte del giocatore umano:
+					 * Per ogni carta presente nella mano del giocatore umano aggiungo un listener che permetterà di scegliere la carta da giocare.
+					 */
+					viewGioco.getPannelloGiocatoreUmano().getCardButtons().get(i).addActionListener(new CardEventListener(game.getPlayerDeck(nickname).get(i), this));
 
 			}
 			/**
@@ -174,32 +176,140 @@ public class ControllerJUno implements Observer
 		public void update(Observable o, Object arg) {
 			
 			
-			System.out.println("update fatto" + arg);
+			System.out.println("update fatto \n" + arg);
 
-			viewGioco.setDiscardButton(game.getDiscardDeck().get(game.getDiscardDeck().size()-1));
+			//viewGioco.setDiscardButton(game.getDiscardDeck().get(game.getDiscardDeck().size()-1));
 //			viewGioco.getPannelloGiocatoreUmano().validate();
-			ArrayList<Card> hand = game.getPlayerDeck(game.getPlayersId()[0]);
+			//ArrayList<Card> hand = game.getPlayerDeck(game.getPlayersId()[0]);
 //			viewGioco.getPannelloGiocatoreUmano().getCardButtons().clear();
 //			for(Card c : hand)
 //			viewGioco.getPannelloGiocatoreUmano().addButtonCard(c);
 //			game.getPlayersDecks().get(game.getCurrentPlayer()).add((Card)arg);
 			System.out.println(game.getPlayersDecks().get(game.getCurrentPlayer()));
 //			
-			
 			//prova refresh
 			System.out.println("prova refresh");
-			viewGioco.getPannelloGiocatoreUmano().refresh();
-			
-			viewGioco.getPannelloGiocatoreUmano().removeAll(); // Pulisco il pannello
-			viewGioco.getPannelloGiocatoreUmano().setCardButtons(game.getPlayersDecks().get(game.getCurrentPlayer()));
+				
+			if(game.getCurrentPlayer()==0)	//se è il turno del giocatore umano
+			{				
+				viewGioco.getPannelloGiocatoreUmano().refresh();
+				
+				viewGioco.getPannelloGiocatoreUmano().removeAll(); // Pulisco il pannello
+				game.getPlayersDecks().get(0).remove((Card)arg);
+				viewGioco.getPannelloGiocatoreUmano().setCardButtons(game.getPlayersDecks().get(0));	//deve mostrare solo le card del giocatore umano
+				//viewGioco.setDiscardButton(game.getDiscardDeck().get(game.getDiscardDeck().size()-1));
+				viewGioco.setDiscardButton((Card)arg);
+				
+				// Aggiungo i componenti
+				viewGioco.getPannelloGiocatoreUmano().repaint();
+				viewGioco.getPannelloGiocatoreUmano().validate();
+				viewGioco.repaint();
+				viewGioco.validate();
+				viewGioco.refresh();
 
-			// Aggiungo i componenti
-			viewGioco.getPannelloGiocatoreUmano().repaint();
-			viewGioco.getPannelloGiocatoreUmano().validate();
-			viewGioco.refresh();
-			
+
+			}
+			else	//se è il turno dei giocatori artificiali
+			{				
+//				viewGioco.removeAll();
+				viewGioco.setDiscardButton((Card)arg);
+
+				viewGioco.repaint();
+				viewGioco.validate();
+				viewGioco.refresh();
+			}
 			
 
+			
+			
+//  		try {
+//				playTurn();
+//				
+//				
+//			} catch (InvalidTurnException | InterruptedException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+}
+
+/**
+ * Metodo che permette ai giocatori artificiali di giocare il loro turno
+ * @throws InvalidTurnException
+ * @throws InterruptedException
+ */
+		public void playTurn() throws InvalidTurnException, InterruptedException
+		{
+			while(!game.isGameOver)
+			{
+				if(game.getCurrentPlayer()!=0)
+					{
+						System.out.println("**"+"giocatore"+ game.getCurrentPlayer());
+
+						//turno del giocatore artificiale
+						Card card = game.playCardArtificial(game.getCurrentPlayer());
+						
+						System.out.println("carta giocata ai:"+card);	
+	
+						this.update(game, card);						
+						Thread.sleep(7000);
+					}
+				else
+				{
+					waitForUserInput();
+
+				}
+//				System.out.println("**"+"giocatore"+ game.getCurrentPlayer());
+//			
+//				//turno del giocatore artificiale
+//				Card card = game.playCardArtificial(game.getCurrentPlayer());
+//				//
+//				System.out.println("carta giocata ai:"+card);	
+//				//
+//				this.update(game, card);						
+//				Thread.sleep(7000);
+					
+				//			while(!game.isGameOver)
+				//			{
+//				System.out.println("carta giocata ai:"+card);	
+//				//
+//				this.update(game, card);						
+					
+					}
+			//waitForUserInput();
+					
+//					else
+//					{
+//						System.out.println("*************"+"giocatore"+ game.getCurrentPlayer());
+//
+//						Thread.sleep(7);
+//						System.out.println("_______________________");
+//					}
+						
+						//				controllerJUno.viewGioco.getPannelloGiocatoreUmano().validate();
+	//				viewGioco.getPannelloGiocatoreUmano().refresh();
+				
+						
+				
+			
+			
 		}
 
+		public void waitForUserInput() {
+			
+			for(int i=0; i< game.getPlayerDeckSize(humanPlayer.getNickname()); i++)
+			{
+//				System.out.println(game.getPlayerDeckSize(nickname));
+//				System.out.println(game.getPlayerDeck(nickname).get(i));
+				
+					/**
+					 * Aggancio dei listeners sulle carte del giocatore umano:
+					 * Per ogni carta presente nella mano del giocatore umano aggiungo un listener che permetterà di scegliere la carta da giocare.
+					 */
+				viewGioco.getPannelloGiocatoreUmano().getCardButtons().get(i).addActionListener(new CardEventListener(game.getPlayerDeck(humanPlayer.getNickname()).get(i), this));
+				this.update(game, null);
+
+			}
+
+	
+		}
 }

@@ -29,6 +29,9 @@ public class ButtonUnoEventListener implements ActionListener
 	public void actionPerformed(ActionEvent e) 
 	{
 		try {
+			
+			
+			System.out.println("Prova bottone uno");
 			game.checkInvalidTurn(currentPlayerName);
 			//se rimane solo una carta nel mazzo è necessario dire "UNO"
 			if(game.getPlayerDeckSize(currentPlayerName) == 1)

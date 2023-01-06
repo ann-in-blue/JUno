@@ -29,8 +29,8 @@ public class Game extends Observable
 	private Color validColor;
 	private int validValue;
 	
-	boolean direction;	//senso orario o senso antiorario
-	boolean isGameOver;	
+	public boolean direction;	//senso orario o senso antiorario
+	public boolean isGameOver;	
 	
 	
 	public Game() 
@@ -184,7 +184,7 @@ public class Game extends Observable
 							default -> null;
 					});
 				}
-				},2000); 	
+				},3000); 	
 		}
 		
 		//caso in cui esce una carta Skip
@@ -225,6 +225,8 @@ public class Game extends Observable
 		
 		//aggiungiamo la carta 
 		discardDeck.add(card);
+		notifyObservers(card);
+		
 		
 	}
 
@@ -244,7 +246,7 @@ public class Game extends Observable
 		}
 		
 		/**
-		 * Inseriamo una pausa di 2 secondi per far si che, nel caso in cui la carta SKIP fosse pescata come prima carta, venga prima creata la view e poi il messaggio a schermo
+		 * Inseriamo una pausa di 5 secondi per far si che, nel caso in cui la carta SKIP fosse pescata come prima carta, venga prima creata la view e poi il messaggio a schermo
 		 */
 		new Timer().schedule(new TimerTask(){
 			@Override 
@@ -254,7 +256,7 @@ public class Game extends Observable
 				message.setFont(new Font("Arial", Font.BOLD, 30));
 				JOptionPane.showMessageDialog(null, message);
 				}
-			},2000);
+			},5000);
 
 		
 		
@@ -289,7 +291,7 @@ public class Game extends Observable
 					message.setFont(new Font("Arial", Font.BOLD, 30));
 		JOptionPane.showMessageDialog(null, message);
 			}
-			},2000);		
+			},5000);		
 		
 	}
 	
@@ -324,7 +326,16 @@ public class Game extends Observable
 					}
 	
 				}			
-			JOptionPane.showMessageDialog(null, playersId[currentPlayer] + " drew "+ n+" cards!");
+			new Timer().schedule(new TimerTask(){
+				@Override 
+				public void run(){
+				
+					JLabel message = new JLabel(playersId[currentPlayer] + " drew "+ n+" cards!");
+					message.setFont(new Font("Arial", Font.BOLD, 30));
+					JOptionPane.showMessageDialog(null, message);
+					}
+				},5000);
+//			JOptionPane.showMessageDialog(null, playersId[currentPlayer] + " drew "+ n+" cards!");
 			
 			/**
 			 * Se il giocatore che ha pescato le carte è il giocatore umano comunichiamo alla view, attraverso il controller che vanno aggiunte n carte al mazzo del giocatore.
@@ -387,7 +398,7 @@ public class Game extends Observable
 			//messaggio a schermo per l'utente
 			JOptionPane.showMessageDialog(null, "It is not "+ player + " turn!");
 			//eccezione
-			throw new InvalidTurnException("It is not "+ player + " turn!", player);
+			//throw new InvalidTurnException("It is not "+ player + " turn!", player);
 		}
 	
 	}
@@ -418,7 +429,9 @@ public class Game extends Observable
 			setValidValue(-1);
 			
 			//togliamo la carta dal mazzo del giocatore che l'ha giocata e la mettiamo nel mazzo di scarto
-			playerCards.remove(card);
+//			playerCards.remove(card);
+//			playersDecks.get(getCurrentPlayer()) = playerCards;
+			getPlayersDecks().get(getCurrentPlayer()).remove(card);
 			
 			checkUno();
 			isGameOver();
@@ -444,7 +457,9 @@ public class Game extends Observable
 			setValidValue(-1);	//si setta il valore di gioco a -1
 			
 			//togliamo la carta dal mazzo del giocatore che l'ha giocata e la mettiamo nel mazzo di scarto
-			playerCards.remove(card);
+//			playerCards.remove(card);
+			getPlayersDecks().get(getCurrentPlayer()).remove(card);
+
 			checkUno();
 			isGameOver();
 			discardDeck.add(card);
@@ -466,8 +481,11 @@ public class Game extends Observable
 			{
 				setValidValue(-1);	//la carta +2 non ha valore quindi viene cambiato il valore di gioco
 				//togliamo la carta dal mazzo del giocatore che l'ha giocata e la mettiamo nel mazzo di scarto
-				playerCards.remove(card);
+//				playerCards.remove(card);
+				getPlayersDecks().get(getCurrentPlayer()).remove(card);
+
 				discardDeck.add(card);
+				
 				checkUno();
 				isGameOver();
 				
@@ -482,7 +500,9 @@ public class Game extends Observable
 			{
 				setValidValue(-1);	
 				//togliamo la carta dal mazzo del giocatore che l'ha giocata e la mettiamo nel mazzo di scarto
-				playerCards.remove(card);
+//				playerCards.remove(card);
+				getPlayersDecks().get(getCurrentPlayer()).remove(card);
+
 				checkUno();
 				isGameOver();
 				discardDeck.add(card);
@@ -502,7 +522,9 @@ public class Game extends Observable
 				setValidValue(-1);
 				
 				//togliamo la carta dal mazzo del giocatore che l'ha giocata e la mettiamo nel mazzo di scarto
-				playerCards.remove(card);
+//				playerCards.remove(card);
+				getPlayersDecks().get(getCurrentPlayer()).remove(card);
+
 				checkUno();
 				isGameOver();
 				discardDeck.add(card);
@@ -524,7 +546,9 @@ public class Game extends Observable
 			setValidColor(card.getColor());	//cambia il colore della partita
 			setValidValue(card.getValue());
 			//togliamo la carta dal mazzo del giocatore che l'ha giocata e la mettiamo nel mazzo di scarto
-			playerCards.remove(card);
+//			playerCards.remove(card);
+			getPlayersDecks().get(getCurrentPlayer()).remove(card);
+
 			checkUno();
 			isGameOver();
 			discardDeck.add(card);
@@ -543,7 +567,7 @@ public class Game extends Observable
 			message.setFont(new Font("Arial", Font.BOLD, 30));
 			JOptionPane.showMessageDialog(null, message);			
 
-			throw new InvalidCardException(message.getText());
+			//throw new InvalidCardException(message.getText());
 		}
 		return false;
 
@@ -573,7 +597,11 @@ public class Game extends Observable
 	public void nextPlayerTurn()
 	{
 		if(isDirection())	//se direzione == true avanzo di 1 nella lista dei giocatori
+		{
 			setCurrentPlayer((getCurrentPlayer() + 1) % getPlayersId().length);		//una volta arrivata alla fine della lista torno all'inizio
+			notifyObservers(getCurrentPlayer());
+		}
+		
 		else
 		{
 			setCurrentPlayer((getCurrentPlayer() - 1) % getPlayersId().length);
@@ -627,8 +655,9 @@ public class Game extends Observable
 				setValidValue(-1);
 				
 				//togliamo la carta dal mazzo del giocatore che l'ha giocata e la mettiamo nel mazzo di scarto
-				artificialPlayerCards.remove(c);
-				
+				//artificialPlayerCards.remove(c);
+				getPlayersDecks().get(getCurrentPlayer()).remove(c);
+
 				checkUno();
 				isGameOver();
 				discardDeck.add(c);
@@ -645,7 +674,9 @@ public class Game extends Observable
 				setValidValue(-1);	//si setta il valore di gioco a -1
 				
 				//togliamo la carta dal mazzo del giocatore che l'ha giocata e la mettiamo nel mazzo di scarto
-				artificialPlayerCards.remove(c);
+				//artificialPlayerCards.remove(c);
+				getPlayersDecks().get(getCurrentPlayer()).remove(c);
+
 				checkUno();
 				isGameOver();
 				discardDeck.add(c);
@@ -670,65 +701,74 @@ public class Game extends Observable
 	{
 		for (Card c: artificialPlayerCards)
 		{
-			if (c.getColor().equals(validColor))
+			if(!c.getClass().getSimpleName().equals("Draw4Card") ||c.getClass().getSimpleName().equals("ChangeColorCard"))
 			{
-				//Se il colore è valido posso avere una carta +2, una carta valore, una carta SKIP o una carta REVERSE 
 				
-				//se il colore è valido e la carta è una carta +2:
-				
-				if(c.getClass().getSimpleName().equals("Draw2Card"))
+				if (c.getColor().equals(validColor))
 				{
-					setValidValue(-1);	//la carta +2 non ha valore quindi viene cambiato il valore di gioco
-					//togliamo la carta dal mazzo del giocatore che l'ha giocata e la mettiamo nel mazzo di scarto
-					artificialPlayerCards.remove(c);
-					discardDeck.add(c);
-					checkUno();
-					isGameOver();
+					//Se il colore è valido posso avere una carta +2, una carta valore, una carta SKIP o una carta REVERSE 
 					
-					nextPlayerTurn();	//si passa al giocatore successivo
-					drawMultipleCardsMove(2);	//il giocatore successivo pesca 2 carte
+					//se il colore è valido e la carta è una carta +2:
 					
-					return c;
-				}
-				
-				//caso in cui il colore è valido ed è una carta SKIP
-				else if(c.getClass().getSimpleName().equals("SkipCard"))
-				{
-					setValidValue(-1);	
-					//togliamo la carta dal mazzo del giocatore che l'ha giocata e la mettiamo nel mazzo di scarto
-					artificialPlayerCards.remove(c);
-					checkUno();
-					isGameOver();
-					discardDeck.add(c);
+					if(c.getClass().getSimpleName().equals("Draw2Card"))
+					{
+						setValidValue(-1);	//la carta +2 non ha valore quindi viene cambiato il valore di gioco
+						//togliamo la carta dal mazzo del giocatore che l'ha giocata e la mettiamo nel mazzo di scarto
+	//					artificialPlayerCards.remove(c);
+						getPlayersDecks().get(getCurrentPlayer()).remove(c);
+	
+						discardDeck.add(c);
+						checkUno();
+						isGameOver();
+						
+						nextPlayerTurn();	//si passa al giocatore successivo
+						drawMultipleCardsMove(2);	//il giocatore successivo pesca 2 carte
+						
+						return c;
+					}
 					
-					skipTurnMove();	//il giocatore successivo viene bloccato			
-					nextPlayerTurn();	//si passa il turno al giocatore successivo a quello bloccato
+					//caso in cui il colore è valido ed è una carta SKIP
+					else if(c.getClass().getSimpleName().equals("SkipCard"))
+					{
+						setValidValue(-1);	
+						//togliamo la carta dal mazzo del giocatore che l'ha giocata e la mettiamo nel mazzo di scarto
+	//					artificialPlayerCards.remove(c);
+						getPlayersDecks().get(getCurrentPlayer()).remove(c);
+	
+						checkUno();
+						isGameOver();
+						discardDeck.add(c);
+						
+						skipTurnMove();	//il giocatore successivo viene bloccato			
+						nextPlayerTurn();	//si passa il turno al giocatore successivo a quello bloccato
+						
+						notifyObservers(c);
+						
+						return c;
+	
+					}
 					
-					notifyObservers(c);
-					
-					return c;
-
-				}
-				
-				//caso in cui il colore è valido e la carta è una "Reverse card"
-				else if(c.getClass().getSimpleName().equals("ReverseCard"))
-				{
-					setValidValue(-1);
-					
-					//togliamo la carta dal mazzo del giocatore che l'ha giocata e la mettiamo nel mazzo di scarto
-					artificialPlayerCards.remove(c);
-					checkUno();
-					isGameOver();
-					discardDeck.add(c);
-					
-					reverseCardMove();	//si cambia la direzione di gioco e si passa il turno al giocatore successivo
-					
-					notifyObservers(c);
-
-					return c;
-					
-				}
-				
+					//caso in cui il colore è valido e la carta è una "Reverse card"
+					else if(c.getClass().getSimpleName().equals("ReverseCard"))
+					{
+						setValidValue(-1);
+						
+						//togliamo la carta dal mazzo del giocatore che l'ha giocata e la mettiamo nel mazzo di scarto
+	//					artificialPlayerCards.remove(c);
+						getPlayersDecks().get(getCurrentPlayer()).remove(c);
+	
+						checkUno();
+						isGameOver();
+						discardDeck.add(c);
+						
+						reverseCardMove();	//si cambia la direzione di gioco e si passa il turno al giocatore successivo
+						
+						notifyObservers(c);
+	
+						return c;
+						
+					}
+				}	
 			}
 		}
 		return chooseCard2(artificialPlayerCards);
@@ -749,7 +789,9 @@ public class Game extends Observable
 				setValidColor(c.getColor());	//cambia il colore della partita
 				setValidValue(c.getValue());
 				//togliamo la carta dal mazzo del giocatore che l'ha giocata e la mettiamo nel mazzo di scarto
-				artificialPlayerCards.remove(c);
+//				artificialPlayerCards.remove(c);
+				getPlayersDecks().get(getCurrentPlayer()).remove(c);
+
 				checkUno();
 				isGameOver();
 				discardDeck.add(c);

@@ -19,10 +19,10 @@ public class ViewObserver implements Observer
 	@Override
 	public void update(Observable o, Object arg) {
 
-		if(arg.getClass().equals(Card.class))
-		{
-			
-		}
+//		if(arg.getClass().equals(Card.class))
+//		{
+//			
+//		}
 	}
 
 }

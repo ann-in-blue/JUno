@@ -42,7 +42,7 @@ public class PannelloGiocatoreUmano extends PannelloGiocatore
 			myPicture = ImageIO.read(new File(image));		
 	
 			JButton button = new JButton(new ImageIcon(myPicture));
-			button.setSize(30,30);
+			button.setSize(20,20);
 			cardButtons.add(button);
 			this.add(button);
 
