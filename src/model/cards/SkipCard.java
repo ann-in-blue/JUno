@@ -25,7 +25,7 @@ public class SkipCard extends Card
 	}
 
 	@Override
-	protected int getValue() {
+	public int getValue() {
 		return -1;
 	}
 

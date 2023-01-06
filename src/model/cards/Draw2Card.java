@@ -17,7 +17,7 @@ public class Draw2Card extends Card
 		return getColor().toString().toLowerCase() + "+2";
 	}
 	@Override
-	protected int getValue() {
+	public int getValue() {
 		return -1;
 	}
 

@@ -15,7 +15,7 @@ public class ChangeColorCard extends WildCard
 
 
 	@Override
-	protected int getValue() {
+	public int getValue() {
 		return -1;
 	}
 }

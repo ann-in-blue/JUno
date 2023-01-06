@@ -1,6 +1,13 @@
 package view;
 
+import java.awt.BasicStroke;
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Stroke;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -46,11 +53,28 @@ public class PannelloGiocatoreUmano extends PannelloGiocatore
 		
 	}
 
+	public void setCardButtons(ArrayList<Card> cardButtons) {
+		
+		for(Card c: cardButtons)
+		{
+			this.addButtonCard(c);
+		}
+	}
+
 	public ArrayList<JButton> getCardButtons() {
 		return cardButtons;
 	}
 	public JButton getButtonUno() {
 		return buttonUno;
+	}
+	
+
+		
+	public void refresh()
+	{
+		
+		this.repaint();
+		
 	}
 	
 

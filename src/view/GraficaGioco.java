@@ -183,5 +183,11 @@ public class GraficaGioco extends JFrame
 		return buttonDiscardDeck;
 	}
 
-
+	
+	public void refresh()
+	{
+		
+		this.repaint();
+		
+	}
 }

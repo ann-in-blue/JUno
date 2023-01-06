@@ -9,6 +9,7 @@ import controller.exceptions.InvalidTurnException;
 import controller.exceptions.InvalidValueException;
 import model.Card;
 import model.Game;
+import model.cards.ValueCard;
 
 public class CardEventListener implements ActionListener
 {
@@ -23,17 +24,23 @@ public class CardEventListener implements ActionListener
 	}
 	/**
 	 * Metodo eseguito quando viene cliccata una carta in mano al giocatore umano.
-	 * Si apre una finestra di conferma e vien giocata la carta selezionata.
+	 * Si apre una finestra di conferma e viene giocata la carta selezionata.
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) 
 	{
 		System.out.println(card);
+		System.out.println(card.getColor());
+//		System.out.println(((ValueCard)card).getValue());
+		
 		try {
 			
 			if(controllerJUno.game.playCard(controllerJUno.game.getCurrentPlayerName(), card))
 			{
+				System.out.println("true check");
+				
 				controllerJUno.update(controllerJUno.game, card);
+				System.out.println("Carta giocata: "+ card);
 				
 				for(int i = 1; i<4; i++)
 				{
@@ -42,7 +49,8 @@ public class CardEventListener implements ActionListener
 					System.out.println("carta giocata ai:"+card);
 					
 					controllerJUno.update(controllerJUno.game, card);
-					controllerJUno.viewGioco.getPannelloGiocatoreUmano().validate();
+//					controllerJUno.viewGioco.getPannelloGiocatoreUmano().validate();
+					controllerJUno.viewGioco.getPannelloGiocatoreUmano().refresh();
 				}
 			}
 				

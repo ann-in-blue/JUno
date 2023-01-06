@@ -124,7 +124,7 @@ public class ControllerJUno implements Observer
 			 * Aggiunta di un action listener sul bottone "Uno" e sul mazzo coperto
 			 */
 			viewGioco.getPannelloGiocatoreUmano().getButtonUno().addActionListener(new ButtonUnoEventListener(game.getCurrentPlayerName(), game));
-			viewGioco.getButtonDeck().addActionListener(new DeckEventListener());
+			viewGioco.getButtonDeck().addActionListener(new DeckEventListener(this));
 			
 		}
 		public void startGameWithAvatarRequest(String nickname)
@@ -172,14 +172,33 @@ public class ControllerJUno implements Observer
 		 */
 		@Override
 		public void update(Observable o, Object arg) {
-			System.out.println(arg);
+			
+			
+			System.out.println("update fatto" + arg);
 
 			viewGioco.setDiscardButton(game.getDiscardDeck().get(game.getDiscardDeck().size()-1));
-			viewGioco.getPannelloGiocatoreUmano().validate();
+//			viewGioco.getPannelloGiocatoreUmano().validate();
 			ArrayList<Card> hand = game.getPlayerDeck(game.getPlayersId()[0]);
-			viewGioco.getPannelloGiocatoreUmano().getCardButtons().clear();
-			for(Card c : hand)
-			viewGioco.getPannelloGiocatoreUmano().addButtonCard(c);
+//			viewGioco.getPannelloGiocatoreUmano().getCardButtons().clear();
+//			for(Card c : hand)
+//			viewGioco.getPannelloGiocatoreUmano().addButtonCard(c);
+//			game.getPlayersDecks().get(game.getCurrentPlayer()).add((Card)arg);
+			System.out.println(game.getPlayersDecks().get(game.getCurrentPlayer()));
+//			
+			
+			//prova refresh
+			System.out.println("prova refresh");
+			viewGioco.getPannelloGiocatoreUmano().refresh();
+			
+			viewGioco.getPannelloGiocatoreUmano().removeAll(); // Pulisco il pannello
+			viewGioco.getPannelloGiocatoreUmano().setCardButtons(game.getPlayersDecks().get(game.getCurrentPlayer()));
+
+			// Aggiungo i componenti
+			viewGioco.getPannelloGiocatoreUmano().repaint();
+			viewGioco.getPannelloGiocatoreUmano().validate();
+			viewGioco.refresh();
+			
+			
 
 		}
 

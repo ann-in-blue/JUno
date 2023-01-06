@@ -45,5 +45,5 @@ public abstract class Card implements CardInterface
 		return false;
 	}
 
-	protected abstract int getValue();
+	public abstract int getValue();
 }

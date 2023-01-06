@@ -16,7 +16,7 @@ public class Draw4Card extends WildCard
 	}
 
 	@Override
-	protected int getValue() {
+	public int getValue() {
 		return -1;
 	}
 }
