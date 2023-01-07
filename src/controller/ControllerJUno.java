@@ -176,7 +176,7 @@ public class ControllerJUno implements Observer
 		public void update(Observable o, Object arg) {
 			
 			
-			System.out.println("update fatto \n" + arg);
+			System.out.println("update inizio \n" + arg);
 
 			//viewGioco.setDiscardButton(game.getDiscardDeck().get(game.getDiscardDeck().size()-1));
 //			viewGioco.getPannelloGiocatoreUmano().validate();
@@ -186,13 +186,11 @@ public class ControllerJUno implements Observer
 //			viewGioco.getPannelloGiocatoreUmano().addButtonCard(c);
 //			game.getPlayersDecks().get(game.getCurrentPlayer()).add((Card)arg);
 			System.out.println(game.getPlayersDecks().get(game.getCurrentPlayer()));
-//			
-			//prova refresh
-			System.out.println("prova refresh");
+
 				
-			if(game.getCurrentPlayer()==0)	//se è il turno del giocatore umano
-			{				
-				viewGioco.getPannelloGiocatoreUmano().refresh();
+//			if(game.getCurrentPlayer()==0)	//se è il turno del giocatore umano
+//			{				
+//				viewGioco.getPannelloGiocatoreUmano().refresh();
 				
 				viewGioco.getPannelloGiocatoreUmano().removeAll(); // Pulisco il pannello
 				game.getPlayersDecks().get(0).remove((Card)arg);
@@ -203,34 +201,93 @@ public class ControllerJUno implements Observer
 				// Aggiungo i componenti
 				viewGioco.getPannelloGiocatoreUmano().repaint();
 				viewGioco.getPannelloGiocatoreUmano().validate();
+				
 				viewGioco.repaint();
 				viewGioco.validate();
 				viewGioco.refresh();
-
-
-			}
-			else	//se è il turno dei giocatori artificiali
-			{				
-//				viewGioco.removeAll();
-				viewGioco.setDiscardButton((Card)arg);
-
-				viewGioco.repaint();
-				viewGioco.validate();
-				viewGioco.refresh();
-			}
-			
-
-			
-			
-//  		try {
-//				playTurn();
-//				
-//				
-//			} catch (InvalidTurnException | InterruptedException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
 }
+		/**
+		 * Metodo di appoggio in cui è possibile esplicitare lo stato in cui si trova il sistema per poter aggiornare la view in modo corretto.
+		 * @param card
+		 * @param state
+		 */
+		public void updateView(Card card, GameState state)
+		{
+//			this.update(game, card);
+			switch(state)
+			{
+			case DRAWING_CARD -> 
+			{
+				
+		
+			System.out.println("prendo una carta \n" + card);
+			System.out.println(game.getPlayersDecks().get(game.getCurrentPlayer()));
+//			
+			//prova refresh
+			System.out.println("prova refresh");
+				
+			if(game.getCurrentPlayer()==0)	//se è il turno del giocatore umano
+			{				
+				viewGioco.getPannelloGiocatoreUmano().refresh();
+				
+				viewGioco.getPannelloGiocatoreUmano().removeAll(); // Pulisco il pannello
+				viewGioco.getPannelloGiocatoreUmano().setCardButtons(game.getPlayersDecks().get(0));	//deve mostrare solo le card del giocatore umano
+
+				
+				// Aggiungo i componenti
+				viewGioco.getPannelloGiocatoreUmano().repaint();
+				viewGioco.getPannelloGiocatoreUmano().validate();
+				viewGioco.repaint();
+				viewGioco.validate();
+				viewGioco.refresh();
+				}
+			try {
+				playTurn();
+				
+				
+			} catch (InvalidTurnException | InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			}
+			case PLAYING_CARD ->
+			{
+				this.update(game, card);
+				System.out.println("update fatto");
+				
+				try {
+					playTurn();
+					
+					
+				} catch (InvalidTurnException | InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			case PLAYING_CARD_ARTIFICIAL ->
+			{
+				//se è il turno dei giocatori artificiali
+								
+//					viewGioco.remove(viewGioco.getButtonDiscardDeck());
+					viewGioco.setDiscardButton(card);
+
+					viewGioco.repaint();
+					viewGioco.validate();
+					viewGioco.refresh();
+					
+					try {
+						playTurn();
+						
+						
+					} catch (InvalidTurnException | InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				
+			}
+			
+		}
+	}
 
 /**
  * Metodo che permette ai giocatori artificiali di giocare il loro turno
@@ -250,7 +307,8 @@ public class ControllerJUno implements Observer
 						
 						System.out.println("carta giocata ai:"+card);	
 	
-						this.update(game, card);						
+//						this.update(game, card);	
+						updateView(card, GameState.PLAYING_CARD_ARTIFICIAL);
 						Thread.sleep(7000);
 					}
 				else
@@ -306,7 +364,7 @@ public class ControllerJUno implements Observer
 					 * Per ogni carta presente nella mano del giocatore umano aggiungo un listener che permetterà di scegliere la carta da giocare.
 					 */
 				viewGioco.getPannelloGiocatoreUmano().getCardButtons().get(i).addActionListener(new CardEventListener(game.getPlayerDeck(humanPlayer.getNickname()).get(i), this));
-				this.update(game, null);
+//				this.update(game, null);
 
 			}
 

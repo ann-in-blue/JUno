@@ -253,8 +253,9 @@ public class Game extends Observable
 			public void run(){
 			
 				JLabel message = new JLabel(playersId[currentPlayer] + " was skipped!");
-				message.setFont(new Font("Arial", Font.BOLD, 30));
-				JOptionPane.showMessageDialog(null, message);
+				System.out.println(message);
+//				message.setFont(new Font("Arial", Font.BOLD, 30));
+//				JOptionPane.showMessageDialog(null, message);
 				}
 			},5000);
 
@@ -288,8 +289,10 @@ public class Game extends Observable
 			public void run(){
 			
 				JLabel message = new JLabel("Game direction changed by " + playersId[currentPlayer]+"!");
-					message.setFont(new Font("Arial", Font.BOLD, 30));
-		JOptionPane.showMessageDialog(null, message);
+//					message.setFont(new Font("Arial", Font.BOLD, 30));
+//		JOptionPane.showMessageDialog(null, message);
+				System.out.println(message);
+
 			}
 			},5000);		
 		
@@ -331,8 +334,10 @@ public class Game extends Observable
 				public void run(){
 				
 					JLabel message = new JLabel(playersId[currentPlayer] + " drew "+ n+" cards!");
-					message.setFont(new Font("Arial", Font.BOLD, 30));
-					JOptionPane.showMessageDialog(null, message);
+//					message.setFont(new Font("Arial", Font.BOLD, 30));
+//					JOptionPane.showMessageDialog(null, message);
+					System.out.println(message);
+
 					}
 				},5000);
 //			JOptionPane.showMessageDialog(null, playersId[currentPlayer] + " drew "+ n+" cards!");
@@ -563,9 +568,9 @@ public class Game extends Observable
 		else
 		{
 			JLabel message = new JLabel("Invalid move: Choose another card!");
-			System.out.println(validValue +" "+ validColor);
-			message.setFont(new Font("Arial", Font.BOLD, 30));
-			JOptionPane.showMessageDialog(null, message);			
+			System.out.println(message +" "+validValue +" "+ validColor);
+//			message.setFont(new Font("Arial", Font.BOLD, 30));
+//			JOptionPane.showMessageDialog(null, message);			
 
 			//throw new InvalidCardException(message.getText());
 		}

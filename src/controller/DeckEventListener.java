@@ -31,7 +31,8 @@ public class DeckEventListener implements ActionListener
 
 //		controllerJUno.update(controllerJUno.game, card);
 //		controllerJUno.game.getPlayersDecks().get(controllerJUno.game.getCurrentPlayer()).add(card);
-		controllerJUno.update(controllerJUno.game, card);
+		controllerJUno.updateView(card, GameState.DRAWING_CARD);
+		
 
 
 

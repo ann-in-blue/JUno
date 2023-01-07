@@ -29,12 +29,9 @@ public class CardEventListener implements ActionListener
 	@Override
 	public void actionPerformed(ActionEvent e) 
 	{
-//		if(controllerJUno.game.getCurrentPlayer()==0)
-//		{
-			
+
 			System.out.println(card);
 			System.out.println(card.getColor());
-	//		System.out.println(((ValueCard)card).getValue());
 			
 			try {
 				
@@ -42,7 +39,8 @@ public class CardEventListener implements ActionListener
 				
 					System.out.println("true check");
 					
-					controllerJUno.update(ControllerJUno.game, card);
+//					controllerJUno.update(ControllerJUno.game, card);
+					controllerJUno.updateView(card, GameState.PLAYING_CARD);
 //					controllerJUno.playTurn();
 					System.out.println("Carta giocata: "+ card);
 				
