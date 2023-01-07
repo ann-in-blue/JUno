@@ -31,9 +31,13 @@ public class DeckEventListener implements ActionListener
 
 //		controllerJUno.update(controllerJUno.game, card);
 //		controllerJUno.game.getPlayersDecks().get(controllerJUno.game.getCurrentPlayer()).add(card);
-		controllerJUno.updateView(card, GameState.DRAWING_CARD);
+		try {
+			controllerJUno.updateView(card, GameState.DRAWING_CARD);
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		
-
 
 
 		

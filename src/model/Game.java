@@ -36,6 +36,7 @@ public class Game extends Observable
 	public Game() 
 	{
 		playersId = new String[4];
+		currentPlayer = 0;
 	}
 	
 	public void startGame()
@@ -46,7 +47,7 @@ public class Game extends Observable
 			deck.shuffle();	//shuffle del mazzo
 			discardDeck = new ArrayList<Card>();	//mazzo di scarto
 			
-			currentPlayer = 0;
+//			currentPlayer = 0;
 			direction = false;
 			playersDecks =  new ArrayList<ArrayList<Card>>();
 			
@@ -165,7 +166,7 @@ public class Game extends Observable
 		//caso in cui esce una carta "cambia colore" -> il giocatore alla sinistra del mazziere sceglie il colore da giocare
 		if(card.getClass().getSimpleName().equals("ChangeColorCard"))
 		{
-			currentPlayer = 1;
+//			currentPlayer = 1;
 			
 			//rallentiamo l'esecuzione in modo da far caricare prima la pagina di gioco e poi aprire la finestra per la scelta del colore
 			new Timer().schedule(new TimerTask(){
@@ -414,15 +415,18 @@ public class Game extends Observable
 	 */
 	public boolean playCard(String player, Card card) throws InvalidTurnException, InvalidColorException, InvalidValueException, InvalidCardException
 	{
+		System.out.println("metodo play card");
 		//controllo se il turno è del giocatore che vuole giocare la carta
 		checkInvalidTurn(player);
 		
 		//carte in mano al giocatore selezionato
-		ArrayList<Card> playerCards = getPlayerDeck(player);
+	//	ArrayList<Card> playerCards = getPlayerDeck(player);
 		
 		//caso 1: carta +4 -> la carta può essere giocata indipendentemente dai valori validValue e validColor
 		if(card.getClass().getSimpleName().equals("Draw4Card"))	 
 		{
+			System.out.println("entro nel +4 play card");
+
 			setValidColor(switch(chooseColorInput(player))
 					{
 							case "Red" -> Color.RED;
@@ -451,6 +455,8 @@ public class Game extends Observable
 		//caso 2: carta "cambia colore" -> è una carta valida da giocare
 		else if(card.getClass().getSimpleName().equals("ChangeColorCard"))
 		{				
+			System.out.println("entro nel change color play card");
+
 			setValidColor(switch(chooseColorInput(player))
 					{
 							case "Red" -> Color.RED;
@@ -475,15 +481,41 @@ public class Game extends Observable
 			return true;
 		}
 		
+
+		//caso in cui la carta è una carta valore
+		else if(card.getClass().getSimpleName().equals("ValueCard") && (card.getValue() == validValue || card.getColor().equals(validColor)))
+		{
+			System.out.println("entro nella carta valore play card");
+
+			setValidColor(card.getColor());	//cambia il colore della partita
+			setValidValue(card.getValue());
+			//togliamo la carta dal mazzo del giocatore che l'ha giocata e la mettiamo nel mazzo di scarto
+//			playerCards.remove(card);
+			getPlayersDecks().get(getCurrentPlayer()).remove(card);
+
+			checkUno();
+			isGameOver();
+			discardDeck.add(card);
+			
+			nextPlayerTurn();
+			
+			notifyObservers(card);
+
+			return true;
+		}
 		//caso 3: caso in cui il colore è valido
 		else if (card.getColor().equals(validColor))
 		{
+			System.out.println("entro nel colore valido play card");
+
 			//Se il colore è valido posso avere una carta +2, una carta valore, una carta SKIP o una carta REVERSE 
 			
 			//caso 3.1: il colore è valido e la carta è una carta +2
 			
 			if(card.getClass().getSimpleName().equals("Draw2Card"))
 			{
+				System.out.println("entro nel colore valido con +2");
+
 				setValidValue(-1);	//la carta +2 non ha valore quindi viene cambiato il valore di gioco
 				//togliamo la carta dal mazzo del giocatore che l'ha giocata e la mettiamo nel mazzo di scarto
 //				playerCards.remove(card);
@@ -503,6 +535,8 @@ public class Game extends Observable
 			//caso 3.2: il colore è valido ed è una carta SKIP
 			else if(card.getClass().getSimpleName().equals("SkipCard"))
 			{
+				System.out.println("entro nel colore valido skip");
+
 				setValidValue(-1);	
 				//togliamo la carta dal mazzo del giocatore che l'ha giocata e la mettiamo nel mazzo di scarto
 //				playerCards.remove(card);
@@ -524,6 +558,8 @@ public class Game extends Observable
 			//caso 3.3: in cui il colore è valido e la carta è una "Reverse card"
 			else if(card.getClass().getSimpleName().equals("ReverseCard"))
 			{
+				System.out.println("entro nel colore valido reverse");
+
 				setValidValue(-1);
 				
 				//togliamo la carta dal mazzo del giocatore che l'ha giocata e la mettiamo nel mazzo di scarto
@@ -543,36 +579,17 @@ public class Game extends Observable
 			}
 			
 		}
-	
-		
-		//caso in cui la carta è una carta valore
-		else if(card.getClass().getSimpleName().equals("ValueCard") && (card.getValue() == validValue || card.getColor().equals(validColor)))
-		{
-			setValidColor(card.getColor());	//cambia il colore della partita
-			setValidValue(card.getValue());
-			//togliamo la carta dal mazzo del giocatore che l'ha giocata e la mettiamo nel mazzo di scarto
-//			playerCards.remove(card);
-			getPlayersDecks().get(getCurrentPlayer()).remove(card);
-
-			checkUno();
-			isGameOver();
-			discardDeck.add(card);
-			nextPlayerTurn();
-			
-			notifyObservers(card);
-
-			return true;
-		}
 		
 		//caso 4: la carta non è compatibile e non può essere giocata
 		else
 		{
 			JLabel message = new JLabel("Invalid move: Choose another card!");
 			System.out.println(message +" "+validValue +" "+ validColor);
-//			message.setFont(new Font("Arial", Font.BOLD, 30));
-//			JOptionPane.showMessageDialog(null, message);			
+			message.setFont(new Font("Arial", Font.BOLD, 30));
+			JOptionPane.showMessageDialog(null, message);		
+			
 
-			//throw new InvalidCardException(message.getText());
+			throw new InvalidCardException(message.getText());
 		}
 		return false;
 
@@ -601,6 +618,7 @@ public class Game extends Observable
 	 */
 	public void nextPlayerTurn()
 	{
+		System.out.println("giocatore corrente iniziale:" + getCurrentPlayer());
 		if(isDirection())	//se direzione == true avanzo di 1 nella lista dei giocatori
 		{
 			setCurrentPlayer((getCurrentPlayer() + 1) % getPlayersId().length);		//una volta arrivata alla fine della lista torno all'inizio
@@ -614,6 +632,8 @@ public class Game extends Observable
 				currentPlayer = playersId.length - 1;
 		}
 		
+		System.out.println("giocatore corrente finale:" + getCurrentPlayer());
+
 	}
 	
 	/**
@@ -709,13 +729,13 @@ public class Game extends Observable
 			if(!c.getClass().getSimpleName().equals("Draw4Card") ||c.getClass().getSimpleName().equals("ChangeColorCard"))
 			{
 				
-				if (c.getColor().equals(validColor))
-				{
+//				if (c.getColor().equals(validColor))
+//				{
 					//Se il colore è valido posso avere una carta +2, una carta valore, una carta SKIP o una carta REVERSE 
 					
 					//se il colore è valido e la carta è una carta +2:
 					
-					if(c.getClass().getSimpleName().equals("Draw2Card"))
+					if(c.getClass().getSimpleName().equals("Draw2Card") && c.getColor().equals(validColor))
 					{
 						setValidValue(-1);	//la carta +2 non ha valore quindi viene cambiato il valore di gioco
 						//togliamo la carta dal mazzo del giocatore che l'ha giocata e la mettiamo nel mazzo di scarto
@@ -733,7 +753,7 @@ public class Game extends Observable
 					}
 					
 					//caso in cui il colore è valido ed è una carta SKIP
-					else if(c.getClass().getSimpleName().equals("SkipCard"))
+					else if(c.getClass().getSimpleName().equals("SkipCard") && c.getColor().equals(validColor))
 					{
 						setValidValue(-1);	
 						//togliamo la carta dal mazzo del giocatore che l'ha giocata e la mettiamo nel mazzo di scarto
@@ -754,7 +774,7 @@ public class Game extends Observable
 					}
 					
 					//caso in cui il colore è valido e la carta è una "Reverse card"
-					else if(c.getClass().getSimpleName().equals("ReverseCard"))
+					else if(c.getClass().getSimpleName().equals("ReverseCard") && c.getColor().equals(validColor))
 					{
 						setValidValue(-1);
 						
@@ -773,7 +793,7 @@ public class Game extends Observable
 						return c;
 						
 					}
-				}	
+//				}	
 			}
 		}
 		return chooseCard2(artificialPlayerCards);

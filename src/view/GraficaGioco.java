@@ -23,7 +23,7 @@ public class GraficaGioco extends JFrame
 	private JButton buttonDiscardDeck;
 	private JPanel panelDecks;
 	private JLabel labelTurno;
-	private JButton buttonPassaTurno;
+//	private JButton buttonPassaTurno;
 	private PannelloGiocatoreUmano pannelloGiocatoreUmano;
 	private PannelloGiocatore pannelloGiocatore2;
 	private PannelloGiocatore pannelloGiocatore3;
@@ -49,8 +49,8 @@ public class GraficaGioco extends JFrame
 		}
 		
 		panelDecks = new JPanel();
-		labelTurno = new JLabel("Turno di: ");
-		buttonPassaTurno = new JButton("Passa il turno");
+//		labelTurno = new JLabel("Turno di: ");
+//		buttonPassaTurno = new JButton("Passa il turno");
 		buttonDeck = new JButton(new ImageIcon(buttonIcon));
 		buttonDeck.setSize(new Dimension(20,50));
 		buttonDeck.setBackground(super.getBackground());

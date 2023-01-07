@@ -5,18 +5,23 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import javax.swing.JTextField;
 
+import controller.exceptions.InvalidTurnException;
+import model.Game;
+
 
 public class PaginaInizialeEventListener implements ActionListener
 {
 	private String nickname;
 	private JTextField field;
 	private ControllerJUno jUno;
+	Game game;
 	ControllerFilePlayersDatabase controllerFile = new ControllerFilePlayersDatabase();
 	
-	public PaginaInizialeEventListener(JTextField field, ControllerJUno jUno) {
+	public PaginaInizialeEventListener(JTextField field, ControllerJUno jUno, Game game) {
 //		this.nickname = nickname;
 		this.field = field;
 		this.jUno = jUno;
+		this.game = game;
 	}
 
 	/**
@@ -36,6 +41,18 @@ public class PaginaInizialeEventListener implements ActionListener
 				//inizia partita
 				System.out.println("nickname inserito è presente");
 				jUno.startGame(nickname);
+//				try {				
+//					System.out.println("start game fatto");
+//
+//					jUno.playTurn();
+//				} catch (InvalidTurnException e1) {
+//					// TODO Auto-generated catch block
+//					e1.printStackTrace();
+//				} catch (InterruptedException e1) {
+//					// TODO Auto-generated catch block
+//					e1.printStackTrace();
+//				}
+
 				
 			}
 			else {

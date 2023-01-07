@@ -7,10 +7,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 import controller.exceptions.InvalidTurnException;
 import controller.exceptions.WrongArgumentsException;
@@ -205,13 +208,17 @@ public class ControllerJUno implements Observer
 				viewGioco.repaint();
 				viewGioco.validate();
 				viewGioco.refresh();
+				
+				
 }
+		
 		/**
 		 * Metodo di appoggio in cui è possibile esplicitare lo stato in cui si trova il sistema per poter aggiornare la view in modo corretto.
 		 * @param card
 		 * @param state
+		 * @throws InterruptedException 
 		 */
-		public void updateView(Card card, GameState state)
+		public void updateView(Card card, GameState state) throws InterruptedException
 		{
 //			this.update(game, card);
 			switch(state)
@@ -240,50 +247,61 @@ public class ControllerJUno implements Observer
 				viewGioco.repaint();
 				viewGioco.validate();
 				viewGioco.refresh();
+//				Thread.sleep(5000);
+//
 				}
-			try {
-				playTurn();
-				
-				
-			} catch (InvalidTurnException | InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+//			try {
+//				playTurn();
+//				
+//				
+//			} catch (InvalidTurnException | InterruptedException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
 			}
 			case PLAYING_CARD ->
 			{
 				this.update(game, card);
 				System.out.println("update fatto");
+//				Thread.sleep(2000);
+//				while(game.getCurrentPlayer() != 0)	
+//				{
+					//fino a che non è il turno del giocatore umano fai giocare i giocatori artificiali
+//					try {
+//						playTurn();
+//					} catch (InterruptedException e) {
+//						// TODO Auto-generated catch block
+//						e.printStackTrace();
+//					} catch (InvalidTurnException e) {
+//						// TODO Auto-generated catch block
+//						e.printStackTrace();
+//					}
+//					Thread.sleep(2000);
+//
+//				}
+
 				
-				try {
-					playTurn();
-					
-					
-				} catch (InvalidTurnException | InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+//				try {
+//					playTurn();
+//					
+//					
+//				} catch (InvalidTurnException | InterruptedException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
 			}
 			case PLAYING_CARD_ARTIFICIAL ->
 			{
 				//se è il turno dei giocatori artificiali
-								
-//					viewGioco.remove(viewGioco.getButtonDiscardDeck());
+					viewGioco.refresh();
+					//viewGioco.removeAll();
 					viewGioco.setDiscardButton(card);
 
 					viewGioco.repaint();
 					viewGioco.validate();
 					viewGioco.refresh();
-					
-					try {
-						playTurn();
-						
-						
-					} catch (InvalidTurnException | InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				
+					Thread.sleep(5000);
+
 			}
 			
 		}
@@ -294,62 +312,34 @@ public class ControllerJUno implements Observer
  * @throws InvalidTurnException
  * @throws InterruptedException
  */
-		public void playTurn() throws InvalidTurnException, InterruptedException
+		public void playTurn() throws InterruptedException, InvalidTurnException 
 		{
-			while(!game.isGameOver)
+//			while(!game.isGameOver)
+//			{				
+			if(game.getCurrentPlayer()!=0)	//se non è il turno del giocatore umano
 			{
-				if(game.getCurrentPlayer()!=0)
-					{
-						System.out.println("**"+"giocatore"+ game.getCurrentPlayer());
+			
+				try {								
+					System.out.println("**"+"giocatore artificiale"+ game.getCurrentPlayer());
 
-						//turno del giocatore artificiale
-						Card card = game.playCardArtificial(game.getCurrentPlayer());
-						
-						System.out.println("carta giocata ai:"+card);	
-	
-//						this.update(game, card);	
-						updateView(card, GameState.PLAYING_CARD_ARTIFICIAL);
-						Thread.sleep(7000);
-					}
-				else
-				{
-					waitForUserInput();
-
+					//turno del giocatore artificiale
+					Card card = game.playCardArtificial(game.getCurrentPlayer());
+					System.out.println("carta giocata ai:"+card);
+										
+					updateView(card, GameState.PLAYING_CARD_ARTIFICIAL);
+					
+					
+					
+				} catch (InvalidTurnException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
-//				System.out.println("**"+"giocatore"+ game.getCurrentPlayer());
-//			
-//				//turno del giocatore artificiale
-//				Card card = game.playCardArtificial(game.getCurrentPlayer());
-//				//
-//				System.out.println("carta giocata ai:"+card);	
-//				//
-//				this.update(game, card);						
-//				Thread.sleep(7000);
+
+			} else {
+				waitForUserInput();
+				System.out.println("Aspetto la mossa del giocatore umano");
+				}
 					
-				//			while(!game.isGameOver)
-				//			{
-//				System.out.println("carta giocata ai:"+card);	
-//				//
-//				this.update(game, card);						
-					
-					}
-			//waitForUserInput();
-					
-//					else
-//					{
-//						System.out.println("*************"+"giocatore"+ game.getCurrentPlayer());
-//
-//						Thread.sleep(7);
-//						System.out.println("_______________________");
-//					}
-						
-						//				controllerJUno.viewGioco.getPannelloGiocatoreUmano().validate();
-	//				viewGioco.getPannelloGiocatoreUmano().refresh();
-				
-						
-				
-			
-			
 		}
 
 		public void waitForUserInput() {
