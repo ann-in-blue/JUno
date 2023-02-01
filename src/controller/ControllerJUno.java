@@ -430,7 +430,7 @@ public class ControllerJUno implements Observer
 					 * Per ogni carta presente nella mano del giocatore umano aggiungo un listener che permetterà di scegliere la carta da giocare.
 					 */
 				viewGioco.getPannelloGiocatoreUmano().getCardButtons().get(i).addActionListener(new CardEventListener(game.getPlayerDeck(humanPlayer.getNickname()).get(i), this));
-//				this.update(game, null);
+
 				viewGioco.getPannelloGiocatoreUmano().repaint();
 				viewGioco.getPannelloGiocatoreUmano().validate();
 				viewGioco.repaint();
