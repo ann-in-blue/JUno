@@ -25,10 +25,21 @@ public class GraficaGioco extends JFrame
 	private JLabel labelTurno;
 //	private JButton buttonPassaTurno;
 	private PannelloGiocatoreUmano pannelloGiocatoreUmano;
+	private PannelloGiocatore pannelloGiocatore1;
 	private PannelloGiocatore pannelloGiocatore2;
 	private PannelloGiocatore pannelloGiocatore3;
-	private PannelloGiocatore pannelloGiocatore4;
 		
+	public PannelloGiocatore getPannelloGiocatore(int giocatore) {
+		return switch(giocatore) {
+		case 1 -> pannelloGiocatore1;
+		case 2 -> pannelloGiocatore2;
+		case 3 -> pannelloGiocatore3;
+		default -> pannelloGiocatore1;
+		};
+				
+	}
+
+
 	//prova bottone immagine
 	private BufferedImage buttonIcon;
 	private BufferedImage iconDiscardDeck;
@@ -52,10 +63,13 @@ public class GraficaGioco extends JFrame
 //		labelTurno = new JLabel("Turno di: ");
 //		buttonPassaTurno = new JButton("Passa il turno");
 		buttonDeck = new JButton(new ImageIcon(buttonIcon));
-		buttonDeck.setSize(new Dimension(20,50));
+		buttonDeck.setContentAreaFilled(false);
 		buttonDeck.setBackground(super.getBackground());
+		
+		
 		buttonDiscardDeck = new JButton(new ImageIcon(iconDiscardDeck));
-		buttonDiscardDeck.setSize(new Dimension(50,50));
+		buttonDiscardDeck.setContentAreaFilled(false);
+
 
 		panelDecks.add(buttonDeck);
 		panelDecks.add(buttonDiscardDeck);
@@ -64,9 +78,9 @@ public class GraficaGioco extends JFrame
 		
 		pannelloGiocatoreUmano = new PannelloGiocatoreUmano(800, 500, players[0]);
 		
-		pannelloGiocatore2 = new PannelloGiocatore("images/card_back_alt.png", 250, 200, players[1], 7);
-		pannelloGiocatore3 = new PannelloGiocatore("images/card_back_alt.png", 250, 200, players[2], 7);
-		pannelloGiocatore4 = new PannelloGiocatore("images/card_back_alt.png", 250, 200, players[3], 7);
+		pannelloGiocatore1 = new PannelloGiocatore("images/card_back_alt.png", 250, 200, players[1], 7);
+		pannelloGiocatore2 = new PannelloGiocatore("images/card_back_alt.png", 250, 200, players[2], 7);
+		pannelloGiocatore3 = new PannelloGiocatore("images/card_back_alt.png", 250, 200, players[3], 7);
 
 		GridBagConstraints gbc = new GridBagConstraints();
 		
@@ -81,7 +95,7 @@ public class GraficaGioco extends JFrame
 //		gbc.anchor = GridBagConstraints.RELATIVE;
 //		gbc.insets = new Insets(0, 0, 0, 5);
 		
-		add(pannelloGiocatore3, gbc);
+		add(pannelloGiocatore2, gbc);
 		
 //pannello giocatore 4
 		gbc.gridx = 2;	//mette il componente a destra di quello precedente
@@ -92,7 +106,7 @@ public class GraficaGioco extends JFrame
 //		gbc.anchor = GridBagConstraints.LINE_START;
 //		gbc.insets = new Insets(0, 0, 0, 5);
 
-		add(pannelloGiocatore4, gbc);
+		add(pannelloGiocatore3, gbc);
 		
 		//pannello giocatore 2
 		gbc.gridx = 0;	//inizio seconda riga
@@ -101,7 +115,7 @@ public class GraficaGioco extends JFrame
 		gbc.weightx = 0.1;
 		gbc.weighty = 0.1;
 
-		add(pannelloGiocatore2, gbc);
+		add(pannelloGiocatore1, gbc);
 		
 		//pannello giocatore 1
 		gbc.gridx = 1;
@@ -177,6 +191,8 @@ public class GraficaGioco extends JFrame
 				iconDiscardDeck = ImageIO.read(new File(image));
 				buttonDiscardDeck = new JButton(new ImageIcon(iconDiscardDeck));
 //				buttonDiscardDeck.setIcon(new ImageIcon(iconDiscardDeck));
+				buttonDiscardDeck.setMargin(null);
+				buttonDiscardDeck.setContentAreaFilled(false);
 				panelDecks.add(buttonDiscardDeck);
 
 		} catch (IOException e) {

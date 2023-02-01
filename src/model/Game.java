@@ -709,6 +709,7 @@ public class Game extends Observable
 				nextPlayerTurn();	//si passa il turno al giocatore successivo
 				notifyObservers(c);
 				
+			
 				return c;
 			}
 		}

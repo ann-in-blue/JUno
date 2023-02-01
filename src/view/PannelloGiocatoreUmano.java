@@ -17,6 +17,7 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.border.MatteBorder;
 
 import model.Card;
 
@@ -30,7 +31,9 @@ public class PannelloGiocatoreUmano extends PannelloGiocatore
 		super(larghezza, altezza, titolo);
 		cardButtons = new ArrayList<JButton>();	
 		buttonUno = new JButton("UNO!");
-		this.add(buttonUno, BorderLayout.PAGE_END);
+		buttonUno.setContentAreaFilled(false);
+
+//		this.add(buttonUno, BorderLayout.CENTER);
 
 	}
 
@@ -42,7 +45,9 @@ public class PannelloGiocatoreUmano extends PannelloGiocatore
 			myPicture = ImageIO.read(new File(image));		
 	
 			JButton button = new JButton(new ImageIcon(myPicture));
-			button.setSize(20,20);
+//			button.setSize(10,20);
+			button.setContentAreaFilled(false);
+			button.setMargin(null);
 			cardButtons.add(button);
 			this.add(button);
 
