@@ -75,6 +75,7 @@ public class Game extends Observable
 	public String getCurrentPlayerName() {
 		return playersId[currentPlayer];
 	}
+	
 	public int getCurrentPlayer()
 	{
 		return currentPlayer;
@@ -295,7 +296,7 @@ public class Game extends Observable
 				System.out.println(message);
 
 			}
-			},5000);		
+			},3000);		
 		
 	}
 	
@@ -340,7 +341,7 @@ public class Game extends Observable
 					System.out.println(message);
 
 					}
-				},5000);
+				},3000);
 //			JOptionPane.showMessageDialog(null, playersId[currentPlayer] + " drew "+ n+" cards!");
 			
 			/**
@@ -657,10 +658,10 @@ public class Game extends Observable
 		int random = rand.nextInt(4);
 		
 		return switch(random) {
-		case 0 -> chooseCard0(artificialPlayerCards);
-		case 1-> chooseCard1(artificialPlayerCards);
-		case 2 -> chooseCard2(artificialPlayerCards);
-		default -> chooseCard0(artificialPlayerCards);
+		case 0 -> chooseCard0(artificialPlayerCards, id);
+		case 1-> chooseCard1(artificialPlayerCards, id);
+		case 2 -> chooseCard2(artificialPlayerCards, id);
+		default -> chooseCard0(artificialPlayerCards, id);
 		};
 
 	}
@@ -670,7 +671,7 @@ public class Game extends Observable
 	 * @param artificialPlayerCards : array di carte in mano al giocatore artificiale
 	 * @return la carta giocata dal giocatore artificiale
 	 */
-	public Card chooseCard0(ArrayList<Card> artificialPlayerCards)
+	public Card chooseCard0(ArrayList<Card> artificialPlayerCards, int id)
 	{
 		for (Card c: artificialPlayerCards)
 		{
@@ -689,6 +690,11 @@ public class Game extends Observable
 				
 				nextPlayerTurn();	//si passa il turno al giocatore successivo
 				drawMultipleCardsMove(4);	//il giocatore successivo pesca 4 carte
+				
+				//messaggio a schermo
+				JLabel message = new JLabel("Carta +4 giocata; \n Nuovo colore: " + validColor+"!");
+				JOptionPane.showMessageDialog(null, message);
+				
 				notifyObservers(c);
 
 				return c;
@@ -707,13 +713,18 @@ public class Game extends Observable
 				discardDeck.add(c);
 				
 				nextPlayerTurn();	//si passa il turno al giocatore successivo
+				
+				//messaggio a schermo
+				JLabel message = new JLabel("Carta changeColor giocata; \n Nuovo colore: " + validColor+"!");
+				JOptionPane.showMessageDialog(null, message);
+				
 				notifyObservers(c);
 				
 			
 				return c;
 			}
 		}
-		return chooseCard1(artificialPlayerCards);
+		return chooseCard1(artificialPlayerCards, id);
 	}
 	
 	/**
@@ -723,7 +734,7 @@ public class Game extends Observable
 	 * @param artificialPlayerCards
 	 * @return carta giocata dal giocatore artificiale
 	 */
-	public Card chooseCard1(ArrayList<Card> artificialPlayerCards)
+	public Card chooseCard1(ArrayList<Card> artificialPlayerCards, int id)
 	{
 		for (Card c: artificialPlayerCards)
 		{
@@ -797,7 +808,7 @@ public class Game extends Observable
 //				}	
 			}
 		}
-		return chooseCard2(artificialPlayerCards);
+		return chooseCard2(artificialPlayerCards, id);
 	}
 	
 	/**
@@ -806,7 +817,7 @@ public class Game extends Observable
 	 * @param artificialPlayerCards
 	 * @return carta giocata dal giocatore artificiale
 	 */
-	public Card chooseCard2(ArrayList<Card> artificialPlayerCards)
+	public Card chooseCard2(ArrayList<Card> artificialPlayerCards, int id)
 	{
 		for (Card c: artificialPlayerCards)
 		{
@@ -828,9 +839,13 @@ public class Game extends Observable
 				return c;
 			}
 		}
-		return drawCard();
+		drawCard();
+		System.out.println("\nNessuna carta utile da giocare. Pesco:\n");
+		nextPlayerTurn();	//si passa il turno al giocatore successivo a quello bloccato
+		return null;
 
 	}
+	
 	
 	/**
 	 * Metodo che permette al giocatore artificiale di pescare una carta dal mazzo.

@@ -173,8 +173,24 @@ public class GraficaGioco extends JFrame
 		return pannelloGiocatoreUmano;
 	}
 
-	public void setPannelloGiocatoreUmano(PannelloGiocatoreUmano pannelloGiocatoreUmano) {
-		this.pannelloGiocatoreUmano = pannelloGiocatoreUmano;
+	public void setPannelloGiocatoreUmano(PannelloGiocatoreUmano pannelloGiocatoreUmanoNuovo) {
+//		this.pannelloGiocatoreUmano = pannelloGiocatoreUmano;
+		this.remove(pannelloGiocatoreUmano);
+		pannelloGiocatoreUmano= pannelloGiocatoreUmanoNuovo;
+//		this.add(pannelloGiocatoreUmanoNuovo);
+		
+		GridBagConstraints gbc1 = new GridBagConstraints();
+
+		//pannello giocatore 1
+				gbc1.gridx = 1;
+				gbc1.gridy = 2;
+				
+				gbc1.weightx = 0.9;
+				gbc1.weighty = 0.9;
+				gbc1.fill = GridBagConstraints.HORIZONTAL;
+
+				add(pannelloGiocatoreUmano, gbc1);
+		
 	}
 	
 	/**

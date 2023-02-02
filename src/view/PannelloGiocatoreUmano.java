@@ -37,6 +37,16 @@ public class PannelloGiocatoreUmano extends PannelloGiocatore
 
 	}
 
+	public PannelloGiocatoreUmano(int larghezza, int altezza, String titolo, ArrayList<Card> cards) {
+		super(larghezza, altezza, titolo);
+		cardButtons = new ArrayList<JButton>();	
+		setCardButtons(cards);
+		buttonUno = new JButton("UNO!");
+		buttonUno.setContentAreaFilled(false);
+
+//		this.add(buttonUno, BorderLayout.CENTER);
+
+	}
 	public void addButtonCard(Card card)
 	{
 		String image = card.getImage();

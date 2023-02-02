@@ -18,11 +18,11 @@ public class PannelloGiocatore extends JPanel{
 	private JLabel nickname;
 	private JLabel remainingCards;
 	
-	public void setRemainingCards(int remainingCards) {
+	public void setRemainingCards(int intRemainingCards) {
 //		this.remove(remainingCards);
-		
-		this.remainingCards = new JLabel("Remaining cards: "+ remainingCards);
-			
+		this.remove(remainingCards);
+		this.remainingCards = new JLabel("Cards: "+ intRemainingCards);
+		this.add(remainingCards);
 		
 	}
 

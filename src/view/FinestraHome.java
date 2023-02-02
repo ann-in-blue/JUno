@@ -27,7 +27,7 @@ public class FinestraHome extends JFrame
 		paginaIniziale = new PaginaIniziale();
 	
 		setLayout(new BorderLayout());
-		setSize(1200, 700);
+		setSize(1100, 600);
 		setLocationRelativeTo(null);	//mette la finestra al centro dello schermo
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);

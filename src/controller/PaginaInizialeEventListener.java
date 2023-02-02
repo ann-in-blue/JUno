@@ -41,17 +41,6 @@ public class PaginaInizialeEventListener implements ActionListener
 				//inizia partita
 				System.out.println("nickname inserito è presente");
 				jUno.startGame(nickname);
-//				try {				
-//					System.out.println("start game fatto");
-//
-//					jUno.playTurn();
-//				} catch (InvalidTurnException e1) {
-//					// TODO Auto-generated catch block
-//					e1.printStackTrace();
-//				} catch (InterruptedException e1) {
-//					// TODO Auto-generated catch block
-//					e1.printStackTrace();
-//				}
 
 				
 			}

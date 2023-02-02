@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
@@ -15,7 +16,10 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
+import controller.exceptions.InvalidCardException;
+import controller.exceptions.InvalidColorException;
 import controller.exceptions.InvalidTurnException;
+import controller.exceptions.InvalidValueException;
 import controller.exceptions.WrongArgumentsException;
 import model.ArtificialPlayer;
 import model.Card;
@@ -31,6 +35,7 @@ import view.PaginaIniziale;
 import view.PannelloAvatar;
 import view.PaginaIniziale.*;
 import view.PannelloGiocatore;
+import view.PannelloGiocatoreUmano;
 
 
 public class ControllerJUno implements Observer
@@ -45,6 +50,7 @@ public class ControllerJUno implements Observer
 
 		//campi del model
 		protected static Game game;
+		protected String nickname;
 		protected ArtificialPlayer bot1, bot2, bot3;
 		protected Player humanPlayer;
 		
@@ -53,6 +59,8 @@ public class ControllerJUno implements Observer
 		protected static GraficaGioco viewGioco;
 		
 		protected static ViewObserver viewObserver;
+		
+		public boolean waitForInput;
 		
 		/**
 		 * Costruttore della classe JUno: crea un'istanza della view, del modello, dell'osservatore del modello e aggancia i listeners ai vari componenti della view.
@@ -75,6 +83,7 @@ public class ControllerJUno implements Observer
 
 		public void startGame(String nickname)
 		{
+			this.nickname= nickname;
 			/**
 			 * Recupero dei dati dei 3 giocatori artificiali
 			 */
@@ -104,33 +113,12 @@ public class ControllerJUno implements Observer
 			
 			//creazione della view di gioco
 			viewGioco = new GraficaGioco(game.getPlayersId());
-			viewGioco.setLabelTurno(new JLabel("Turno di: "+game.getCurrentPlayerName()));
-
+//			viewGioco.setLabelTurno(new JLabel("Turno di: "+game.getCurrentPlayerName()));
 			//aggiunta alla view della prima carta sul tavolo
 			viewGioco.setDiscardButton(game.getDiscardDeck().get(0));
 			
-			//aggiunta alla view della carte del giocatore umano
-			for(int i=0; i< game.getPlayerDeckSize(nickname); i++)
-			{
-//				System.out.println(game.getPlayerDeckSize(nickname));
-//				System.out.println(game.getPlayerDeck(nickname).get(i));
-				
-				//per ogni carta in mano al giocatore umano aggiungo l'immagine alla view
-				viewGioco.getPannelloGiocatoreUmano().addButtonCard(game.getPlayerDeck(nickname).get(i));
-			
-					/**
-					 * Aggancio dei listeners sulle carte del giocatore umano:
-					 * Per ogni carta presente nella mano del giocatore umano aggiungo un listener che permetterà di scegliere la carta da giocare.
-					 */
-					viewGioco.getPannelloGiocatoreUmano().getCardButtons().get(i).addActionListener(new CardEventListener(game.getPlayerDeck(nickname).get(i), this));
 
-			}
-			/**
-			 * Aggiunta di un action listener sul bottone "Uno" e sul mazzo coperto
-			 */
-			viewGioco.getPannelloGiocatoreUmano().getButtonUno().addActionListener(new ButtonUnoEventListener(game.getCurrentPlayerName(), game));
-			viewGioco.getButtonDeck().addActionListener(new DeckEventListener(this));
-			
+			setTurn();
 		}
 	
 		public void startGameWithAvatarRequest(String nickname)
@@ -149,6 +137,39 @@ public class ControllerJUno implements Observer
 			}
 			
 		}
+		
+		/**
+		 * Metodo run che permette la gestione dei turni
+		 * @return
+		 */
+		
+		public void setTurn()
+		{
+			//aggiunta alla view delle carte del giocatore umano
+			for(int i=0; i< game.getPlayerDeckSize(nickname); i++)
+			{
+//				System.out.println(game.getPlayerDeckSize(nickname));
+//				System.out.println(game.getPlayerDeck(nickname).get(i));
+				
+				//per ogni carta in mano al giocatore umano aggiungo l'immagine alla view
+				viewGioco.getPannelloGiocatoreUmano().addButtonCard(game.getPlayerDeck(nickname).get(i));
+			
+					/**
+					 * Aggancio dei listeners sulle carte del giocatore umano:
+					 * Per ogni carta presente nella mano del giocatore umano aggiungo un listener che permetterà di scegliere la carta da giocare.
+					 */
+				viewGioco.getPannelloGiocatoreUmano().getCardButtons().get(i).addActionListener(new CardEventListener(game.getPlayerDeck(nickname).get(i), this));
+
+			}
+			/**
+			 * Aggiunta di un action listener sul bottone "Uno" e sul mazzo coperto
+			 */
+			viewGioco.getPannelloGiocatoreUmano().getButtonUno().addActionListener(new ButtonUnoEventListener(game.getCurrentPlayerName(), game));
+			viewGioco.getButtonDeck().addActionListener(new DeckEventListener(this));
+			
+		}
+		
+		
 		public static Game getGame() {
 			return game;
 		}
@@ -181,14 +202,6 @@ public class ControllerJUno implements Observer
 			
 			
 			System.out.println("update inizio \n" + arg);
-
-			//viewGioco.setDiscardButton(game.getDiscardDeck().get(game.getDiscardDeck().size()-1));
-//			viewGioco.getPannelloGiocatoreUmano().validate();
-			//ArrayList<Card> hand = game.getPlayerDeck(game.getPlayersId()[0]);
-//			viewGioco.getPannelloGiocatoreUmano().getCardButtons().clear();
-//			for(Card c : hand)
-//			viewGioco.getPannelloGiocatoreUmano().addButtonCard(c);
-//			game.getPlayersDecks().get(game.getCurrentPlayer()).add((Card)arg);
 			System.out.println(game.getPlayersDecks().get(game.getCurrentPlayer()));
 
 				
@@ -196,17 +209,13 @@ public class ControllerJUno implements Observer
 //			{				
 //				viewGioco.getPannelloGiocatoreUmano().refresh();
 				
-				viewGioco.getPannelloGiocatoreUmano().removeAll(); // Pulisco il pannello
+//				viewGioco.getPannelloGiocatoreUmano().removeAll(); // Pulisco il pannello
 				game.getPlayersDecks().get(0).remove((Card)arg);
-				viewGioco.getPannelloGiocatoreUmano().setCardButtons(game.getPlayersDecks().get(0));	//deve mostrare solo le card del giocatore umano
-				
-				
-				for(int i = 0;  i< game.getPlayerDeckSize(humanPlayer.getNickname()); i++)
-				{
-					viewGioco.getPannelloGiocatoreUmano().getCardButtons().get(i).addActionListener(new CardEventListener(game.getPlayerDeck(humanPlayer.getNickname()).get(i), this));
-				}
-				
-				//viewGioco.setDiscardButton(game.getDiscardDeck().get(game.getDiscardDeck().size()-1));
+//				viewGioco.getPannelloGiocatoreUmano().setCardButtons(game.getPlayersDecks().get(0));	
+				//deve mostrare solo le card del giocatore umano
+//				setCardListenerOnCardButtons();
+				setGameForNextTurn();
+
 				viewGioco.setDiscardButton((Card)arg);
 				
 				// Aggiungo i componenti
@@ -225,33 +234,77 @@ public class ControllerJUno implements Observer
 					e.printStackTrace();
 				}
 				
-				//PROVA GESTIONE TURNI
-				while(game.getCurrentPlayer() != 0)	
-				{
-					System.out.println("prova while");
-				
-//					{
-						//fino a che non è il turno del giocatore umano fai giocare i giocatori artificiali
-						try {
-							playTurn();
-						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						} catch (InvalidTurnException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-						try {
-							Thread.sleep(2000);
-						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-				}
-				waitForUserInput();
-	
+				//PROVA
+//				while(!game.isGameOver)
+//				{
+					
+					System.out.println("entro nel while isGameOver");
+					//PROVA GESTIONE TURNI
+					while(game.getCurrentPlayer() != 0)	
+					{
+						System.out.println("prova while");
+					
+//						{
+							//fino a che non è il turno del giocatore umano fai giocare i giocatori artificiali
+							try {
+								playTurn();
+								Thread.sleep(3000);
+
+							} catch (InterruptedException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							} catch (InvalidTurnException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
 					}
+					waitForUserInput();
 				
+//					setWaitForInput(false);
+		
+					}
+//				}
+				
+				
+		public void setGameForNextTurn()
+		{
+			viewGioco.setPannelloGiocatoreUmano(new PannelloGiocatoreUmano(800, 500, nickname, game.getPlayersDecks().get(0)));
+			
+			setCardListenerOnCardButtons();
+			
+			// Aggiungo i componenti
+			viewGioco.getPannelloGiocatoreUmano().repaint();
+			viewGioco.getPannelloGiocatoreUmano().validate();
+			
+			viewGioco.repaint();
+			viewGioco.validate();
+			viewGioco.refresh();
+		}
+
+		
+		
+		public void setCardListenerOnCardButtons()
+		{
+//			viewGioco.getPannelloGiocatoreUmano().setCardButtons(game.getPlayersDecks().get(0));	//deve mostrare solo le card del giocatore umano
+
+			//aggiunta alla view della carte del giocatore umano
+			for(int i=0; i< (game.getPlayersDecks().get(0)).size(); i++)
+			{
+//				System.out.println(game.getPlayerDeckSize(nickname));
+//				System.out.println(game.getPlayerDeck(nickname).get(i));
+				
+				//per ogni carta in mano al giocatore umano aggiungo l'immagine alla view
+//				viewGioco.getPannelloGiocatoreUmano().addButtonCard(game.getPlayerDeck(humanPlayer.getNickname()).get(i));
+			
+					/**
+					 * Aggancio dei listeners sulle carte del giocatore umano:
+					 * Per ogni carta presente nella mano del giocatore umano aggiungo un listener che permetterà di scegliere la carta da giocare.
+					 */
+				viewGioco.getPannelloGiocatoreUmano().getCardButtons().get(i).addActionListener(new CardEventListener(game.getPlayerDeck(humanPlayer.getNickname()).get(i), this));
+
+			}
+			
+		}
 
 		
 		/**
@@ -276,14 +329,19 @@ public class ControllerJUno implements Observer
 			System.out.println("prova refresh");
 				
 			int giocatore = game.getCurrentPlayer();
+			System.out.println("giocatore corrente: "+ giocatore);
+			
+			
 			if(giocatore == 0)	//se è il turno del giocatore umano
 			{				
 				viewGioco.getPannelloGiocatoreUmano().refresh();
 				
 				viewGioco.getPannelloGiocatoreUmano().removeAll(); // Pulisco il pannello
-				viewGioco.getPannelloGiocatoreUmano().setCardButtons(game.getPlayersDecks().get(0));	//deve mostrare solo le card del giocatore umano
-			
-			
+//				viewGioco.getPannelloGiocatoreUmano().setCardButtons(game.getPlayersDecks().get(0));	//deve mostrare solo le card del giocatore umano
+//				setCardListenerOnCardButtons();
+				setGameForNextTurn();
+
+				
 				// Aggiungo i componenti
 				viewGioco.getPannelloGiocatoreUmano().repaint();
 				viewGioco.getPannelloGiocatoreUmano().validate();
@@ -312,58 +370,42 @@ public class ControllerJUno implements Observer
 
 				
 			}
-//			try {
-//				playTurn();
-//				
-//				
-//			} catch (InvalidTurnException | InterruptedException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
 			}
 			case PLAYING_CARD ->
 			{
-				this.update(game, card);
-				System.out.println("update fatto");
-//				Thread.sleep(2000);
-//				while(game.getCurrentPlayer() != 0)	
-//				{
-					//fino a che non è il turno del giocatore umano fai giocare i giocatori artificiali
-//					try {
-//						playTurn();
-//					} catch (InterruptedException e) {
-//						// TODO Auto-generated catch block
-//						e.printStackTrace();
-//					} catch (InvalidTurnException e) {
-//						// TODO Auto-generated catch block
-//						e.printStackTrace();
-//					}
-//					Thread.sleep(2000);
-//
-//				}
-
 				
+				//PROVAAAAA
 //				try {
-//					playTurn();
-//					
-//					
-//				} catch (InvalidTurnException | InterruptedException e) {
+//					game.playCard(sgame.getCurrentPlayerName(), card);
+					//notifichiamo che il turno è stato giocato
+//					notify();
+//					setWaitForInput(true);
+//				} catch (InvalidTurnException | InvalidColorException | InvalidValueException
+//						| InvalidCardException e) {
 //					// TODO Auto-generated catch block
 //					e.printStackTrace();
 //				}
+
+				this.update(game, card);
+				System.out.println("update fatto");
+//				
 			}
 			case PLAYING_CARD_ARTIFICIAL ->
 			{
+				
 				//se è il turno dei giocatori artificiali
 					viewGioco.refresh();
 					//viewGioco.removeAll();
+					JLabel message = new JLabel("Giocatore artificiale " + game.getCurrentPlayer()+"\nCarta giocata: ; " + card +"!");
+					JOptionPane.showMessageDialog(null, message);
+					
 					viewGioco.setDiscardButton(card);
 
-					//
-
-					//new jLabel
+					
+					//new jLabel con le carte rimanenti
 					viewGioco.getPannelloGiocatore(game.getCurrentPlayer()).setRemainingCards(game.getPlayerDeckSize(game.getCurrentPlayerName()));
 					System.out.println("remaining cards for player: "+ game.getPlayerDeckSize(game.getCurrentPlayerName()));
+					System.out.println(game.getPlayerDeck(game.getCurrentPlayerName()));
 
 
 					viewGioco.getPannelloGiocatore(game.getCurrentPlayer()).repaint();
@@ -373,7 +415,7 @@ public class ControllerJUno implements Observer
 					viewGioco.repaint();
 					viewGioco.validate();
 					viewGioco.refresh();
-					Thread.sleep(5000);
+					Thread.sleep(3000);
 
 			}
 			
@@ -387,19 +429,20 @@ public class ControllerJUno implements Observer
  */
 		public void playTurn() throws InterruptedException, InvalidTurnException 
 		{
-//			while(!game.isGameOver)
-//			{				
-//			if(game.getCurrentPlayer()!=0)	//se non è il turno del giocatore umano
-//			{
-			
 				try {								
 					System.out.println("**"+"giocatore artificiale"+ game.getCurrentPlayer());
 
 					//turno del giocatore artificiale
 					Card card = game.playCardArtificial(game.getCurrentPlayer());
-					System.out.println("carta giocata ai:"+card);
+
+					if (!card.equals(null))
+							{
+					System.out.println("carta giocata al play turn artificial :"+card+ game.getCurrentPlayer());
+										updateView(card, GameState.PLAYING_CARD_ARTIFICIAL);
+
+							}
+							
 										
-					updateView(card, GameState.PLAYING_CARD_ARTIFICIAL);
 					
 					
 					
@@ -407,38 +450,39 @@ public class ControllerJUno implements Observer
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-
-//			} else {
-//				System.out.println("entro nel wait for user");
-//				waitForUserInput();
-//				System.out.println("Aspetto la mossa del giocatore umano");
-//				}
-					
+			
 		}
 
 		public void waitForUserInput() {
 			
 			System.out.println("entro nel wait for user");
+//			setTurn();
+			setGameForNextTurn();
 
-			for(int i=0; i< game.getPlayerDeckSize(humanPlayer.getNickname()); i++)
-			{
-				System.out.println(game.getPlayerDeckSize(humanPlayer.getNickname()));
-				System.out.println(game.getPlayerDeck(humanPlayer.getNickname()).get(i));
-				
-					/**
-					 * Aggancio dei listeners sulle carte del giocatore umano:
-					 * Per ogni carta presente nella mano del giocatore umano aggiungo un listener che permetterà di scegliere la carta da giocare.
-					 */
-				viewGioco.getPannelloGiocatoreUmano().getCardButtons().get(i).addActionListener(new CardEventListener(game.getPlayerDeck(humanPlayer.getNickname()).get(i), this));
-
-				viewGioco.getPannelloGiocatoreUmano().repaint();
-				viewGioco.getPannelloGiocatoreUmano().validate();
-				viewGioco.repaint();
-				viewGioco.validate();
-				viewGioco.refresh();
-
-			}
-
+//			for(int i=0; i< game.getPlayerDeckSize(humanPlayer.getNickname()); i++)
+//			{
+//				System.out.println(game.getPlayerDeckSize(humanPlayer.getNickname()));
+//				System.out.println(game.getPlayerDeck(humanPlayer.getNickname()).get(i));
+//				
+//				
+////				viewGioco.getPannelloGiocatoreUmano().addButtonCard(game.getPlayerDeck(humanPlayer.getNickname()).get(i));
+//
+//					/**
+//					 * Aggancio dei listeners sulle carte del giocatore umano:
+//					 * Per ogni carta presente nella mano del giocatore umano aggiungo  listener che permetterà di scegliere la carta da giocare.
+//					 */
+//				viewGioco.getPannelloGiocatoreUmano().getCardButtons().get(i).addActionListener(new TurnEventListener(game.getPlayerDeck(humanPlayer.getNickname()).get(i), this));
+//
+//				
+//			}
 	
+		}
+
+		public boolean isWaitForInput() {
+			return waitForInput;
+		}
+
+		public void setWaitForInput(boolean waitForInput) {
+			this.waitForInput = waitForInput;
 		}
 }

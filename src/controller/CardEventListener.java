@@ -40,7 +40,10 @@ public class CardEventListener implements ActionListener
 					System.out.println("true check");
 					
 //					controllerJUno.update(ControllerJUno.game, card);
+//					controllerJUno.updateView(card, GameState.PLAYING_CARD);
 					controllerJUno.updateView(card, GameState.PLAYING_CARD);
+//					notify();
+
 //					Thread.sleep(3000);
 					
 //					while(controllerJUno.game.getCurrentPlayer() != 0)	
@@ -51,17 +54,32 @@ public class CardEventListener implements ActionListener
 //
 //					}
 					
+					
 				
-			} catch (InvalidTurnException | InvalidColorException | InvalidValueException | InvalidCardException e1) {
+//			} catch (InvalidTurnException | InvalidColorException | InvalidValueException | InvalidCardException e1) {
 				// TODO Auto-generated catch block
-				e1.printStackTrace();
+//				e1.printStackTrace();
 //			
 			} catch (InterruptedException e2) {
 				// TODO Auto-generated catch block
 				e2.printStackTrace();
+			} catch (InvalidTurnException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (InvalidColorException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (InvalidValueException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (InvalidCardException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
 			}
-		}
+			
+	}
 //	}
+	
 	
 
 }
