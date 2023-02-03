@@ -38,28 +38,9 @@ public class CardEventListener implements ActionListener
 					controllerJUno.game.playCard(controllerJUno.game.getCurrentPlayerName(), card);
 				
 					System.out.println("true check");
-					
-//					controllerJUno.update(ControllerJUno.game, card);
-//					controllerJUno.updateView(card, GameState.PLAYING_CARD);
 					controllerJUno.updateView(card, GameState.PLAYING_CARD);
-//					notify();
-
-//					Thread.sleep(3000);
-					
-//					while(controllerJUno.game.getCurrentPlayer() != 0)	
-//					{
-//						//fino a che non è il turno del giocatore umano fai giocare i giocatori artificiali
-//						controllerJUno.playTurn();
-//						Thread.sleep(2000);
-//
-//					}
 					
 					
-				
-//			} catch (InvalidTurnException | InvalidColorException | InvalidValueException | InvalidCardException e1) {
-				// TODO Auto-generated catch block
-//				e1.printStackTrace();
-//			
 			} catch (InterruptedException e2) {
 				// TODO Auto-generated catch block
 				e2.printStackTrace();

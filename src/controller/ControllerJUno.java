@@ -2,6 +2,7 @@ package controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -189,6 +190,30 @@ public class ControllerJUno implements Observer
 			ControllerJUno.file = file;
 		}
 
+		public void startArtificialPlayersTurn()
+		{
+			System.out.println("entro nei turni dei giocatori artificiali");
+			//PROVA GESTIONE TURNI
+			while(game.getCurrentPlayer() != 0)	
+			{
+				System.out.println("prova while");
+			
+				//fino a che non è il turno del giocatore umano fai giocare i giocatori artificiali
+				try {
+					playTurn();
+					Thread.sleep(3000);
+
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (InvalidTurnException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			waitForUserInput();
+		
+		}
 		/**
 		 * Metodo che permette, dopo aver ricevuto una notifica dal modello, di aggiornare la view in base all'argomento in input.
 		 * La view può essere aggiornata in vari modi, in relazione agli elementi del modello che sono cambiati e anche al tipo di giocatore che ha giocato il suo turno.
@@ -234,36 +259,9 @@ public class ControllerJUno implements Observer
 					e.printStackTrace();
 				}
 				
-				//PROVA
-//				while(!game.isGameOver)
-//				{
-					
-					System.out.println("entro nel while isGameOver");
-					//PROVA GESTIONE TURNI
-					while(game.getCurrentPlayer() != 0)	
-					{
-						System.out.println("prova while");
-					
-//						{
-							//fino a che non è il turno del giocatore umano fai giocare i giocatori artificiali
-							try {
-								playTurn();
-								Thread.sleep(3000);
+				startArtificialPlayersTurn();
 
-							} catch (InterruptedException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							} catch (InvalidTurnException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-					}
-					waitForUserInput();
-				
-//					setWaitForInput(false);
-		
-					}
-//				}
+		}
 				
 				
 		public void setGameForNextTurn()
@@ -337,8 +335,8 @@ public class ControllerJUno implements Observer
 				viewGioco.getPannelloGiocatoreUmano().refresh();
 				
 				viewGioco.getPannelloGiocatoreUmano().removeAll(); // Pulisco il pannello
-//				viewGioco.getPannelloGiocatoreUmano().setCardButtons(game.getPlayersDecks().get(0));	//deve mostrare solo le card del giocatore umano
-//				setCardListenerOnCardButtons();
+
+				setButtonPassaTurno();
 				setGameForNextTurn();
 
 				
@@ -348,8 +346,6 @@ public class ControllerJUno implements Observer
 				viewGioco.repaint();
 				viewGioco.validate();
 				viewGioco.refresh();
-//				Thread.sleep(5000);
-//
 				}
 			else
 			{
@@ -415,12 +411,38 @@ public class ControllerJUno implements Observer
 					viewGioco.repaint();
 					viewGioco.validate();
 					viewGioco.refresh();
-					Thread.sleep(3000);
+					Thread.sleep(1000);
 
 			}
 			
 		}
 	}
+	
+		/**
+		 * Metodo che rende visibile il bottone per passare il turno e associa ad esso un action listener che permette all'utente
+		 * di passare il turno al giocatore successivo nel caso in cui, dopo aver pescato una carta, non si ha nessuna carta da giocare.
+		 */
+		public void setButtonPassaTurno()
+		{
+//			viewGioco.getButtonPassaTurno().setEnabled(true);
+			viewGioco.getButtonPassaTurno().setVisible(true);
+			viewGioco.getButtonPassaTurno().addActionListener(new PassaTurnoEventListener(this));
+		}
+		
+		/**
+		 * Metodo chiamato dopo aver cliccato il bottone "Passa Turno" che permette al giocatore umano di saltare il turno e passare al giocatore successivo.
+		 * 
+		 */
+		public void passaTurno()
+		{
+			System.out.println();
+			System.out.println("Passa turno cliccato");
+			game.nextPlayerTurn();			
+			viewGioco.getButtonPassaTurno().setVisible(false);
+
+			startArtificialPlayersTurn();
+
+		}
 
 /**
  * Metodo che permette ai giocatori artificiali di giocare il loro turno
@@ -447,7 +469,6 @@ public class ControllerJUno implements Observer
 					
 					
 				} catch (InvalidTurnException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			
@@ -459,22 +480,6 @@ public class ControllerJUno implements Observer
 //			setTurn();
 			setGameForNextTurn();
 
-//			for(int i=0; i< game.getPlayerDeckSize(humanPlayer.getNickname()); i++)
-//			{
-//				System.out.println(game.getPlayerDeckSize(humanPlayer.getNickname()));
-//				System.out.println(game.getPlayerDeck(humanPlayer.getNickname()).get(i));
-//				
-//				
-////				viewGioco.getPannelloGiocatoreUmano().addButtonCard(game.getPlayerDeck(humanPlayer.getNickname()).get(i));
-//
-//					/**
-//					 * Aggancio dei listeners sulle carte del giocatore umano:
-//					 * Per ogni carta presente nella mano del giocatore umano aggiungo  listener che permetterà di scegliere la carta da giocare.
-//					 */
-//				viewGioco.getPannelloGiocatoreUmano().getCardButtons().get(i).addActionListener(new TurnEventListener(game.getPlayerDeck(humanPlayer.getNickname()).get(i), this));
-//
-//				
-//			}
 	
 		}
 

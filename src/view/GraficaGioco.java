@@ -22,13 +22,20 @@ public class GraficaGioco extends JFrame
 	private JButton buttonDeck;
 	private JButton buttonDiscardDeck;
 	private JPanel panelDecks;
-	private JLabel labelTurno;
-//	private JButton buttonPassaTurno;
+	private JButton buttonUno;
+
+//	private JLabel labelTurno;
+	private JButton buttonPassaTurno;
+	
 	private PannelloGiocatoreUmano pannelloGiocatoreUmano;
 	private PannelloGiocatore pannelloGiocatore1;
 	private PannelloGiocatore pannelloGiocatore2;
 	private PannelloGiocatore pannelloGiocatore3;
 		
+	//prova bottone immagine
+	private BufferedImage buttonIcon;
+	private BufferedImage iconDiscardDeck;
+	
 	public PannelloGiocatore getPannelloGiocatore(int giocatore) {
 		return switch(giocatore) {
 		case 1 -> pannelloGiocatore1;
@@ -39,10 +46,6 @@ public class GraficaGioco extends JFrame
 				
 	}
 
-
-	//prova bottone immagine
-	private BufferedImage buttonIcon;
-	private BufferedImage iconDiscardDeck;
 	
 	public GraficaGioco(String[] players)
 	{
@@ -61,7 +64,17 @@ public class GraficaGioco extends JFrame
 		
 		panelDecks = new JPanel();
 //		labelTurno = new JLabel("Turno di: ");
-//		buttonPassaTurno = new JButton("Passa il turno");
+		buttonUno = new JButton("UNO!");
+		buttonUno.setContentAreaFilled(false);
+
+		buttonPassaTurno = new JButton("PASSA IL TURNO");
+//		buttonPassaTurno.setBackground(null);
+		buttonPassaTurno.setContentAreaFilled(false);
+
+		
+		//		buttonPassaTurno.setEnabled(false);
+		buttonPassaTurno.setVisible(false);
+		
 		buttonDeck = new JButton(new ImageIcon(buttonIcon));
 		buttonDeck.setContentAreaFilled(false);
 		buttonDeck.setBackground(super.getBackground());
@@ -74,7 +87,8 @@ public class GraficaGioco extends JFrame
 		panelDecks.add(buttonDeck);
 		panelDecks.add(buttonDiscardDeck);
 //		panelDecks.add(labelTurno);
-		//panelDecks.add(buttonPassaTurno);
+		panelDecks.add(buttonUno);
+		panelDecks.add(buttonPassaTurno);
 		
 		pannelloGiocatoreUmano = new PannelloGiocatoreUmano(800, 500, players[0]);
 		
@@ -152,17 +166,22 @@ public class GraficaGioco extends JFrame
 	}
 
 
-	public JLabel getLabelTurno() {
-		return labelTurno;
+	public JButton getButtonPassaTurno() {
+		return buttonPassaTurno;
 	}
 
 
-	public void setLabelTurno(JLabel labelTurno) {
-		this.labelTurno = labelTurno;
-		panelDecks.add(labelTurno);
+//	public JLabel getLabelTurno() {
+//		return labelTurno;
+//	}
 
-		
-	}
+
+//	public void setLabelTurno(JLabel labelTurno) {
+//		this.labelTurno = labelTurno;
+//		panelDecks.add(labelTurno);
+//
+//		
+//	}
 
 
 	public JButton getButtonDeck() {

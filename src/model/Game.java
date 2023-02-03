@@ -132,6 +132,11 @@ public class Game extends Observable
 		this.discardDeck = discardDeck;
 	}
 	
+	public Card getDiscardDeckTopCard()
+	{
+		return discardDeck.get(discardDeck.size()-1);
+	}
+	
 	/**
 	 * Metodo per cambiare il mazzo di riferimento con il mazzo di scarto
 	 * @throws WrongArgumentsException 
@@ -842,7 +847,7 @@ public class Game extends Observable
 		drawCard();
 		System.out.println("\nNessuna carta utile da giocare. Pesco:\n");
 		nextPlayerTurn();	//si passa il turno al giocatore successivo a quello bloccato
-		return null;
+		return getDiscardDeckTopCard();
 
 	}
 	
