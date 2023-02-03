@@ -48,13 +48,13 @@ public class Game extends Observable
 			discardDeck = new ArrayList<Card>();	//mazzo di scarto
 			
 //			currentPlayer = 0;
-			direction = false;
+			direction = true;
 			playersDecks =  new ArrayList<ArrayList<Card>>();
 			
 			for (int i = 0; i < playersId.length; i++)
 				{
 				//per ogni giocatore -> array di 7 carte iniziali
-				ArrayList<Card> hand = new ArrayList<Card>(Arrays.asList(deck.distribuisciCard(7)));
+				ArrayList<Card> hand = new ArrayList<Card>(Arrays.asList(deck.distribuisciCard(3)));
 				
 				for(Card c: hand)
 				{
@@ -76,6 +76,30 @@ public class Game extends Observable
 		return playersId[currentPlayer];
 	}
 	
+	
+	public int getPreviousPlayer()
+	{
+		if(isDirection())	//se direzione == true vado indietro di 1 nella lista dei giocatori
+		{
+			if (getCurrentPlayer() > 0)	//posso decrementare tranquillamente di 1
+				return getCurrentPlayer() - 1;
+			else return getPlayersId().length - 1;
+				
+//			return (getCurrentPlayer() - 1) % getPlayersId().length;		//una volta arrivata alla fine della lista torno all'inizio
+		}
+		
+		else {
+			if(getCurrentPlayer() < 3)
+				return getCurrentPlayer() + 1;
+			else
+				return 0;
+		}
+	}
+	
+	public String getPreviousPlayerName()
+	{
+		return playersId[getPreviousPlayer()];
+	}
 	public int getCurrentPlayer()
 	{
 		return currentPlayer;
@@ -890,6 +914,7 @@ public class Game extends Observable
 		{
 			isGameOver = true;
 			JOptionPane.showMessageDialog(null, "The Game is Over: " + playersId[currentPlayer] + "is the winner!","Game Over",JOptionPane.INFORMATION_MESSAGE);
+			System.exit(0);
 
 		}
 		

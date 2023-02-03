@@ -184,6 +184,16 @@ public class GraficaGioco extends JFrame
 //	}
 
 
+	public JButton getButtonUno() {
+		return buttonUno;
+	}
+
+
+	public void setButtonUno(JButton buttonUno) {
+		this.buttonUno = buttonUno;
+	}
+
+
 	public JButton getButtonDeck() {
 		return buttonDeck;
 	}

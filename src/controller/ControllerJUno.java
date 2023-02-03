@@ -52,7 +52,7 @@ public class ControllerJUno implements Observer
 		//campi del model
 		protected static Game game;
 		protected String nickname;
-		protected ArtificialPlayer bot1, bot2, bot3;
+		protected ArtificialPlayer bot0, bot1, bot2;
 		protected Player humanPlayer;
 		
 		//campi della view
@@ -90,9 +90,9 @@ public class ControllerJUno implements Observer
 			 */
 			try {
 				//inizializzo i tre giocatori con i dati recuperati dal file
-				bot1 = new ArtificialPlayer(controllerDatabase.caricaDaFile("bot1"));
-				bot2 = new ArtificialPlayer(controllerDatabase.caricaDaFile("bot2"));
-				bot3 = new ArtificialPlayer(controllerDatabase.caricaDaFile("bot3"));
+				bot0 = new ArtificialPlayer(controllerDatabase.caricaDaFile("bot1"));
+				bot1 = new ArtificialPlayer(controllerDatabase.caricaDaFile("bot2"));
+				bot2 = new ArtificialPlayer(controllerDatabase.caricaDaFile("bot3"));
 
 				//inizializzazione del giocatore umano
 				humanPlayer = new Player(controllerDatabase.caricaDaFile(nickname));
@@ -105,9 +105,9 @@ public class ControllerJUno implements Observer
 			
 			//inizializzazione della lista dei 4 giocatori
 			game.getPlayersId()[0] = nickname;
-			game.getPlayersId()[1] = bot1.getNickname();
-			game.getPlayersId()[2] = bot2.getNickname();
-			game.getPlayersId()[3] = bot3.getNickname();
+			game.getPlayersId()[1] = bot0.getNickname();
+			game.getPlayersId()[2] = bot1.getNickname();
+			game.getPlayersId()[3] = bot2.getNickname();
 
 			//inizializzazione dei mazzi di gioco e della prima carta sul tavolo
 			game.startGame();
@@ -165,7 +165,7 @@ public class ControllerJUno implements Observer
 			/**
 			 * Aggiunta di un action listener sul bottone "Uno" e sul mazzo coperto
 			 */
-			viewGioco.getPannelloGiocatoreUmano().getButtonUno().addActionListener(new ButtonUnoEventListener(game.getCurrentPlayerName(), game));
+			viewGioco.getButtonUno().addActionListener(new ButtonUnoEventListener(game.getCurrentPlayerName(), game));
 			viewGioco.getButtonDeck().addActionListener(new DeckEventListener(this));
 			
 		}
@@ -369,19 +369,8 @@ public class ControllerJUno implements Observer
 			}
 			case PLAYING_CARD ->
 			{
-				
-				//PROVAAAAA
-//				try {
-//					game.playCard(sgame.getCurrentPlayerName(), card);
-					//notifichiamo che il turno è stato giocato
-//					notify();
-//					setWaitForInput(true);
-//				} catch (InvalidTurnException | InvalidColorException | InvalidValueException
-//						| InvalidCardException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
-
+			
+				viewGioco.getButtonPassaTurno().setVisible(false);
 				this.update(game, card);
 				System.out.println("update fatto");
 //				
@@ -392,16 +381,16 @@ public class ControllerJUno implements Observer
 				//se è il turno dei giocatori artificiali
 					viewGioco.refresh();
 					//viewGioco.removeAll();
-					JLabel message = new JLabel("Giocatore artificiale " + game.getCurrentPlayer()+"\nCarta giocata: ; " + card +"!");
+					JLabel message = new JLabel("Giocatore artificiale " + game.getPreviousPlayer()+"\nCarta giocata: ; " + card +"!");
 					JOptionPane.showMessageDialog(null, message);
 					
 					viewGioco.setDiscardButton(card);
 
 					
 					//new jLabel con le carte rimanenti
-					viewGioco.getPannelloGiocatore(game.getCurrentPlayer()).setRemainingCards(game.getPlayerDeckSize(game.getCurrentPlayerName()));
-					System.out.println("remaining cards for player: "+ game.getPlayerDeckSize(game.getCurrentPlayerName()));
-					System.out.println(game.getPlayerDeck(game.getCurrentPlayerName()));
+					viewGioco.getPannelloGiocatore(game.getPreviousPlayer()).setRemainingCards(game.getPlayerDeckSize(game.getCurrentPlayerName()));
+					System.out.println("remaining cards for player: "+ game.getPlayerDeckSize(game.getPreviousPlayerName()));
+					System.out.println(game.getPlayerDeck(game.getPreviousPlayerName()));
 
 
 					viewGioco.getPannelloGiocatore(game.getCurrentPlayer()).repaint();
@@ -437,6 +426,7 @@ public class ControllerJUno implements Observer
 		{
 			System.out.println();
 			System.out.println("Passa turno cliccato");
+			
 			game.nextPlayerTurn();			
 			viewGioco.getButtonPassaTurno().setVisible(false);
 
@@ -452,20 +442,18 @@ public class ControllerJUno implements Observer
 		public void playTurn() throws InterruptedException, InvalidTurnException 
 		{
 				try {								
-					System.out.println("**"+"giocatore artificiale"+ game.getCurrentPlayer());
+					System.out.println("**"+"bot"+ game.getCurrentPlayer());
 
 					//turno del giocatore artificiale
 					Card card = game.playCardArtificial(game.getCurrentPlayer());
 
 					if (!card.equals(null))
-							{
-					System.out.println("carta giocata al play turn artificial :"+card+ game.getCurrentPlayer());
-										updateView(card, GameState.PLAYING_CARD_ARTIFICIAL);
+					{
+						System.out.println("carta giocata al play turn artificial :"+card+ game.getCurrentPlayer());
+						updateView(card, GameState.PLAYING_CARD_ARTIFICIAL);
 
-							}
-							
-										
-					
+					}
+						
 					
 					
 				} catch (InvalidTurnException e) {

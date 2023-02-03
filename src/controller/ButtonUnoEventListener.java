@@ -35,7 +35,14 @@ public class ButtonUnoEventListener implements ActionListener
 			game.checkInvalidTurn(currentPlayerName);
 			//se rimane solo una carta nel mazzo è necessario dire "UNO"
 			if(game.getPlayerDeckSize(currentPlayerName) == 1)
+			{
 				JOptionPane.showMessageDialog(null, "UNO!!!" + game.getPlayersId()[game.getCurrentPlayer()]);
+			}
+			else
+			{
+				JOptionPane.showMessageDialog(null, "Non è possibile chiamare UNO: numero di carte sbagliato");
+
+			}
 			
 		} catch (InvalidTurnException e1) {
 			e1.printStackTrace();
