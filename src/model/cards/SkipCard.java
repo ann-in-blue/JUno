@@ -1,7 +1,7 @@
 package model.cards;
 
 import model.Card;
-import model.Color;
+import model.Colors;
 
 /**
  * Classe che rappresenta la carta "blocca il gioctore successivo".
@@ -11,7 +11,7 @@ import model.Color;
 public class SkipCard extends Card
 {
 
-	public SkipCard(Color color, String nameImage)
+	public SkipCard(Colors color, String nameImage)
 	{
 		super();
 		setColor(color);

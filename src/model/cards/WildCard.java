@@ -1,7 +1,7 @@
 package model.cards;
 
 import model.Card;
-import model.Color;
+import model.Colors;
 
 /**
  * Carta generica con degli effetti particolari: +4 o cambia colore

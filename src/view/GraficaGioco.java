@@ -64,8 +64,8 @@ public class GraficaGioco extends JFrame
 		
 		panelDecks = new JPanel();
 //		labelTurno = new JLabel("Turno di: ");
-		buttonUno = new JButton("UNO!");
-		buttonUno.setContentAreaFilled(false);
+		buttonUno = new JButton("UNO");
+//		buttonUno.setContentAreaFilled(false);
 
 		buttonPassaTurno = new JButton("PASSA IL TURNO");
 //		buttonPassaTurno.setBackground(null);
@@ -81,7 +81,7 @@ public class GraficaGioco extends JFrame
 		
 		
 		buttonDiscardDeck = new JButton(new ImageIcon(iconDiscardDeck));
-		buttonDiscardDeck.setContentAreaFilled(false);
+//		buttonDiscardDeck.setContentAreaFilled(false);
 
 
 		panelDecks.add(buttonDeck);
@@ -170,20 +170,6 @@ public class GraficaGioco extends JFrame
 		return buttonPassaTurno;
 	}
 
-
-//	public JLabel getLabelTurno() {
-//		return labelTurno;
-//	}
-
-
-//	public void setLabelTurno(JLabel labelTurno) {
-//		this.labelTurno = labelTurno;
-//		panelDecks.add(labelTurno);
-//
-//		
-//	}
-
-
 	public JButton getButtonUno() {
 		return buttonUno;
 	}
@@ -235,7 +221,6 @@ public class GraficaGioco extends JFrame
 				panelDecks.remove(buttonDiscardDeck);
 				iconDiscardDeck = ImageIO.read(new File(image));
 				buttonDiscardDeck = new JButton(new ImageIcon(iconDiscardDeck));
-//				buttonDiscardDeck.setIcon(new ImageIcon(iconDiscardDeck));
 				buttonDiscardDeck.setMargin(null);
 				buttonDiscardDeck.setContentAreaFilled(false);
 				panelDecks.add(buttonDiscardDeck);
@@ -245,6 +230,13 @@ public class GraficaGioco extends JFrame
 		}
 	}
 	
+	public void setGameColor(Color color)
+	{
+//		panelDecks.remove(buttonUno);
+		buttonUno.setBackground(color);
+//		panelDecks.add(buttonUno);
+			
+	}
 
 	public JButton getButtonDiscardDeck() {
 		return buttonDiscardDeck;

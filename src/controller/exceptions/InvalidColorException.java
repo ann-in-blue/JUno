@@ -1,13 +1,13 @@
 package controller.exceptions;
 
-import model.Color;
+import model.Colors;
 
 public class InvalidColorException extends Exception
 {
-	private Color correctColor;
-	private Color usedColor;
+	private Colors correctColor;
+	private Colors usedColor;
 	
-	public InvalidColorException(String message, Color usedColor, Color correctColor)
+	public InvalidColorException(String message, Colors usedColor, Colors correctColor)
 	{
 		super(message);
 		this.correctColor = correctColor;

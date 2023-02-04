@@ -1,7 +1,7 @@
 package model.cards;
 
 import model.Card;
-import model.Color;
+import model.Colors;
 
 /**
  * Classe che rappresenta la carta "cambia giro" e modifica la direzione di gioco.
@@ -11,7 +11,7 @@ import model.Color;
 public class ReverseCard extends Card
 {
 
-	public ReverseCard(Color color, String nameImage)
+	public ReverseCard(Colors color, String nameImage)
 	{
 		setColor(color);
 		setImage(nameImage);

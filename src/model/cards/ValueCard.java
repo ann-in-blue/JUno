@@ -1,14 +1,14 @@
 package model.cards;
 
 import model.Card;
-import model.Color;
+import model.Colors;
 
 public class ValueCard extends Card
 {
 
 	private final int value;
 	
-	public ValueCard(Color color, int value, String nameImage)
+	public ValueCard(Colors color, int value, String nameImage)
 	{
 		this.value = value;
 		setColor(color);

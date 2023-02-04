@@ -38,7 +38,7 @@ public interface CardFactory
 	 * @return
 	 * @throws WrongArgumentsException
 	 */
-	default Card createCard(Type type, Color color, String nameImage) throws WrongArgumentsException
+	default Card createCard(Type type, Colors color, String nameImage) throws WrongArgumentsException
 	{
 		//in base al tipo crea la carta specifica
 		return switch(type) 
@@ -57,7 +57,7 @@ public interface CardFactory
 	 * @param type
 	 * @return l'oggetto istanziato
 	 */
-	default Card createCard(Type type, Color color, int value, String nameImage) throws WrongArgumentsException
+	default Card createCard(Type type, Colors color, int value, String nameImage) throws WrongArgumentsException
 	{
 		//in base al tipo crea la carta specifica
 		return switch(type) 

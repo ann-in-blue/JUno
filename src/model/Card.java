@@ -15,11 +15,11 @@ import javax.imageio.ImageIO;
 public abstract class Card implements CardInterface
 {
 	private String image;
-	private Color color;
+	private Colors color;
 
 
 	@Override
-	public Color getColor()
+	public Colors getColor()
 	{
 		return color;
 	}
@@ -30,7 +30,7 @@ public abstract class Card implements CardInterface
 		return image;
 	}
 	@Override
-	public void setColor(Color color)
+	public void setColor(Colors color)
 	{
 		this.color = color;
 	}

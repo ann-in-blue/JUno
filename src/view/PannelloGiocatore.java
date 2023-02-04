@@ -20,7 +20,7 @@ public class PannelloGiocatore extends JPanel{
 	
 	public void setRemainingCards(int intRemainingCards) {
 		this.remove(remainingCards);
-		this.remainingCards = new JLabel("Cards for : "+ nickname + intRemainingCards);
+		this.remainingCards = new JLabel("Cards:" + intRemainingCards);
 		this.add(remainingCards);
 		
 	}

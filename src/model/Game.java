@@ -26,7 +26,7 @@ public class Game extends Observable
 	private ArrayList<ArrayList<Card>> playersDecks;	//carte in mano ai giocatori
 	private ArrayList<Card> discardDeck;	//mazzo di scarto
 	
-	private Color validColor;
+	private Colors validColor;
 	private int validValue;
 	
 	public boolean direction;	//senso orario o senso antiorario
@@ -48,13 +48,13 @@ public class Game extends Observable
 			discardDeck = new ArrayList<Card>();	//mazzo di scarto
 			
 //			currentPlayer = 0;
-			direction = true;
+			direction = false;
 			playersDecks =  new ArrayList<ArrayList<Card>>();
 			
 			for (int i = 0; i < playersId.length; i++)
 				{
 				//per ogni giocatore -> array di 7 carte iniziali
-				ArrayList<Card> hand = new ArrayList<Card>(Arrays.asList(deck.distribuisciCard(3)));
+				ArrayList<Card> hand = new ArrayList<Card>(Arrays.asList(deck.distribuisciCard(7)));
 				
 				for(Card c: hand)
 				{
@@ -99,6 +99,10 @@ public class Game extends Observable
 	public String getPreviousPlayerName()
 	{
 		return playersId[getPreviousPlayer()];
+	}
+	public String getPlayerName(int index)
+	{
+		return playersId[index];
 	}
 	public int getCurrentPlayer()
 	{
@@ -208,10 +212,10 @@ public class Game extends Observable
 					
 					setValidColor(switch((String)selectedColor)
 					{
-							case "Red" -> Color.RED;
-							case "Blue" -> Color.BLUE;
-							case "Green" -> Color.GREEN;
-							case "Yellow" -> Color.YELLOW;
+							case "Red" -> Colors.RED;
+							case "Blue" -> Colors.BLUE;
+							case "Green" -> Colors.GREEN;
+							case "Yellow" -> Colors.YELLOW;
 							default -> null;
 					});
 				}
@@ -264,7 +268,7 @@ public class Game extends Observable
 	/**
 	 * Metodo che blocca il giocatore corrente per un turno
 	 */
-	private void skipTurnMove() {
+	public void skipTurnMove() {
 		
 		if(isDirection())	//se direzione == true avanzo di 1 nella lista dei giocatori
 			setCurrentPlayer((getCurrentPlayer() + 1) % getPlayersId().length);		//una volta arrivata alla fine della lista torno all'inizio
@@ -366,7 +370,7 @@ public class Game extends Observable
 				
 					JLabel message = new JLabel(playersId[currentPlayer] + " drew "+ n+" cards!");
 //					message.setFont(new Font("Arial", Font.BOLD, 30));
-//					JOptionPane.showMessageDialog(null, message);
+					JOptionPane.showMessageDialog(null, message);
 					System.out.println(message);
 
 					}
@@ -393,11 +397,11 @@ public class Game extends Observable
 		return playersDecks;
 	}
 
-	public Color getValidColor() {
+	public Colors getValidColor() {
 		return validColor;
 	}
 
-	public void setValidColor(Color validColor) {
+	public void setValidColor(Colors validColor) {
 		this.validColor = validColor;
 	}
 
@@ -433,8 +437,6 @@ public class Game extends Observable
 		{
 			//messaggio a schermo per l'utente
 			JOptionPane.showMessageDialog(null, "It is not "+ player + " turn!");
-			//eccezione
-			//throw new InvalidTurnException("It is not "+ player + " turn!", player);
 		}
 	
 	}
@@ -459,10 +461,10 @@ public class Game extends Observable
 
 			setValidColor(switch(chooseColorInput(player))
 					{
-							case "Red" -> Color.RED;
-							case "Blue" -> Color.BLUE;
-							case "Green" -> Color.GREEN;
-							case "Yellow" -> Color.YELLOW;
+							case "Red" -> Colors.RED;
+							case "Blue" -> Colors.BLUE;
+							case "Green" -> Colors.GREEN;
+							case "Yellow" -> Colors.YELLOW;
 							default -> null;
 					});
 			setValidValue(-1);
@@ -489,10 +491,10 @@ public class Game extends Observable
 
 			setValidColor(switch(chooseColorInput(player))
 					{
-							case "Red" -> Color.RED;
-							case "Blue" -> Color.BLUE;
-							case "Green" -> Color.GREEN;
-							case "Yellow" -> Color.YELLOW;
+							case "Red" -> Colors.RED;
+							case "Blue" -> Colors.BLUE;
+							case "Green" -> Colors.GREEN;
+							case "Yellow" -> Colors.YELLOW;
 							default -> null;
 					});
 			setValidValue(-1);	//si setta il valore di gioco a -1
@@ -627,9 +629,12 @@ public class Game extends Observable
 	}
 	public void checkUno()
 	{
-		//se rimane solo una carta nel mazzo è necessario dire "UNO"
-		if(getPlayerDeckSize(getCurrentPlayerName()) == 1)
-			JOptionPane.showMessageDialog(null, "UNO!!!" + playersId[currentPlayer]);
+		if(getCurrentPlayer() !=0)
+		{
+			//se rimane solo una carta nel mazzo è necessario dire "UNO"
+			if(getPlayerDeckSize(getCurrentPlayerName()) == 1)
+				JOptionPane.showMessageDialog(null, "UNO!!!" + playersId[currentPlayer]);
+		}
 				
 	}
 	
@@ -666,243 +671,6 @@ public class Game extends Observable
 
 	}
 	
-	/**
-	 * Metodo che si occupa di scegliere la carta da giocare per i 3 giocatori artificiali.
-	 * Grazie ad un numero casuale viene scelta la strategia per scegliere una delle carte presenti nei mazzi dei giocatori artificiali.
-	 * @param id
-	 * @return
-	 * @throws InvalidTurnException
-	 */
-	public Card playCardArtificial(int id) throws InvalidTurnException
-	{
-		//controllo se il turno è del giocatore che vuole giocare la carta
-		checkInvalidTurn(getPlayersId()[id]);
-				
-		//carte in mano al giocatore artificiale
-		ArrayList<Card> artificialPlayerCards = getPlayerDeck(getPlayersId()[id]);
-		
-		//numero random per la scelta della strategia di gioco
-		Random rand = new Random();		
-		
-		int random = rand.nextInt(4);
-		
-		return switch(random) {
-		case 0 -> chooseCard0(artificialPlayerCards, id);
-		case 1-> chooseCard1(artificialPlayerCards, id);
-		case 2 -> chooseCard2(artificialPlayerCards, id);
-		default -> chooseCard0(artificialPlayerCards, id);
-		};
-
-	}
-	/**
-	 * Metodo che scorre la lista delle carte del giocatore artificiale e restituisce la prima carta +4 o cambiaColore che trova.
-	 * Altrimenti chiama il metodo chooseCard1().
-	 * @param artificialPlayerCards : array di carte in mano al giocatore artificiale
-	 * @return la carta giocata dal giocatore artificiale
-	 */
-	public Card chooseCard0(ArrayList<Card> artificialPlayerCards, int id)
-	{
-		for (Card c: artificialPlayerCards)
-		{
-			if(c.getClass().getSimpleName().equals("Draw4Card"))	 
-			{
-				setValidColor(chooseColorArtificial());
-				setValidValue(-1);
-				
-				//togliamo la carta dal mazzo del giocatore che l'ha giocata e la mettiamo nel mazzo di scarto
-				//artificialPlayerCards.remove(c);
-				getPlayersDecks().get(getCurrentPlayer()).remove(c);
-
-				checkUno();
-				isGameOver();
-				discardDeck.add(c);
-				
-				nextPlayerTurn();	//si passa il turno al giocatore successivo
-				drawMultipleCardsMove(4);	//il giocatore successivo pesca 4 carte
-				
-				//messaggio a schermo
-				JLabel message = new JLabel("Carta +4 giocata; \n Nuovo colore: " + validColor+"!");
-				JOptionPane.showMessageDialog(null, message);
-				
-				notifyObservers(c);
-
-				return c;
-			}
-			else if(c.getClass().getSimpleName().equals("ChangeColorCard"))
-			{				
-				setValidColor(chooseColorArtificial());
-				setValidValue(-1);	//si setta il valore di gioco a -1
-				
-				//togliamo la carta dal mazzo del giocatore che l'ha giocata e la mettiamo nel mazzo di scarto
-				//artificialPlayerCards.remove(c);
-				getPlayersDecks().get(getCurrentPlayer()).remove(c);
-
-				checkUno();
-				isGameOver();
-				discardDeck.add(c);
-				
-				nextPlayerTurn();	//si passa il turno al giocatore successivo
-				
-				//messaggio a schermo
-				JLabel message = new JLabel("Carta changeColor giocata; \n Nuovo colore: " + validColor+"!");
-				JOptionPane.showMessageDialog(null, message);
-				
-				notifyObservers(c);
-				
-			
-				return c;
-			}
-		}
-		return chooseCard1(artificialPlayerCards, id);
-	}
-	
-	/**
-	 * Metodo che permette, in base alle carte in mano al giocatore artificiale, di giocare una carta dello stesso colore di quella presente sul tavolo di gioco.
-	 * Se non c'è una carta dello stesso colore richiama il metodo chooseCard2() che sceglierà in base al valore della carta sul tavolo.
-	 * 
-	 * @param artificialPlayerCards
-	 * @return carta giocata dal giocatore artificiale
-	 */
-	public Card chooseCard1(ArrayList<Card> artificialPlayerCards, int id)
-	{
-		for (Card c: artificialPlayerCards)
-		{
-			if(!c.getClass().getSimpleName().equals("Draw4Card") ||c.getClass().getSimpleName().equals("ChangeColorCard"))
-			{
-				
-//				if (c.getColor().equals(validColor))
-//				{
-					//Se il colore è valido posso avere una carta +2, una carta valore, una carta SKIP o una carta REVERSE 
-					
-					//se il colore è valido e la carta è una carta +2:
-					
-					if(c.getClass().getSimpleName().equals("Draw2Card") && c.getColor().equals(validColor))
-					{
-						setValidValue(-1);	//la carta +2 non ha valore quindi viene cambiato il valore di gioco
-						//togliamo la carta dal mazzo del giocatore che l'ha giocata e la mettiamo nel mazzo di scarto
-	//					artificialPlayerCards.remove(c);
-						getPlayersDecks().get(getCurrentPlayer()).remove(c);
-	
-						discardDeck.add(c);
-						checkUno();
-						isGameOver();
-						
-						nextPlayerTurn();	//si passa al giocatore successivo
-						drawMultipleCardsMove(2);	//il giocatore successivo pesca 2 carte
-						
-						return c;
-					}
-					
-					//caso in cui il colore è valido ed è una carta SKIP
-					else if(c.getClass().getSimpleName().equals("SkipCard") && c.getColor().equals(validColor))
-					{
-						setValidValue(-1);	
-						//togliamo la carta dal mazzo del giocatore che l'ha giocata e la mettiamo nel mazzo di scarto
-	//					artificialPlayerCards.remove(c);
-						getPlayersDecks().get(getCurrentPlayer()).remove(c);
-	
-						checkUno();
-						isGameOver();
-						discardDeck.add(c);
-						
-						skipTurnMove();	//il giocatore successivo viene bloccato			
-						nextPlayerTurn();	//si passa il turno al giocatore successivo a quello bloccato
-						
-						notifyObservers(c);
-						
-						return c;
-	
-					}
-					
-					//caso in cui il colore è valido e la carta è una "Reverse card"
-					else if(c.getClass().getSimpleName().equals("ReverseCard") && c.getColor().equals(validColor))
-					{
-						setValidValue(-1);
-						
-						//togliamo la carta dal mazzo del giocatore che l'ha giocata e la mettiamo nel mazzo di scarto
-	//					artificialPlayerCards.remove(c);
-						getPlayersDecks().get(getCurrentPlayer()).remove(c);
-	
-						checkUno();
-						isGameOver();
-						discardDeck.add(c);
-						
-						reverseCardMove();	//si cambia la direzione di gioco e si passa il turno al giocatore successivo
-						
-						notifyObservers(c);
-	
-						return c;
-						
-					}
-//				}	
-			}
-		}
-		return chooseCard2(artificialPlayerCards, id);
-	}
-	
-	/**
-	 * Metodo che permette al giocatore artificiale di giocare una carta dello stesso valore della carta presente sul tavolo di gioco.
-	 * Nel caso non ce ne fosse nessuna richiama il metodo chooseFirstAvailableCard().
-	 * @param artificialPlayerCards
-	 * @return carta giocata dal giocatore artificiale
-	 */
-	public Card chooseCard2(ArrayList<Card> artificialPlayerCards, int id)
-	{
-		for (Card c: artificialPlayerCards)
-		{
-			if(c.getClass().getSimpleName().equals("ValueCard") && (c.getValue() == validValue || c.getColor().equals(validColor)))
-			{
-				setValidColor(c.getColor());	//cambia il colore della partita
-				setValidValue(c.getValue());
-				//togliamo la carta dal mazzo del giocatore che l'ha giocata e la mettiamo nel mazzo di scarto
-//				artificialPlayerCards.remove(c);
-				getPlayersDecks().get(getCurrentPlayer()).remove(c);
-
-				checkUno();
-				isGameOver();
-				discardDeck.add(c);
-				nextPlayerTurn();
-				
-				notifyObservers(c);
-
-				return c;
-			}
-		}
-		drawCard();
-		System.out.println("\nNessuna carta utile da giocare. Pesco:\n");
-		nextPlayerTurn();	//si passa il turno al giocatore successivo a quello bloccato
-		return getDiscardDeckTopCard();
-
-	}
-	
-	
-	/**
-	 * Metodo che permette al giocatore artificiale di pescare una carta dal mazzo.
-	 * @return carta pescata dal mazzo
-	 */
-	public Card drawCard()
-	{
-		return drawMultipleCardsMove(1)[0];
-	}
-	/**
-	 * Metodo che permette ai giocatori artificiali, grazie ad un numero random, di selezionare uno dei 4 colori da giocare.
-	 * @return colore random
-	 */
-	public Color chooseColorArtificial()
-	{
-		Random rand = new Random();		
-		
-		int random = rand.nextInt(5);
-		
-		return switch(random) {
-		case 0 -> Color.BLUE;
-		case 1-> Color.GREEN;
-		case 2 -> Color.RED;
-		case 3 -> Color.YELLOW;
-		default -> Color.BLUE;
-		};
-
-	}
 	
 	/**
 	 * Metodo per finire la partita e annunciare il vincitore
@@ -913,7 +681,7 @@ public class Game extends Observable
 		if(getPlayerDeckSize(getCurrentPlayerName())==0)
 		{
 			isGameOver = true;
-			JOptionPane.showMessageDialog(null, "The Game is Over: " + playersId[currentPlayer] + "is the winner!","Game Over",JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(null, "THE GAME IS OVER: " + playersId[currentPlayer].toUpperCase() + "\n IS THE WINNER!","Game Over",JOptionPane.INFORMATION_MESSAGE);
 			System.exit(0);
 
 		}

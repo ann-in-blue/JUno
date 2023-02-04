@@ -1,5 +1,6 @@
 package controller;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -23,8 +24,9 @@ import controller.exceptions.InvalidTurnException;
 import controller.exceptions.InvalidValueException;
 import controller.exceptions.WrongArgumentsException;
 import model.ArtificialPlayer;
+import model.ArtificialPlayerMoves;
 import model.Card;
-import model.Color;
+import model.Colors;
 import model.Deck;
 import model.Game;
 import model.Player;
@@ -51,8 +53,9 @@ public class ControllerJUno implements Observer
 
 		//campi del model
 		protected static Game game;
+		protected ArtificialPlayerMoves ai;
 		protected String nickname;
-		protected ArtificialPlayer bot0, bot1, bot2;
+		protected ArtificialPlayer bot1, bot2, bot3;
 		protected Player humanPlayer;
 		
 		//campi della view
@@ -73,6 +76,9 @@ public class ControllerJUno implements Observer
 			
 			//creazione del modello
 			game = new Game();
+			
+			//mosse dei giocatori
+			ai = new ArtificialPlayerMoves(game);
 					
 			//creazione dell'observer del gioco
 			viewObserver = new ViewObserver();
@@ -90,9 +96,9 @@ public class ControllerJUno implements Observer
 			 */
 			try {
 				//inizializzo i tre giocatori con i dati recuperati dal file
-				bot0 = new ArtificialPlayer(controllerDatabase.caricaDaFile("bot1"));
-				bot1 = new ArtificialPlayer(controllerDatabase.caricaDaFile("bot2"));
-				bot2 = new ArtificialPlayer(controllerDatabase.caricaDaFile("bot3"));
+				bot1 = new ArtificialPlayer(controllerDatabase.caricaDaFile("bot1"));
+				bot2 = new ArtificialPlayer(controllerDatabase.caricaDaFile("bot2"));
+				bot3 = new ArtificialPlayer(controllerDatabase.caricaDaFile("bot3"));
 
 				//inizializzazione del giocatore umano
 				humanPlayer = new Player(controllerDatabase.caricaDaFile(nickname));
@@ -105,9 +111,9 @@ public class ControllerJUno implements Observer
 			
 			//inizializzazione della lista dei 4 giocatori
 			game.getPlayersId()[0] = nickname;
-			game.getPlayersId()[1] = bot0.getNickname();
-			game.getPlayersId()[2] = bot1.getNickname();
-			game.getPlayersId()[3] = bot2.getNickname();
+			game.getPlayersId()[1] = bot1.getNickname();
+			game.getPlayersId()[2] = bot2.getNickname();
+			game.getPlayersId()[3] = bot3.getNickname();
 
 			//inizializzazione dei mazzi di gioco e della prima carta sul tavolo
 			game.startGame();
@@ -117,6 +123,8 @@ public class ControllerJUno implements Observer
 //			viewGioco.setLabelTurno(new JLabel("Turno di: "+game.getCurrentPlayerName()));
 			//aggiunta alla view della prima carta sul tavolo
 			viewGioco.setDiscardButton(game.getDiscardDeck().get(0));
+			changeColor(game.getValidColor());
+
 			
 
 			setTurn();
@@ -242,6 +250,7 @@ public class ControllerJUno implements Observer
 				setGameForNextTurn();
 
 				viewGioco.setDiscardButton((Card)arg);
+				changeColor(game.getValidColor());
 				
 				// Aggiungo i componenti
 				viewGioco.getPannelloGiocatoreUmano().repaint();
@@ -287,13 +296,7 @@ public class ControllerJUno implements Observer
 
 			//aggiunta alla view della carte del giocatore umano
 			for(int i=0; i< (game.getPlayersDecks().get(0)).size(); i++)
-			{
-//				System.out.println(game.getPlayerDeckSize(nickname));
-//				System.out.println(game.getPlayerDeck(nickname).get(i));
-				
-				//per ogni carta in mano al giocatore umano aggiungo l'immagine alla view
-//				viewGioco.getPannelloGiocatoreUmano().addButtonCard(game.getPlayerDeck(humanPlayer.getNickname()).get(i));
-			
+			{			
 					/**
 					 * Aggancio dei listeners sulle carte del giocatore umano:
 					 * Per ogni carta presente nella mano del giocatore umano aggiungo un listener che permetterà di scegliere la carta da giocare.
@@ -313,7 +316,6 @@ public class ControllerJUno implements Observer
 		 */
 		public void updateView(Card card, GameState state) throws InterruptedException
 		{
-//			this.update(game, card);
 			switch(state)
 			{
 			case DRAWING_CARD -> 
@@ -355,14 +357,18 @@ public class ControllerJUno implements Observer
 				 */
 				viewGioco.getPannelloGiocatore(giocatore).removeAll();
 			viewGioco.getPannelloGiocatore(giocatore).setRemainingCards(game.getPlayerDeckSize(game.getCurrentPlayerName()));
+			
+			System.out.println(" giocatore: "+ giocatore);
 			System.out.println("remaining cards for player: "+ game.getPlayerDeckSize(game.getCurrentPlayerName()));
+			System.out.println("current pla: "+game.getCurrentPlayerName());
 
+			Thread.sleep(1000);
 
-				viewGioco.getPannelloGiocatore(giocatore).repaint();
-				viewGioco.getPannelloGiocatore(giocatore).validate();
-				viewGioco.repaint();
-				viewGioco.validate();
-				viewGioco.refresh();
+			viewGioco.getPannelloGiocatore(giocatore).repaint();
+			viewGioco.getPannelloGiocatore(giocatore).validate();
+			viewGioco.repaint();
+			viewGioco.validate();
+			viewGioco.refresh();
 
 				
 			}
@@ -381,11 +387,11 @@ public class ControllerJUno implements Observer
 				//se è il turno dei giocatori artificiali
 					viewGioco.refresh();
 					//viewGioco.removeAll();
-					JLabel message = new JLabel("Giocatore artificiale " + game.getPreviousPlayer()+"\nCarta giocata: ; " + card +"!");
+					JLabel message = new JLabel("Giocatore artificiale " + game.getPreviousPlayer()+"\nCarta giocata: " + card +"!");
 					JOptionPane.showMessageDialog(null, message);
 					
 					viewGioco.setDiscardButton(card);
-
+					changeColor(game.getValidColor());
 					
 					//new jLabel con le carte rimanenti
 					viewGioco.getPannelloGiocatore(game.getPreviousPlayer()).setRemainingCards(game.getPlayerDeckSize(game.getCurrentPlayerName()));
@@ -413,7 +419,6 @@ public class ControllerJUno implements Observer
 		 */
 		public void setButtonPassaTurno()
 		{
-//			viewGioco.getButtonPassaTurno().setEnabled(true);
 			viewGioco.getButtonPassaTurno().setVisible(true);
 			viewGioco.getButtonPassaTurno().addActionListener(new PassaTurnoEventListener(this));
 		}
@@ -445,7 +450,8 @@ public class ControllerJUno implements Observer
 					System.out.println("**"+"bot"+ game.getCurrentPlayer());
 
 					//turno del giocatore artificiale
-					Card card = game.playCardArtificial(game.getCurrentPlayer());
+//					Card card = game.playCardArtificial(game.getCurrentPlayer());
+					Card card = ai.playCardArtificial(game.getCurrentPlayer());
 
 					if (!card.equals(null))
 					{
@@ -460,6 +466,21 @@ public class ControllerJUno implements Observer
 					e.printStackTrace();
 				}
 			
+		}
+		
+		public void changeColor(Colors color)
+		{
+			Color c = switch(color)
+					{
+			case RED -> Color.red;
+			case BLUE -> Color.blue;
+			case YELLOW -> Color.yellow;
+			case GREEN -> Color.green;
+			default -> Color.gray;
+			
+					};
+			viewGioco.setGameColor(c);
+
 		}
 
 		public void waitForUserInput() {

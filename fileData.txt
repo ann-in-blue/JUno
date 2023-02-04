@@ -1,6 +1,7 @@
 bot1,avatar1.jpg,15,0,15,Avanzato
 bot2,avatar2.jpg,10,2,8,Intermedio
 bot3,avatar3.jpg,13,2,11,Intermedio
+bot0,avatar3.jpg,13,2,11,Intermedio
 robin,robin.png,0,0,0,Base
 ann,avatar4.jpg,0,0,0,Base
 legolas,legolas.png,0,0,0,Base

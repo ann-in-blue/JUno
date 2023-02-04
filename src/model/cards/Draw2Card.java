@@ -1,11 +1,11 @@
 package model.cards;
 
 import model.Card;
-import model.Color;
+import model.Colors;
 
 public class Draw2Card extends Card
 {
-	public Draw2Card(Color color, String nameImage)
+	public Draw2Card(Colors color, String nameImage)
 	{
 		setColor(color);
 		setImage(nameImage);

@@ -26,7 +26,7 @@ public class Deck implements CardFactory
 		currentCard = 0;
 		int ind = 0;
 
-		for (Color color : Color.values())
+		for (Colors color : Colors.values())
 		{
 			//indice per scorrere il mazzo
 			//primo for che va da 0 a 9
