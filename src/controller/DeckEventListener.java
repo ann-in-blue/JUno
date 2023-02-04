@@ -7,14 +7,21 @@ import java.util.ArrayList;
 import model.Card;
 import model.Game;
 
+/**
+ * Classe che implementa l'interfaccia ActionListener e definisce le istruzioni da eseguire una volta cliccata il mazzo coperto sul tavolo.
+ * @author a-00
+ *
+ */
 public class DeckEventListener implements ActionListener
 {
 
+	/**
+	 * Riferimento al controller di gioco.
+	 */
 	private ControllerJUno controllerJUno;
-//	public Game game;
+
 	public DeckEventListener(ControllerJUno controllerJUno)
 	{
-//		this.card = card;
 		this.controllerJUno = controllerJUno;
 	}
 
@@ -24,17 +31,13 @@ public class DeckEventListener implements ActionListener
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
+		//Recupero della carta in cima al mazzo
 		Card card = ControllerJUno.game.drawMultipleCardsMove(1)[0];
-		System.out.println("Carta pescata: "+ card);
 		
-		//se è il turno del giocatore umano fai vedere la carta
-
-//		controllerJUno.update(controllerJUno.game, card);
-//		controllerJUno.game.getPlayersDecks().get(controllerJUno.game.getCurrentPlayer()).add(card);
+		//se è il turno del giocatore umano aggiunge la carta al mazzo scoperto
 		try {
 			controllerJUno.updateView(card, GameState.DRAWING_CARD);
 		} catch (InterruptedException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		

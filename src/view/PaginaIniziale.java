@@ -125,20 +125,6 @@ public class PaginaIniziale extends JPanel
 		gbc.weighty = 0.05;
 		add(new JPanel(), gbc);
 				
-		
-		//azioni da eseguire una volta cliccato il bottone "Invia"
-//		buttonNickname.addActionListener(new PaginaInizialeEventListener(fieldNickname));			
-//		buttonNickname.addActionListener(new ActionListener() {
-//
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				String text = fieldNickname.getText();
-//				System.out.println(text);
-//
-//			}
-//			
-//		});
-				
 
 	}
 

@@ -11,34 +11,45 @@ import model.Card;
 import model.Game;
 import model.cards.ValueCard;
 
+/**
+ * Classe che implementa l'interfaccia ActionListener che permette di eseguire le istruzioni corrette in seguito al click di una carta in mano all'utente.
+ * @author a-00
+ *
+ */
 public class CardEventListener implements ActionListener
 {
 
+	/**
+	 * Riferimento alla carta selezionata e al controller di gioco che si occupa di aggiornare la logica e la view.
+	 */
 	private Card card;
 	private ControllerJUno controllerJUno;
 	
+	/**
+	 * Costruttore con parametri.
+	 * @param card
+	 * @param controllerJUno
+	 */
 	public CardEventListener(Card card, ControllerJUno controllerJUno)
 	{
 		this.card = card;
 		this.controllerJUno = controllerJUno;
 	}
+	
 	/**
 	 * Metodo eseguito quando viene cliccata una carta in mano al giocatore umano.
-	 * Si apre una finestra di conferma e viene giocata la carta selezionata.
+	 * Chiama il metodo playCard del controller che permette di verificare se la carta selezionata è compatibile con quella sul tavolo e in caso affermativo aggiorna la view con la nuova carta.
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) 
 	{
 
-			System.out.println(card);
-			System.out.println(card.getColor());
+//			System.out.println(card);
 			
 			try {
-				
-					controllerJUno.game.playCard(controllerJUno.game.getCurrentPlayerName(), card);
-				
-					System.out.println("true check");
-					controllerJUno.updateView(card, GameState.PLAYING_CARD);
+			
+				controllerJUno.game.playCard(controllerJUno.game.getCurrentPlayerName(), card);
+				controllerJUno.updateView(card, GameState.PLAYING_CARD);
 					
 					
 			} catch (InterruptedException e2) {

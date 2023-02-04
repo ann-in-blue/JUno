@@ -23,8 +23,6 @@ public class GraficaGioco extends JFrame
 	private JButton buttonDiscardDeck;
 	private JPanel panelDecks;
 	private JButton buttonUno;
-
-//	private JLabel labelTurno;
 	private JButton buttonPassaTurno;
 	
 	private PannelloGiocatoreUmano pannelloGiocatoreUmano;
@@ -36,16 +34,6 @@ public class GraficaGioco extends JFrame
 	private BufferedImage buttonIcon;
 	private BufferedImage iconDiscardDeck;
 	
-	public PannelloGiocatore getPannelloGiocatore(int giocatore) {
-		return switch(giocatore) {
-		case 1 -> pannelloGiocatore1;
-		case 2 -> pannelloGiocatore2;
-		case 3 -> pannelloGiocatore3;
-		default -> pannelloGiocatore1;
-		};
-				
-	}
-
 	
 	public GraficaGioco(String[] players)
 	{
@@ -166,6 +154,15 @@ public class GraficaGioco extends JFrame
 	}
 
 
+	public PannelloGiocatore getPannelloGiocatore(int giocatore) {
+		return switch(giocatore) {
+		case 1 -> pannelloGiocatore1;
+		case 2 -> pannelloGiocatore2;
+		case 3 -> pannelloGiocatore3;
+		default -> pannelloGiocatore1;
+		};
+				
+	}
 	public JButton getButtonPassaTurno() {
 		return buttonPassaTurno;
 	}

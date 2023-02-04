@@ -18,14 +18,7 @@ public class PannelloGiocatore extends JPanel{
 	private JLabel nickname;
 	private JLabel remainingCards;
 	
-	public void setRemainingCards(int intRemainingCards) {
-		this.remove(remainingCards);
-		this.remainingCards = new JLabel("Cards:" + intRemainingCards);
-		this.add(remainingCards);
-		
-	}
-
-
+	
 	public PannelloGiocatore(String imagePath, int larghezza, int altezza, String titolo, int numOfCards)
 	{
 		try {
@@ -49,8 +42,7 @@ public class PannelloGiocatore extends JPanel{
 		add(remainingCards, BorderLayout.PAGE_END);
 
 	}
-	
-	
+
 	public PannelloGiocatore(int larghezza, int altezza, String titolo)
 	{
 		setPreferredSize(new Dimension(larghezza, altezza));
@@ -58,6 +50,12 @@ public class PannelloGiocatore extends JPanel{
 
 	}
 
+	public void setRemainingCards(int intRemainingCards) {
+		this.remove(remainingCards);
+		this.remainingCards = new JLabel("Cards:" + intRemainingCards);
+		this.add(remainingCards);
+		
+	}
 
 	public BufferedImage getMyPicture() {
 		return myPicture;

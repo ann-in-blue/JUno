@@ -20,7 +20,7 @@ public class ValueCard extends Card
 		return false;
 		
 	}
-
+	@Override
 	public int getValue()
 	{
 		return value;

@@ -70,7 +70,7 @@ public class Game extends Observable
 		}
 		
 	}
-	//GETTERS E SETTERS
+
 	
 	public String getCurrentPlayerName() {
 		return playersId[currentPlayer];
@@ -186,7 +186,7 @@ public class Game extends Observable
 	
 	
 	
-	//metodo per iniziare la partita - SPOSTARE NELL CONTROLLER
+	//metodo per iniziare la partita
 	public void setFirstCard()
 	{
 		Card card = deck.distribuisciCard();
@@ -290,11 +290,9 @@ public class Game extends Observable
 				JLabel message = new JLabel(playersId[currentPlayer] + " was skipped!");
 				System.out.println(message);
 //				message.setFont(new Font("Arial", Font.BOLD, 30));
-//				JOptionPane.showMessageDialog(null, message);
+				JOptionPane.showMessageDialog(null, message);
 				}
-			},5000);
-
-		
+			},1000);
 		
 	}
 	
@@ -325,11 +323,11 @@ public class Game extends Observable
 			
 				JLabel message = new JLabel("Game direction changed by " + playersId[currentPlayer]+"!");
 //					message.setFont(new Font("Arial", Font.BOLD, 30));
-//		JOptionPane.showMessageDialog(null, message);
+		JOptionPane.showMessageDialog(null, message);
 				System.out.println(message);
 
 			}
-			},3000);		
+			},1000);		
 		
 	}
 	
@@ -368,13 +366,14 @@ public class Game extends Observable
 				@Override 
 				public void run(){
 				
-					JLabel message = new JLabel(playersId[currentPlayer] + " drew "+ n+" cards!");
+//					JLabel message = new JLabel(playersId[currentPlayer] + " drew "+ n+" cards!");
 //					message.setFont(new Font("Arial", Font.BOLD, 30));
-					JOptionPane.showMessageDialog(null, message);
-					System.out.println(message);
+//					JOptionPane.showMessageDialog(null, message);
+					JOptionPane.showMessageDialog(null, playersId[currentPlayer] + " drew "+ n+" cards!");
+//					System.out.println(message);
 
 					}
-				},3000);
+				},1000);
 //			JOptionPane.showMessageDialog(null, playersId[currentPlayer] + " drew "+ n+" cards!");
 			
 			/**
@@ -413,9 +412,9 @@ public class Game extends Observable
 		this.validValue = validValue;
 	}
 
-	public void setDeck(Deck deck) {
-		this.deck = deck;
-	}
+//	public void setDeck(Deck deck) {
+//		this.deck = deck;
+//	}
 
 	public boolean isDirection() {
 		return direction;

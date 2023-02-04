@@ -103,15 +103,15 @@ public class FilePlayersDatabase
 		
 	}
 	
-	public static void main(String[] args) throws IOException {
-		
-		File f = new File("/home/a-00/git/JUno/fileData.txt");
-		FilePlayersDatabase fd = new FilePlayersDatabase();
-		
-//		fd.salvaSuFile(f, "yoda", "yoda.png");
-
-		Player p1 = new Player(fd.caricaDaFile(f, "yoda"));
-
-	}
+//	public static void main(String[] args) throws IOException {
+//		
+//		File f = new File("/home/a-00/git/JUno/fileData.txt");
+//		FilePlayersDatabase fd = new FilePlayersDatabase();
+//		
+////		fd.salvaSuFile(f, "yoda", "yoda.png");
+//
+//		Player p1 = new Player(fd.caricaDaFile(f, "yoda"));
+//
+//	}
 	
 }

@@ -8,9 +8,16 @@ import javax.swing.JTextField;
 import controller.exceptions.InvalidTurnException;
 import model.Game;
 
-
+/**
+ * Classe che contiene le istruzioni da eseguire quando viene inserito un nickname all'inizio della partita.
+ * @author a-00
+ *
+ */
 public class PaginaInizialeEventListener implements ActionListener
 {
+	/**
+	 * Riferimenti agli elementi necessari per iniziare una partita.
+	 */
 	private String nickname;
 	private JTextField field;
 	private ControllerJUno jUno;
@@ -18,7 +25,6 @@ public class PaginaInizialeEventListener implements ActionListener
 	ControllerFilePlayersDatabase controllerFile = new ControllerFilePlayersDatabase();
 	
 	public PaginaInizialeEventListener(JTextField field, ControllerJUno jUno, Game game) {
-//		this.nickname = nickname;
 		this.field = field;
 		this.jUno = jUno;
 		this.game = game;

@@ -9,6 +9,11 @@ import controller.exceptions.InvalidTurnException;
 import controller.exceptions.InvalidValueException;
 import model.Card;
 
+/**
+ * Classe che implementa lìinterfaccia ActionListener e permette di eseguire le azioni specifiche dopo aver cliccato il bottone per passare il turno.
+ * @author a-00
+ *
+ */
 public class PassaTurnoEventListener implements ActionListener
 {
 

@@ -34,24 +34,6 @@ public class FinestraHome extends JFrame
 		
 		
 		 // Aggiungo i componenti alla finestra
-		 
 		add(paginaIniziale, BorderLayout.CENTER);
-//		pack();
 	}
-
-	
-	//ridisegnamo la finestra
-//	@Override
-//	public void paint(Graphics g)
-//	{
-////			Graphics2D g2d=(Graphics2D)g;			
-//		
-//		
-//	}
-//	
-//	public void refresh()
-//	{
-//		this.repaint();
-//		
-//	}
 }

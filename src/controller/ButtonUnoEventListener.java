@@ -8,12 +8,31 @@ import javax.swing.JOptionPane;
 import controller.exceptions.InvalidTurnException;
 import model.Game;
 
+/**
+ * Classe che implementa l'interfaccia ActionListener che permette di eseguire le istruzioni specifiche
+ *  in caso venga cliccato il tasto UNO.
+ * 
+ * @author a-00
+ *
+ */
 public class ButtonUnoEventListener implements ActionListener
 {
 
-	private String currentPlayerName;	//riferimento al giocatore a cui spetta il turno
-	private Game game;	//riferimento alla partita in corso
+	/**
+	 * Riferimento al giocatore a cui spetta il turno
+	 */
+	private String currentPlayerName;	
+	/**
+	 * Rifermento alla partita in corso
+	 */
+	private Game game;	
 	
+	
+	/**
+	 * Costruttore della classe.
+	 * @param currentPlayerName
+	 * @param game
+	 */
 	public ButtonUnoEventListener(String currentPlayerName, Game game)
 	{
 		this.currentPlayerName = currentPlayerName;
@@ -24,16 +43,17 @@ public class ButtonUnoEventListener implements ActionListener
 	 * Metodo eseguito quando viene cliccato il bottone UNO da parte del giocatore umano.
 	 * Viene fatto un controllo per verificare se è il turno del giocatore umano e poi viene verificato che abbia effettivamente una carta sola nel mazzo.
 	 * In quel caso viene stampato a schermo un messaggio.
+	 * Nel caso in cui il giocatore abbia più di 1 carta viene stampato un messaggio di errore.
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) 
 	{
 		try {
-			
-			
-			System.out.println("Prova bottone uno");
+			/**
+			 * Si controlla che sia effettivamente il turno dell'utente.
+			 */
 			game.checkInvalidTurn(currentPlayerName);
-			//se rimane solo una carta nel mazzo è necessario dire "UNO"
+
 			if(game.getPlayerDeckSize(currentPlayerName) == 1)
 			{
 				JOptionPane.showMessageDialog(null, "UNO!!!" + game.getPlayersId()[game.getCurrentPlayer()]);
