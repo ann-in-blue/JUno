@@ -73,7 +73,7 @@ public class FilePlayersDatabase
 	
 	
 	/**
-	 * Metodo per caricare i dati di un giocatore da un file in input.
+	 * Metodo per caricare i dati di un giocatore da un file in input tramite stream.
 	 */
 	public String caricaDaFile(File file, String nickname) throws IOException
 	{
@@ -102,16 +102,5 @@ public class FilePlayersDatabase
 		return null;
 		
 	}
-	
-//	public static void main(String[] args) throws IOException {
-//		
-//		File f = new File("/home/a-00/git/JUno/fileData.txt");
-//		FilePlayersDatabase fd = new FilePlayersDatabase();
-//		
-////		fd.salvaSuFile(f, "yoda", "yoda.png");
-//
-//		Player p1 = new Player(fd.caricaDaFile(f, "yoda"));
-//
-//	}
 	
 }

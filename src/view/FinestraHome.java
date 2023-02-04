@@ -7,6 +7,12 @@ import java.util.Observer;
 
 import javax.swing.*;
 
+/**
+ * Classe che rappresenta la view della pagina iniziale del gioco.
+ * Contiene un pannello che richiede di inserire in input il nome del giocatore.
+ * @author a-00
+ *
+ */
 public class FinestraHome extends JFrame 
 {	
 	private PaginaIniziale paginaIniziale;

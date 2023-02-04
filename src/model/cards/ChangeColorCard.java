@@ -1,5 +1,10 @@
 package model.cards;
 
+/**
+ * Carta cambia colore: colore da scegliere e valore -1;
+ * @author a-00
+ *
+ */
 public class ChangeColorCard extends WildCard
 {
 

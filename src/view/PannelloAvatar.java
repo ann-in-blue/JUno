@@ -12,6 +12,11 @@ import javax.swing.JPanel;
 
 import controller.AvatarFilter;
 
+/**
+ * Classe che rappresenta il pannello usato per inserire in input l'avatar di un giocatore.
+ * @author a-00
+ *
+ */
 public class PannelloAvatar extends JPanel{
 
 	private JLabel labelAvatar;
@@ -42,6 +47,10 @@ public class PannelloAvatar extends JPanel{
 		
 		
 }
+	/**
+	 * Metodo per fornire in input il file che contiene l'avatar
+	 * @return
+	 */
 	public String getAvatarInput()
 		{
 			if(avatarChooser.showOpenDialog(avatarChooser) == JFileChooser.APPROVE_OPTION)

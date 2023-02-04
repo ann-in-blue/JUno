@@ -8,6 +8,12 @@ import javax.swing.JOptionPane;
 
 import controller.exceptions.InvalidTurnException;
 
+
+/**
+ * Classe che implementa l'interfaccia AIMoves e implementa tutti i metodi usati dai giocatori artificiali.
+ * @author a-00
+ *
+ */
 public class ArtificialPlayerMoves implements AIMoves
 {
 	
@@ -34,22 +40,23 @@ public class ArtificialPlayerMoves implements AIMoves
 		//carte in mano al giocatore artificiale
 		ArrayList<Card> artificialPlayerCards = g.getPlayerDeck(g.getPlayersId()[id]);
 		
-		//numero random per la scelta della strategia di gioco
+		//Viene scelto un numero random per la scelta della strategia di gioco
 		Random rand = new Random();		
 		
 		int random = rand.nextInt(4);
 		
 		return switch(random) {
-		case 0 -> chooseCard0(artificialPlayerCards, id);
-		case 1-> chooseCard1(artificialPlayerCards, id);
-		case 2 -> chooseCard2(artificialPlayerCards, id);
-		default -> chooseCard0(artificialPlayerCards, id);
+				case 0 -> chooseCard0(artificialPlayerCards, id);
+				case 1-> chooseCard1(artificialPlayerCards, id);
+				case 2 -> chooseCard2(artificialPlayerCards, id);
+				default -> chooseCard0(artificialPlayerCards, id);
 		};
 
 	}
 	/**
 	 * Metodo che scorre la lista delle carte del giocatore artificiale e restituisce la prima carta +4 o cambiaColore che trova.
 	 * Altrimenti chiama il metodo chooseCard1().
+	 * Se viene trovata una carta utile si passa il turno al giocatore successivo.
 	 * @param artificialPlayerCards : array di carte in mano al giocatore artificiale
 	 * @return la carta giocata dal giocatore artificiale
 	 */
@@ -63,7 +70,6 @@ public class ArtificialPlayerMoves implements AIMoves
 				g.setValidValue(-1);
 				
 				//togliamo la carta dal mazzo del giocatore che l'ha giocata e la mettiamo nel mazzo di scarto
-				//artificialPlayerCards.remove(c);
 				g.getPlayersDecks().get(g.getCurrentPlayer()).remove(c);
 
 				g.checkUno();
@@ -88,7 +94,6 @@ public class ArtificialPlayerMoves implements AIMoves
 				g.setValidValue(-1);	//si setta il valore di gioco a -1
 				
 				//togliamo la carta dal mazzo del giocatore che l'ha giocata e la mettiamo nel mazzo di scarto
-				//artificialPlayerCards.remove(c);
 				g.getPlayersDecks().get(g.getCurrentPlayer()).remove(c);
 
 				g.checkUno();
@@ -113,7 +118,7 @@ public class ArtificialPlayerMoves implements AIMoves
 	/**
 	 * Metodo che permette, in base alle carte in mano al giocatore artificiale, di giocare una carta dello stesso colore di quella presente sul tavolo di gioco.
 	 * Se non c'è una carta dello stesso colore richiama il metodo chooseCard2() che sceglierà in base al valore della carta sul tavolo.
-	 * 
+	 * Se viene trovata una carta utile si passa il turno al giocatore successivo.
 	 * @param artificialPlayerCards
 	 * @return carta giocata dal giocatore artificiale
 	 */
@@ -123,72 +128,57 @@ public class ArtificialPlayerMoves implements AIMoves
 		{
 			if(!c.getClass().getSimpleName().equals("Draw4Card") ||c.getClass().getSimpleName().equals("ChangeColorCard"))
 			{
+			
+				if(c.getClass().getSimpleName().equals("Draw2Card") && c.getColor().equals(g.getValidColor()))
+				{
+					g.setValidValue(-1);	//la carta +2 non ha valore quindi viene cambiato il valore di gioco
+					//togliamo la carta dal mazzo del giocatore che l'ha giocata e la mettiamo nel mazzo di scarto
+					g.getPlayersDecks().get(g.getCurrentPlayer()).remove(c);
+
+					g.getDiscardDeck().add(c);
+					g.checkUno();
+					g.isGameOver();
+					
+					g.nextPlayerTurn();	//si passa al giocatore successivo
+					g.drawMultipleCardsMove(2);	//il giocatore successivo pesca 2 carte
+					
+					return c;
+				}
 				
-//				if (c.getColor().equals(validColor))
-//				{
-					//Se il colore è valido posso avere una carta +2, una carta valore, una carta SKIP o una carta REVERSE 
+				//caso in cui il colore è valido ed è una carta SKIP
+				else if(c.getClass().getSimpleName().equals("SkipCard") && c.getColor().equals(g.getValidColor()))
+				{
+					g.setValidValue(-1);	
+					//togliamo la carta dal mazzo del giocatore che l'ha giocata e la mettiamo nel mazzo di scarto
+					g.getPlayersDecks().get(g.getCurrentPlayer()).remove(c);
+
+					g.checkUno();
+					g.isGameOver();
+					g.getDiscardDeck().add(c);
+					g.skipTurnMove();	//il giocatore successivo viene bloccato			
+					g.nextPlayerTurn();	//si passa il turno al giocatore successivo a quello bloccato
 					
-					//se il colore è valido e la carta è una carta +2:
+					g.notifyObservers(c);
 					
-					if(c.getClass().getSimpleName().equals("Draw2Card") && c.getColor().equals(g.getValidColor()))
-					{
-						g.setValidValue(-1);	//la carta +2 non ha valore quindi viene cambiato il valore di gioco
-						//togliamo la carta dal mazzo del giocatore che l'ha giocata e la mettiamo nel mazzo di scarto
-	//					artificialPlayerCards.remove(c);
-						g.getPlayersDecks().get(g.getCurrentPlayer()).remove(c);
-	
-						g.getDiscardDeck().add(c);
-						g.checkUno();
-						g.isGameOver();
-						
-						g.nextPlayerTurn();	//si passa al giocatore successivo
-						g.drawMultipleCardsMove(2);	//il giocatore successivo pesca 2 carte
-						
-						return c;
-					}
+					return c;
+				}
 					
-					//caso in cui il colore è valido ed è una carta SKIP
-					else if(c.getClass().getSimpleName().equals("SkipCard") && c.getColor().equals(g.getValidColor()))
-					{
-						g.setValidValue(-1);	
-						//togliamo la carta dal mazzo del giocatore che l'ha giocata e la mettiamo nel mazzo di scarto
-	//					artificialPlayerCards.remove(c);
-						g.getPlayersDecks().get(g.getCurrentPlayer()).remove(c);
-	
-						g.checkUno();
-						g.isGameOver();
-						g.getDiscardDeck().add(c);
-						
-						g.skipTurnMove();	//il giocatore successivo viene bloccato			
-						g.nextPlayerTurn();	//si passa il turno al giocatore successivo a quello bloccato
-						
-						g.notifyObservers(c);
-						
-						return c;
-	
-					}
+				//caso in cui il colore è valido e la carta è una "Reverse card"
+				else if(c.getClass().getSimpleName().equals("ReverseCard") && c.getColor().equals(g.getValidColor()))
+				{
+					g.setValidValue(-1);
 					
-					//caso in cui il colore è valido e la carta è una "Reverse card"
-					else if(c.getClass().getSimpleName().equals("ReverseCard") && c.getColor().equals(g.getValidColor()))
-					{
-						g.setValidValue(-1);
-						
-						//togliamo la carta dal mazzo del giocatore che l'ha giocata e la mettiamo nel mazzo di scarto
-	//					artificialPlayerCards.remove(c);
-						g.getPlayersDecks().get(g.getCurrentPlayer()).remove(c);
-	
-						g.checkUno();
-						g.isGameOver();
-						g.getDiscardDeck().add(c);
-						
-						g.reverseCardMove();	//si cambia la direzione di gioco e si passa il turno al giocatore successivo
-						
-						g.notifyObservers(c);
-	
-						return c;
-						
-					}
-//				}	
+					//togliamo la carta dal mazzo del giocatore che l'ha giocata e la mettiamo nel mazzo di scarto
+					g.getPlayersDecks().get(g.getCurrentPlayer()).remove(c);
+
+					g.checkUno();
+					g.isGameOver();
+					g.getDiscardDeck().add(c);
+					g.reverseCardMove();	//si cambia la direzione di gioco e si passa il turno al giocatore successivo
+					
+					g.notifyObservers(c);
+					return c;	
+				}	
 			}
 		}
 		return chooseCard2(artificialPlayerCards, id);
@@ -196,7 +186,7 @@ public class ArtificialPlayerMoves implements AIMoves
 	
 	/**
 	 * Metodo che permette al giocatore artificiale di giocare una carta dello stesso valore della carta presente sul tavolo di gioco.
-	 * Nel caso non ce ne fosse nessuna richiama il metodo chooseFirstAvailableCard().
+	 * Nel caso non ce ne fosse nessuna pesca una carta dal mazzo e restituisce la carta presente sul tavolo.
 	 * @param artificialPlayerCards
 	 * @return carta giocata dal giocatore artificiale
 	 */
@@ -209,7 +199,6 @@ public class ArtificialPlayerMoves implements AIMoves
 				g.setValidColor(c.getColor());	//cambia il colore della partita
 				g.setValidValue(c.getValue());
 				//togliamo la carta dal mazzo del giocatore che l'ha giocata e la mettiamo nel mazzo di scarto
-//				artificialPlayerCards.remove(c);
 				g.getPlayersDecks().get(g.getCurrentPlayer()).remove(c);
 
 				g.checkUno();
@@ -218,14 +207,11 @@ public class ArtificialPlayerMoves implements AIMoves
 				g.nextPlayerTurn();
 				
 				g.notifyObservers(c);
-
 				return c;
 			}
 		}
 		drawCard();
-		System.out.println("\nNessuna carta utile da giocare. Pesco:\n");
-		JOptionPane.showMessageDialog(null, "CARTA PESCATA ","carta pescata",JOptionPane.INFORMATION_MESSAGE);
-
+//		System.out.println("\nNessuna carta utile da giocare. Pesco:\n");
 		g.nextPlayerTurn();	//si passa il turno al giocatore successivo a quello bloccato
 		return g.getDiscardDeckTopCard();
 

@@ -13,7 +13,11 @@ import controller.exceptions.InvalidValueException;
 import controller.exceptions.WrongArgumentsException;
 import model.cards.WildCard;
 
-
+/**
+ * Classe che rappresenta la logica del gioco.
+ * @author a-00
+ *
+ */
 public class Game extends Observable
 {
 	//campi per salvare i giocatori
@@ -22,23 +26,34 @@ public class Game extends Observable
 	
 	//campi per i mazzi
 	private Deck deck;
-	
 	private ArrayList<ArrayList<Card>> playersDecks;	//carte in mano ai giocatori
 	private ArrayList<Card> discardDeck;	//mazzo di scarto
 	
+	/**
+	 * Riferimenti ai valori e al volore valido da giocare.
+	 * I valori cambiano ad ogni turno.
+	 */
 	private Colors validColor;
 	private int validValue;
 	
 	public boolean direction;	//senso orario o senso antiorario
-	public boolean isGameOver;	
+	public boolean isGameOver;	//campo che permette di capire quando termina il gioco.
 	
 	
+	/**
+	 * Costruttore della classe.
+	 * Crea una lista dei giocatori di dimensione 4.
+	 */
 	public Game() 
 	{
 		playersId = new String[4];
 		currentPlayer = 0;
 	}
 	
+	/**
+	 * Metodo che permette di iniziare una partita:
+	 * crea il mazzo, inizializza i vari elementi e setta la prima carta sul tavolo.
+	 */
 	public void startGame()
 	{
 		try
@@ -47,7 +62,6 @@ public class Game extends Observable
 			deck.shuffle();	//shuffle del mazzo
 			discardDeck = new ArrayList<Card>();	//mazzo di scarto
 			
-//			currentPlayer = 0;
 			direction = false;
 			playersDecks =  new ArrayList<ArrayList<Card>>();
 			
@@ -58,7 +72,6 @@ public class Game extends Observable
 				
 				for(Card c: hand)
 				{
-					System.out.println("card del giocatore "+i+ c);
 					playersDecks.add(i, hand);
 				}
 			}
@@ -76,7 +89,10 @@ public class Game extends Observable
 		return playersId[currentPlayer];
 	}
 	
-	
+	/**
+	 * Metodo che restituisce l'indice del giocatore del turno precedente.
+	 * @return
+	 */
 	public int getPreviousPlayer()
 	{
 		if(isDirection())	//se direzione == true vado indietro di 1 nella lista dei giocatori
@@ -84,9 +100,7 @@ public class Game extends Observable
 			if (getCurrentPlayer() > 0)	//posso decrementare tranquillamente di 1
 				return getCurrentPlayer() - 1;
 			else return getPlayersId().length - 1;
-				
-//			return (getCurrentPlayer() - 1) % getPlayersId().length;		//una volta arrivata alla fine della lista torno all'inizio
-		}
+						}
 		
 		else {
 			if(getCurrentPlayer() < 3)
@@ -95,11 +109,20 @@ public class Game extends Observable
 				return 0;
 		}
 	}
-	
+
+	/**
+	 * Metodo che restituisce il nome del giocatore del turno precedente.
+	 * @return
+	 */
 	public String getPreviousPlayerName()
 	{
 		return playersId[getPreviousPlayer()];
 	}
+	/**
+	 * Dato un indice restituisce il nome del giocatore corrispondente in lista.
+	 * @param index
+	 * @return
+	 */
 	public String getPlayerName(int index)
 	{
 		return playersId[index];
@@ -108,6 +131,7 @@ public class Game extends Observable
 	{
 		return currentPlayer;
 	}
+	
 	public void setCurrentPlayer(int currentPlayer) {
 		this.currentPlayer = currentPlayer;
 	}
@@ -150,6 +174,7 @@ public class Game extends Observable
 		return getPlayerDeck(pid).size();
 	}
 	
+	
 	public void setPlayerDecks(ArrayList<ArrayList<Card>> playersDecks) {
 		this.playersDecks = playersDecks;
 	}
@@ -159,7 +184,10 @@ public class Game extends Observable
 	public void setDiscardDeck(ArrayList<Card> discardDeck) {
 		this.discardDeck = discardDeck;
 	}
-	
+	/**
+	 * Metodo che restituisce la carta in cima al mazzo di scarto
+	 * @return
+	 */
 	public Card getDiscardDeckTopCard()
 	{
 		return discardDeck.get(discardDeck.size()-1);
@@ -186,7 +214,10 @@ public class Game extends Observable
 	
 	
 	
-	//metodo per iniziare la partita
+	/**
+	 * metodo per iniziare la partita scegliendo la prima carta.
+	 * Come da regolamento alcune carte non possono essere giocate all'inizio e questo metodo permette di verificare che queste regole siano verificate.
+	 */
 	public void setFirstCard()
 	{
 		Card card = deck.distribuisciCard();
@@ -199,14 +230,11 @@ public class Game extends Observable
 		
 		//caso in cui esce una carta "cambia colore" -> il giocatore alla sinistra del mazziere sceglie il colore da giocare
 		if(card.getClass().getSimpleName().equals("ChangeColorCard"))
-		{
-//			currentPlayer = 1;
-			
+		{			
 			//rallentiamo l'esecuzione in modo da far caricare prima la pagina di gioco e poi aprire la finestra per la scelta del colore
 			new Timer().schedule(new TimerTask(){
 				@Override 
 				public void run(){
-				//codice da far ritardare -> visualizzazione carta buttata, ciò che aggiorna la view			
 					Object[] possibleColors = {"Red", "Blue", "Green", "Yellow"};
 					Object selectedColor = JOptionPane.showInputDialog(null,"Choose one color", "Input", JOptionPane.INFORMATION_MESSAGE, null, possibleColors, possibleColors[0]);
 					
@@ -219,7 +247,7 @@ public class Game extends Observable
 							default -> null;
 					});
 				}
-				},3000); 	
+				},2000); 	
 		}
 		
 		//caso in cui esce una carta Skip
@@ -258,15 +286,14 @@ public class Game extends Observable
 		setValidColor(card.getColor());
 		setValidValue(card.getValue());
 		
-		//aggiungiamo la carta 
+		//aggiungiamo la carta al mazzo di scarto
 		discardDeck.add(card);
 		notifyObservers(card);
-		
 		
 	}
 
 	/**
-	 * Metodo che blocca il giocatore corrente per un turno
+	 * Metodo che blocca il giocatore corrente per un turno seguendo gli effetti della carta SKIP.
 	 */
 	public void skipTurnMove() {
 		
@@ -289,7 +316,6 @@ public class Game extends Observable
 			
 				JLabel message = new JLabel(playersId[currentPlayer] + " was skipped!");
 				System.out.println(message);
-//				message.setFont(new Font("Arial", Font.BOLD, 30));
 				JOptionPane.showMessageDialog(null, message);
 				}
 			},1000);
@@ -297,7 +323,7 @@ public class Game extends Observable
 	}
 	
 	/**
-	 * Metodo che permette di cambiare direzione di gioco grazie alla carta "Reverse Card"
+	 * Metodo che permette di cambiare direzione di gioco grazie alla carta "Reverse Card".
 	 */
 	public void reverseCardMove()
 	{
@@ -332,8 +358,8 @@ public class Game extends Observable
 	}
 	
 	/**
-	 * Metodo che permette di pescare n carte
-	 * @param n
+	 * Metodo che permette di pescare n carte dal mazzo di gioco
+	 * @param n 
 	 */
 	public Card[] drawMultipleCardsMove(int n) {
 		
@@ -366,15 +392,9 @@ public class Game extends Observable
 				@Override 
 				public void run(){
 				
-//					JLabel message = new JLabel(playersId[currentPlayer] + " drew "+ n+" cards!");
-//					message.setFont(new Font("Arial", Font.BOLD, 30));
-//					JOptionPane.showMessageDialog(null, message);
 					JOptionPane.showMessageDialog(null, playersId[currentPlayer] + " drew "+ n+" cards!");
-//					System.out.println(message);
-
 					}
 				},1000);
-//			JOptionPane.showMessageDialog(null, playersId[currentPlayer] + " drew "+ n+" cards!");
 			
 			/**
 			 * Se il giocatore che ha pescato le carte è il giocatore umano comunichiamo alla view, attraverso il controller che vanno aggiunte n carte al mazzo del giocatore.
@@ -412,10 +432,6 @@ public class Game extends Observable
 		this.validValue = validValue;
 	}
 
-//	public void setDeck(Deck deck) {
-//		this.deck = deck;
-//	}
-
 	public boolean isDirection() {
 		return direction;
 	}
@@ -426,7 +442,7 @@ public class Game extends Observable
 	
 	/**
 	 * Metodo verifica se è il turno del giocatore in input.
-	 * Se l'indice del giocatore in input corrisponde all'indice del giocatore corrente il turno è valido, altrimenti non è il turno del giocatore in input e viene creato sia un messaggio a schermo per l'utente che un'eccezione che stampa in console un messaggio di errore.
+	 * Se l'indice del giocatore in input corrisponde all'indice del giocatore corrente il turno è valido, altrimenti non è il turno del giocatore in input e viene creato un messaggio a schermo per l'utente.
 	 * @param player
 	 * @throws InvalidTurnException
 	 */
@@ -441,7 +457,7 @@ public class Game extends Observable
 	}
 	
 	/**
-	 * Metodo per giocare la carta scelta
+	 * Metodo per giocare la carta scelta, prima verifica se la carta è compatibile e poi la gioca, passando eventualmente al giocatore successivo.
 	 * @throws InvalidCardException 
 	 */
 	public boolean playCard(String player, Card card) throws InvalidTurnException, InvalidColorException, InvalidValueException, InvalidCardException
@@ -449,10 +465,7 @@ public class Game extends Observable
 		System.out.println("metodo play card");
 		//controllo se il turno è del giocatore che vuole giocare la carta
 		checkInvalidTurn(player);
-		
-		//carte in mano al giocatore selezionato
-	//	ArrayList<Card> playerCards = getPlayerDeck(player);
-		
+				
 		//caso 1: carta +4 -> la carta può essere giocata indipendentemente dai valori validValue e validColor
 		if(card.getClass().getSimpleName().equals("Draw4Card"))	 
 		{
@@ -469,8 +482,6 @@ public class Game extends Observable
 			setValidValue(-1);
 			
 			//togliamo la carta dal mazzo del giocatore che l'ha giocata e la mettiamo nel mazzo di scarto
-//			playerCards.remove(card);
-//			playersDecks.get(getCurrentPlayer()) = playerCards;
 			getPlayersDecks().get(getCurrentPlayer()).remove(card);
 			
 			checkUno();
@@ -499,7 +510,6 @@ public class Game extends Observable
 			setValidValue(-1);	//si setta il valore di gioco a -1
 			
 			//togliamo la carta dal mazzo del giocatore che l'ha giocata e la mettiamo nel mazzo di scarto
-//			playerCards.remove(card);
 			getPlayersDecks().get(getCurrentPlayer()).remove(card);
 
 			checkUno();
@@ -521,7 +531,6 @@ public class Game extends Observable
 			setValidColor(card.getColor());	//cambia il colore della partita
 			setValidValue(card.getValue());
 			//togliamo la carta dal mazzo del giocatore che l'ha giocata e la mettiamo nel mazzo di scarto
-//			playerCards.remove(card);
 			getPlayersDecks().get(getCurrentPlayer()).remove(card);
 
 			checkUno();
@@ -529,7 +538,6 @@ public class Game extends Observable
 			discardDeck.add(card);
 			
 			nextPlayerTurn();
-			
 			notifyObservers(card);
 
 			return true;
@@ -570,7 +578,6 @@ public class Game extends Observable
 
 				setValidValue(-1);	
 				//togliamo la carta dal mazzo del giocatore che l'ha giocata e la mettiamo nel mazzo di scarto
-//				playerCards.remove(card);
 				getPlayersDecks().get(getCurrentPlayer()).remove(card);
 
 				checkUno();
@@ -579,7 +586,6 @@ public class Game extends Observable
 				
 				skipTurnMove();	//il giocatore successivo viene bloccato			
 				nextPlayerTurn();	//si passa il turno al giocatore successivo a quello bloccato
-				
 				notifyObservers(card);
 				
 				return true;
@@ -594,17 +600,14 @@ public class Game extends Observable
 				setValidValue(-1);
 				
 				//togliamo la carta dal mazzo del giocatore che l'ha giocata e la mettiamo nel mazzo di scarto
-//				playerCards.remove(card);
 				getPlayersDecks().get(getCurrentPlayer()).remove(card);
 
 				checkUno();
 				isGameOver();
 				discardDeck.add(card);
 				
-				reverseCardMove();	//si cambia la direzione di gioco e si passa il turno al giocatore successivo
-				
+				reverseCardMove();	//si cambia la direzione di gioco e si passa il turno al giocatore successivo				
 				notifyObservers(card);
-
 				return true;
 				
 			}
@@ -619,13 +622,15 @@ public class Game extends Observable
 			message.setFont(new Font("Arial", Font.BOLD, 30));
 			JOptionPane.showMessageDialog(null, message);		
 			
-
 			throw new InvalidCardException(message.getText());
 		}
 		return false;
 
 		
 	}
+	/**
+	 * Metodo che verifica se uno dei giocatori è arrivato ad una sola carta in mano e in caso scrive un messaggio a schermo per avvertire gli altri.
+	 */
 	public void checkUno()
 	{
 		if(getCurrentPlayer() !=0)
@@ -648,7 +653,7 @@ public class Game extends Observable
 	}
 	
 	/**
-	 * Metodo per passare il turno al giocatore successivo
+	 * Metodo per passare il turno al giocatore successivo, incrementando/decrementando l'indice del giocatore corrente in base alla direzione di gioco.
 	 */
 	public void nextPlayerTurn()
 	{

@@ -2,6 +2,11 @@ package model;
 
 import java.awt.Image;
 
+/**
+ * Interfaccia che contiene i vari metodi collegati alle carte.
+
+ * @param nameImage
+ */
 public interface CardInterface 
 {
 	

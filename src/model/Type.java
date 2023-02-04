@@ -1,5 +1,10 @@
 package model;
 
+/**
+ * Lista delle varie tipologie di carte
+ * @author a-00
+ *
+ */
 public enum Type 
 {
 	VALUE_CARD,

@@ -8,7 +8,7 @@ import javax.imageio.ImageIO;
 
 
 /**
- * Classe astratta che rappresenta una carta generica di Uno.
+ * Classe astratta che rappresenta una carta generica di Uno formata da un colore e da un valore.
  * @author ann
  *
  */

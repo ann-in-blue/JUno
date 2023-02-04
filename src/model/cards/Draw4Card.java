@@ -1,5 +1,11 @@
 package model.cards;
 
+/**
+ * Classe che rappresenta una carta +4:
+ * valore -1;
+ * @author a-00
+ *
+ */
 public class Draw4Card extends WildCard
 {
 	

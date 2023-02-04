@@ -1,28 +1,17 @@
 package view;
 
-
-//import java.awt.BorderLayout;
 import java.awt.Color;
 
 import java.awt.Dimension;
 import java.awt.Font;
-//import java.awt.Graphics;
-//import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-//import java.awt.Stroke;
-//import java.awt.event.ActionEvent;
-//import java.awt.event.ActionListener;
-//import java.awt.geom.AffineTransform;
-//import java.awt.geom.Line2D;
-
 import javax.swing.*;
-
 import controller.PaginaInizialeEventListener;
 
 /**
- * Classe che rappresenta la pagina iniziale del gioco 
+ * Classe che rappresenta la pagina iniziale del gioco per inserire i dati del giocatore
  * @author a-00
  *
  */
@@ -78,9 +67,7 @@ public class PaginaIniziale extends JPanel
 		gbc.weightx = 0.01;
 		gbc.weighty = 0.01;
 		
-//		gbc.anchor = GridBagConstraints.CENTER; 	//allineamento
-//		
-//		gbc.fill = GridBagConstraints.HORIZONTAL;
+
 		gbc.insets = new Insets(0, 0, 0, 5);
 		
 		add(labelTitolo, gbc);

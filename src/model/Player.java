@@ -2,7 +2,7 @@ package model;
 
 /**
  * classe che rappresenta un giocatore.
- * DAti: nickname, avatar, partite giocate, vinte e perse, livello.
+ * Dati: nickname, avatar, partite giocate, vinte e perse, livello.
  * @author a-00
  *
  */
@@ -26,9 +26,7 @@ public class Player
 	public Player(String nickname, String avatar) {
 		this.nickname = nickname;
 		this.avatar = avatar;
-		
 		this.livello = "Base";
-		
 		
 	}
 
@@ -59,10 +57,6 @@ public class Player
 	public String getNickname() {
 		return nickname;
 	}
-
-//	public void setNickname(String nickname) {
-//		this.nickname = nickname;
-//	}
 
 	public String getAvatar() {
 		return avatar;
@@ -103,6 +97,9 @@ public class Player
 		return livello;
 	}
 
+	/**
+	 * Metodo per settare il livello di un giocatore
+	 */
 	public void setLivello() 
 	{
 		double rapportoPartite = partiteVinte / partiteGiocate;

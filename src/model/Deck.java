@@ -12,14 +12,26 @@ import controller.exceptions.WrongArgumentsException;
 
 import javax.swing.ImageIcon;
 
-
+/**
+ * Classe che rappresenta il mazzo di gioco.
+ * Vene creata utilizzando vari elementi di tipo Card.
+ * @author a-00
+ *
+ */
 public class Deck implements CardFactory
 {
 	
 	Card[] deck;
+	/**
+	 * indice della carta corrente nel mazzo;
+	 */
 	protected int currentCard;
 	
-	
+	/**
+	 * Costruttore del mazzo di gioco
+	 * @param numeroCarte
+	 * @throws WrongArgumentsException
+	 */
 	public Deck(int numeroCarte) throws WrongArgumentsException
 	{
 		this.deck = new Card[numeroCarte];
@@ -80,7 +92,9 @@ public class Deck implements CardFactory
 		return deck;
 	}
 	
-	
+	/**
+	 * Metodo che permette di mescolare le carte del mazzo utilizzando valori random.
+	 */
 	public void shuffle()
 	{
 		Random rand = new Random();
@@ -100,7 +114,7 @@ public class Deck implements CardFactory
 		
 	}
 	/**
-	 * metodo che distribuisce la prossima carta del mazzo.
+	 * Metodo che distribuisce la prossima carta del mazzo.
 	 * @param i
 	 * @return
 	 */
@@ -121,6 +135,7 @@ public class Deck implements CardFactory
 			return deck[currentCard];
 		}
 	}
+	
 	public int getCurrentCard() {
 		return currentCard;
 	}
@@ -134,7 +149,7 @@ public class Deck implements CardFactory
 	}
 
 	/**
-	 * metodo che distribuisce la prossima carta del mazzo.
+	 * metodo che distribuisce l'immagine della prossima carta del mazzo.
 	 * @param i
 	 * @return
 	 */

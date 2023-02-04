@@ -17,6 +17,12 @@ import javax.swing.*;
 
 import model.Card;
 
+/**
+ * Calsse che rappresenta la grafica principale del gioco.
+ * Contiene i vari bottoni per il mazzo, il bottone uno, i pannelli per i 4 giocatori.
+ * @author a-00
+ *
+ */
 public class GraficaGioco extends JFrame
 {
 	private JButton buttonDeck;
@@ -35,51 +41,50 @@ public class GraficaGioco extends JFrame
 	private BufferedImage iconDiscardDeck;
 	
 	
+	/**
+	 * Costruttore della classe.
+	 * Inizializza i vari elementi una volta iniziata la partita.
+	 * @param players
+	 */
 	public GraficaGioco(String[] players)
 	{
 		super("JUno");
 				
 		setLayout(new GridBagLayout());
 
-		//prova
 		try {
 			buttonIcon = ImageIO.read(new File("images/card_back.png"));
 			iconDiscardDeck = ImageIO.read(new File("images/card_back.png"));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+		//bottoni
 		panelDecks = new JPanel();
-//		labelTurno = new JLabel("Turno di: ");
 		buttonUno = new JButton("UNO");
-//		buttonUno.setContentAreaFilled(false);
 
+		//bottone per passare il turno
 		buttonPassaTurno = new JButton("PASSA IL TURNO");
-//		buttonPassaTurno.setBackground(null);
 		buttonPassaTurno.setContentAreaFilled(false);
-
-		
-		//		buttonPassaTurno.setEnabled(false);
 		buttonPassaTurno.setVisible(false);
 		
+		//bottone che rappresenta il mazzo coperto
 		buttonDeck = new JButton(new ImageIcon(buttonIcon));
 		buttonDeck.setContentAreaFilled(false);
 		buttonDeck.setBackground(super.getBackground());
 		
-		
+		//bottone per il mazzo di scarto
 		buttonDiscardDeck = new JButton(new ImageIcon(iconDiscardDeck));
-//		buttonDiscardDeck.setContentAreaFilled(false);
 
-
+		//aggiunta degli elementi al pannello principale
 		panelDecks.add(buttonDeck);
 		panelDecks.add(buttonDiscardDeck);
-//		panelDecks.add(labelTurno);
 		panelDecks.add(buttonUno);
 		panelDecks.add(buttonPassaTurno);
 		
+		/**
+		 * Inizializzazione dei pannelli per i 4 giocatori.
+		 */
 		pannelloGiocatoreUmano = new PannelloGiocatoreUmano(800, 500, players[0]);
-		
 		pannelloGiocatore1 = new PannelloGiocatore("images/card_back_alt.png", 250, 200, players[1], 7);
 		pannelloGiocatore2 = new PannelloGiocatore("images/card_back_alt.png", 250, 200, players[2], 7);
 		pannelloGiocatore3 = new PannelloGiocatore("images/card_back_alt.png", 250, 200, players[3], 7);
@@ -93,20 +98,15 @@ public class GraficaGioco extends JFrame
 		gbc.weightx = 0.01;
 		gbc.weighty = 0.01;
 		gbc.fill = GridBagConstraints.VERTICAL;	//occupa tutto lo spazio disponibile in altezza e in larghezza.
-
-//		gbc.anchor = GridBagConstraints.RELATIVE;
-//		gbc.insets = new Insets(0, 0, 0, 5);
 		
 		add(pannelloGiocatore2, gbc);
 		
-//pannello giocatore 4
+		//pannello giocatore 4
 		gbc.gridx = 2;	//mette il componente a destra di quello precedente
 		gbc.gridy = 0;
 		
 		gbc.weightx = 0.01;
 		gbc.weighty = 0.01;
-//		gbc.anchor = GridBagConstraints.LINE_START;
-//		gbc.insets = new Insets(0, 0, 0, 5);
 
 		add(pannelloGiocatore3, gbc);
 		
@@ -153,7 +153,11 @@ public class GraficaGioco extends JFrame
 		
 	}
 
-
+/**
+ * Metodo che restituisce il pannello corrispondente al giocatore inserito in input
+ * @param giocatore
+ * @return
+ */
 	public PannelloGiocatore getPannelloGiocatore(int giocatore) {
 		return switch(giocatore) {
 		case 1 -> pannelloGiocatore1;
@@ -163,6 +167,7 @@ public class GraficaGioco extends JFrame
 		};
 				
 	}
+	//GET methods
 	public JButton getButtonPassaTurno() {
 		return buttonPassaTurno;
 	}
@@ -170,7 +175,6 @@ public class GraficaGioco extends JFrame
 	public JButton getButtonUno() {
 		return buttonUno;
 	}
-
 
 	public void setButtonUno(JButton buttonUno) {
 		this.buttonUno = buttonUno;
@@ -185,23 +189,25 @@ public class GraficaGioco extends JFrame
 		return pannelloGiocatoreUmano;
 	}
 
+	/**
+	 * Metodo che setta il pannello del giocatore umano
+	 * @param pannelloGiocatoreUmanoNuovo
+	 */
 	public void setPannelloGiocatoreUmano(PannelloGiocatoreUmano pannelloGiocatoreUmanoNuovo) {
-//		this.pannelloGiocatoreUmano = pannelloGiocatoreUmano;
 		this.remove(pannelloGiocatoreUmano);
 		pannelloGiocatoreUmano= pannelloGiocatoreUmanoNuovo;
-//		this.add(pannelloGiocatoreUmanoNuovo);
 		
 		GridBagConstraints gbc1 = new GridBagConstraints();
 
 		//pannello giocatore 1
-				gbc1.gridx = 1;
-				gbc1.gridy = 2;
-				
-				gbc1.weightx = 0.9;
-				gbc1.weighty = 0.9;
-				gbc1.fill = GridBagConstraints.HORIZONTAL;
+		gbc1.gridx = 1;
+		gbc1.gridy = 2;
+		
+		gbc1.weightx = 0.9;
+		gbc1.weighty = 0.9;
+		gbc1.fill = GridBagConstraints.HORIZONTAL;
 
-				add(pannelloGiocatoreUmano, gbc1);
+		add(pannelloGiocatoreUmano, gbc1);
 		
 	}
 	
@@ -227,19 +233,22 @@ public class GraficaGioco extends JFrame
 		}
 	}
 	
+	/**
+	 * Metodo usato per cambiare il colore del tasto uno con il colore valido per quel turno di gioco.
+	 * @param color
+	 */
 	public void setGameColor(Color color)
 	{
-//		panelDecks.remove(buttonUno);
-		buttonUno.setBackground(color);
-//		panelDecks.add(buttonUno);
-			
+		buttonUno.setBackground(color);			
 	}
 
 	public JButton getButtonDiscardDeck() {
 		return buttonDiscardDeck;
 	}
 
-	
+	/**
+	 * Metodo per aggiornare la view
+	 */
 	public void refresh()
 	{
 		

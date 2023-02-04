@@ -3,6 +3,12 @@ package model.cards;
 import model.Card;
 import model.Colors;
 
+/**
+ * Classe che rappresenta la carta +2.
+ * Valore -1;
+ * @author a-00
+ *
+ */
 public class Draw2Card extends Card
 {
 	public Draw2Card(Colors color, String nameImage)

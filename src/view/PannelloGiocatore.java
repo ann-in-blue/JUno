@@ -11,6 +11,12 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
 
+/**
+ * Classe che rappresenta un pannello generico.
+ * Contiene l'immagine del mazzo coperto, il nickname del giocatore e le carte rimanenti.
+ * @author a-00
+ *
+ */
 public class PannelloGiocatore extends JPanel{
 
 	private BufferedImage myPicture;
@@ -25,7 +31,6 @@ public class PannelloGiocatore extends JPanel{
 			//carica l'immagine 
 			myPicture = ImageIO.read(new File(imagePath));
 			picLabel = new JLabel(new ImageIcon(myPicture));			
-//			picLabel.setSize(50, 50);
 			
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -50,6 +55,10 @@ public class PannelloGiocatore extends JPanel{
 
 	}
 
+	/**
+	 * Metodo che aggiorna il numero di carte rimanenti in mano al giocatore.
+	 * @param intRemainingCards
+	 */
 	public void setRemainingCards(int intRemainingCards) {
 		this.remove(remainingCards);
 		this.remainingCards = new JLabel("Cards:" + intRemainingCards);

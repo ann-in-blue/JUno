@@ -3,6 +3,12 @@ package model.cards;
 import model.Card;
 import model.Colors;
 
+/**
+ * Classe che rappresenta una carta valore.
+ * Ha un colore e un valore preciso.
+ * @author a-00
+ *
+ */
 public class ValueCard extends Card
 {
 

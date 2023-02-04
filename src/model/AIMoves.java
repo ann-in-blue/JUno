@@ -4,6 +4,11 @@ import java.util.ArrayList;
 
 import controller.exceptions.InvalidTurnException;
 
+/**
+ * Interfaccia che contiene i metodi usati dai giocatori artificiali per scegliere la carta da giocare.
+ * @author a-00
+ *
+ */
 public interface AIMoves
 {
 
